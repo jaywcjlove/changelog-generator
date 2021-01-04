@@ -48,13 +48,15 @@ async function run() {
       regexp.test(headRef) &&
       regexp.test(baseRef)
     ) {
+      let tagRef = '';
       if (/^refs\/tags\//.test(github.context.ref)) {
-        core.setOutput('tag', github.context.ref.replace(/.*(?=\/)\//, ''));
+        tagRef = github.context.ref.replace(/.*(?=\/)\//, '');
+        core.setOutput('tag', tagRef);
       }
       if (/^refs\/heads\//.test(github.context.ref)) {
         core.setOutput('branch', github.context.ref.replace(/.*(?=\/)\//, ''));
       }
-      getChangelog(headRef, baseRef, owner + '/' + repo);
+      getChangelog(headRef, baseRef, owner + '/' + repo, tagRef);
     } else {
       core.setFailed(
         'Branch names must contain only numbers, strings, underscores, periods, and dashes.'
@@ -66,7 +68,7 @@ async function run() {
   }
 }
 
-async function getChangelog(headRef, baseRef, repoName) {
+async function getChangelog(headRef, baseRef, repoName, tagRef) {
   try {
     let output = ''
     let err = ''
@@ -90,9 +92,8 @@ async function getChangelog(headRef, baseRef, repoName) {
 
     if (output) {
       const changelog = formatString(output, repoName);
-      const version = core.getInput('tag');
       console.log('\x1b[32m%s\x1b[0m', `Changelog between ${baseRef} and ${headRef}:\n${changelog}`);
-      core.setOutput('compareurl', `https://github.com/${repoName}/compare/${baseRef}...${version || headRef}`);
+      core.setOutput('compareurl', `https://github.com/${repoName}/compare/${baseRef}...${tagRef || headRef}`);
       core.setOutput('changelog', changelog);
     } else {
       core.setFailed(err);
