@@ -1,4 +1,4 @@
-name: create-release
+name: Create Release
 on:
   push:
     # Sequence of patterns matched against refs/tags
@@ -12,6 +12,7 @@ jobs:
       # To use this repository's private action, you must check out the repository
       - name: Checkout
         uses: actions/checkout@v2
+
       - name: Generate changelog
         id: changelog
         uses: jaywcjlove/changelog-generator@main
@@ -25,7 +26,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: v${{ github.ref }}
-          body: ${{ steps.changelog.outputs.compareurl }}\n${{ steps.changelog.outputs.changelog }}
+          release_name: ${{ github.ref }}
+          body: |
+            ${{ steps.changelog.outputs.compareurl }}
+            ${{ steps.changelog.outputs.changelog }}
           draft: false
           prerelease: false
