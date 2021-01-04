@@ -17,6 +17,8 @@ inputs:
 outputs:
   changelog:
     description: 'Markdown formatted changelog'
+  compareurl:
+    description: 'Comparing two branches to see what’s changed or to start a new pull request.'
 runs:
   using: 'node12'
   main: 'dist/index.js'

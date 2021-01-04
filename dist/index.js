@@ -76,7 +76,6 @@ async function getChangelog(headRef, baseRef, repoName) {
       }
     }
     options.cwd = './';
-    console.log(`path: ${path.join(src, '..', 'changelog.sh')}`);
     await exec.exec(
       path.join(src, '..', 'changelog.sh'),
       [headRef, baseRef, repoName],
@@ -89,6 +88,7 @@ async function getChangelog(headRef, baseRef, repoName) {
         '\x1b[32m%s\x1b[0m',
         `Changelog between ${baseRef} and ${headRef}:\n${output}`
       )
+      core.setOutput('compareurl', `https://github.com/${repoName}/compare/${baseRef}...${headRef}`)
       core.setOutput('changelog', output)
     } else {
       core.setFailed(err)

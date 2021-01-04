@@ -16,3 +16,6 @@ jobs:
 
       - name: Get the changelog
         run: echo "${{ steps.changelog.outputs.changelog }}"
+
+      - name: Get comparing changes url,
+        run: echo "${{ steps.changelog.outputs.compareurl }}"
