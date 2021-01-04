@@ -108,7 +108,6 @@ async function getChangelog(headRef, baseRef, repoName) {
 function formatString(str = '', repoName = '') {
   let result = '';
   str.split('\n').filter(Boolean).forEach((subStr) => {
-    console.log('\x1b[32m%s\x1b[0m', `Changelog>>>> ${subStr}`);
     const strArr = subStr.split('[,,,]');
     const shortHash = strArr[1];
     const hash = strArr[2];
@@ -139,7 +138,9 @@ function formatString(str = '', repoName = '') {
     } else {
       commit = `📄 ${commit}`;
     }
-    result += `- ${commit} [\`${shortHash}\`](http://github.com/${repoName}/commit/${hash})\n`;
+    const changelog = `- ${commit} [\`${shortHash}\`](http://github.com/${repoName}/commit/${hash})`;
+    console.log('\x1b[32m%s\x1b[0m', `Changelog>>>> ${changelog}`);
+    result += `${changelog}\n`;
   });
   return result;
 }
