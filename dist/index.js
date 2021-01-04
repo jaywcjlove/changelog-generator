@@ -29,7 +29,7 @@ async function run() {
         owner: owner,
         repo: repo
       });
-      console.log(`test3:`)
+      console.log(`test3: ${JSON.stringify(latestRelease)}`)
       if (latestRelease) {
         baseRef = latestRelease.data.tag_name;
       } else {
