@@ -134,6 +134,7 @@ function formatString(str = '', repoName = '') {
     }
     result += `- ${commit} [\`${shortHash}\`](http://github.com/${repoName}/commit/${hash})\n`;
   });
+  console.log('\x1b[32m%s\x1b[0m', `result>>>> ${result}`);
   return result;
 }
 
