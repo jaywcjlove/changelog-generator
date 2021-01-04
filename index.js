@@ -35,10 +35,7 @@ async function run() {
       headRef = github.context.sha;
     }
 
-
-
-
-    console.log(`tag: ${JSON.stringify(github.context.sha)}`);
+    console.log(`tag: ${JSON.stringify(github.context.ref)}`);
     console.log(`head-ref1: ${headRef}`);
     console.log(`base-ref1: ${baseRef}`);
 
