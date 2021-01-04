@@ -35,7 +35,10 @@ async function run() {
       headRef = github.context.sha;
     }
 
-    const tag = await octokit.repos.getReleaseByTag();
+    const tag = await octokit.repos.getReleaseByTag({
+      owner: owner,
+      repo: repo
+    });
 
 
 
