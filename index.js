@@ -9,19 +9,19 @@ async function run() {
     var headRef = core.getInput('head-ref');
     var baseRef = core.getInput('base-ref');
     const myToken = core.getInput('myToken');
-    const octokit = new github.GitHub(myToken);
     const { owner, repo } = github.context.repo;
     console.log(`repo: ${owner}/${repo}`);
-    console.log(`head-ref: ${headRef}`)
-    console.log(`base-ref: ${baseRef}`)
+    console.log(`head-ref: ${headRef}`);
+    console.log(`base-ref: ${baseRef}`);
 
+    const octokit = github.getOctokit(myToken);
     if (!baseRef) {
       const latestRelease = await octokit.repos.getLatestRelease({
         owner: owner,
         repo: repo
-      })
+      });
       if (latestRelease) {
-        baseRef = latestRelease.data.tag_name
+        baseRef = latestRelease.data.tag_name;
       } else {
         core.setFailed(
           `There are no releases on ${owner}/${repo}. Tags are not releases.`
