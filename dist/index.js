@@ -9,7 +9,7 @@ const core = __webpack_require__(186);
 const exec = __webpack_require__(514);
 const github = __webpack_require__(438);
 const path = __webpack_require__(622);
-
+const regexp = /^[.A-Za-z0-9_-]*$/;
 const src = __dirname;
 
 async function run() {
