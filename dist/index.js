@@ -8,6 +8,7 @@ module.exports =
 const core = __webpack_require__(186);
 const exec = __webpack_require__(514);
 const github = __webpack_require__(438);
+const path = __webpack_require__(622);
 
 const src = __dirname;
 
@@ -17,9 +18,6 @@ async function run() {
     var baseRef = core.getInput('base-ref');
     const myToken = core.getInput('myToken');
     const { owner, repo } = github.context.repo;
-    console.log(`repo: ${owner}/${repo}`);
-    console.log(`head-ref: ${headRef}`);
-    console.log(`base-ref: ${baseRef}`);
 
     const octokit = github.getOctokit(myToken);
     console.log(`test1:`)
@@ -42,15 +40,71 @@ async function run() {
       headRef = github.context.sha;
     }
 
-    console.log(`tag: ${JSON.stringify(github.context.ref)}`);
+    console.log(`repo: ${owner}/${repo}`);
+    console.log(`ref: ${JSON.stringify(github.context.ref)}`);
     console.log(`head-ref1: ${headRef}`);
     console.log(`base-ref1: ${baseRef}`);
+
+    if (
+      !!headRef &&
+      !!baseRef &&
+      regexp.test(headRef) &&
+      regexp.test(baseRef)
+    ) {
+      getChangelog(headRef, baseRef, owner + '/' + repo)
+    } else {
+      core.setFailed(
+        'Branch names must contain only numbers, strings, underscores, periods, and dashes.'
+      )
+    }
 
   } catch (error) {
     core.setFailed(error.message);
   }
 }
 
+async function getChangelog(headRef, baseRef, repoName) {
+  try {
+    let output = ''
+    let err = ''
+
+    // These are option configurations for the @actions/exec lib`
+    const options = {}
+    options.listeners = {
+      stdout: data => {
+        output += data.toString();
+      },
+      stderr: data => {
+        err += data.toString();
+      }
+    }
+    options.cwd = './';
+    console.log(`path: ${path.join(src, '..', 'changelog.sh')}`);
+    await exec.exec(
+      path.join(src, '..', 'changelog.sh'),
+      [headRef, baseRef, repoName],
+      options
+    );
+
+
+    if (output) {
+      console.log(
+        '\x1b[32m%s\x1b[0m',
+        `Changelog between ${baseRef} and ${headRef}:\n${output}`
+      )
+      core.setOutput('changelog', output)
+    } else {
+      core.setFailed(err)
+      process.exit(1)
+    }
+    
+  } catch (error) {
+    core.setFailed(
+      `Could not generate changelog between references because: ${error.message}`
+    );
+    process.exit(0);
+  }
+}
 
 try {
   run();
