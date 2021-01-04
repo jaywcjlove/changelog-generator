@@ -95,8 +95,6 @@ async function getChangelog(headRef, baseRef, repoName, tagRef) {
 
     if (output) {
       const changelog = formatString(output, repoName);
-      const version = core.getInput('tag');
-      console.log(`version->: ${version}`);
       console.log('\x1b[32m%s\x1b[0m', `Changelog between ${baseRef} and ${headRef}:\n${changelog}`);
       core.setOutput('compareurl', `https://github.com/${repoName}/compare/${baseRef}...${tagRef || headRef}`);
       core.setOutput('changelog', changelog);
