@@ -132,7 +132,6 @@ function formatString(str = '', repoName = '') {
       commit = `📄 ${commit}`;
     }
     const changelog = `- ${commit} [\`${shortHash}\`](http://github.com/${repoName}/commit/${hash})`;
-    console.log('\x1b[32m%s\x1b[0m', `Changelog>>>> ${changelog}`);
     result += `${changelog}\n`;
   });
   return result;
