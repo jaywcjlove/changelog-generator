@@ -20,14 +20,11 @@ async function run() {
     const { owner, repo } = github.context.repo;
 
     const octokit = github.getOctokit(myToken);
-    console.log(`test1:`)
     if (!baseRef) {
-      console.log(`test2:`)
       const latestRelease = await octokit.repos.getLatestRelease({
         owner: owner,
         repo: repo
       });
-      console.log(`test3: ${JSON.stringify(latestRelease)}`)
       if (latestRelease) {
         baseRef = latestRelease.data.tag_name;
       } else {
@@ -51,11 +48,11 @@ async function run() {
       regexp.test(headRef) &&
       regexp.test(baseRef)
     ) {
-      getChangelog(headRef, baseRef, owner + '/' + repo)
+      getChangelog(headRef, baseRef, owner + '/' + repo);
     } else {
       core.setFailed(
         'Branch names must contain only numbers, strings, underscores, periods, and dashes.'
-      )
+      );
     }
 
   } catch (error) {
