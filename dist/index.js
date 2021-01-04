@@ -51,10 +51,13 @@ async function run() {
       let tagRef = '';
       if (/^refs\/tags\//.test(github.context.ref)) {
         tagRef = github.context.ref.replace(/.*(?=\/)\//, '');
+        console.log(`tag: ${tagRef}`);
         core.setOutput('tag', tagRef);
       }
       if (/^refs\/heads\//.test(github.context.ref)) {
-        core.setOutput('branch', github.context.ref.replace(/.*(?=\/)\//, ''));
+        const branch = github.context.ref.replace(/.*(?=\/)\//, '');
+        console.log(`branch: ${branch}`);
+        core.setOutput('branch', branch);
       }
       getChangelog(headRef, baseRef, owner + '/' + repo, tagRef);
     } else {
