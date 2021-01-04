@@ -99,7 +99,7 @@ async function getChangelog(headRef, baseRef, repoName) {
  */
 function formatString(str = '', repoName = '') {
   let result = '';
-  str.split('[-|-]').filter(Boolean).forEach((subStr) => {
+  str.split('[-|-]').replace(/(^\n+)|(\n*$)/g, '').filter(Boolean).forEach((subStr) => {
     const strArr = subStr.split('[,,,]');
     const shortHash = strArr[0];
     const hash = strArr[1];
