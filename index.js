@@ -15,11 +15,14 @@ async function run() {
     console.log(`base-ref: ${baseRef}`);
 
     const octokit = github.getOctokit(myToken);
+    console.log(`test1:`)
     if (!baseRef) {
+      console.log(`test2:`)
       const latestRelease = await octokit.repos.getLatestRelease({
         owner: owner,
         repo: repo
       });
+      console.log(`test3:`)
       if (latestRelease) {
         baseRef = latestRelease.data.tag_name;
       } else {
