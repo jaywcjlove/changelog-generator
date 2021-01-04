@@ -69,10 +69,6 @@ async function getChangelog(headRef, baseRef, repoName) {
     const options = {}
     options.listeners = {
       stdout: data => {
-        console.log(
-          '\x1b[32m%s\x1b[0m',
-          `Changelog between ->> ${data.toString()}`
-        )
         output += data.toString();
       },
       stderr: data => {
@@ -86,17 +82,13 @@ async function getChangelog(headRef, baseRef, repoName) {
       options
     );
 
-
     if (output) {
-      console.log(
-        '\x1b[32m%s\x1b[0m',
-        `Changelog between ${baseRef} and ${headRef}:\n${output}`
-      )
-      core.setOutput('compareurl', `https://github.com/${repoName}/compare/${baseRef}...${headRef}`)
-      core.setOutput('changelog', output)
+      console.log('\x1b[32m%s\x1b[0m', `Changelog between ${baseRef} and ${headRef}:\n${output}`);
+      core.setOutput('compareurl', `https://github.com/${repoName}/compare/${baseRef}...${headRef}`);
+      core.setOutput('changelog', formatString(output, repoName));
     } else {
-      core.setFailed(err)
-      process.exit(1)
+      core.setFailed(err);
+      process.exit(1);
     }
     
   } catch (error) {
@@ -105,6 +97,53 @@ async function getChangelog(headRef, baseRef, repoName) {
     );
     process.exit(0);
   }
+}
+
+/**
+ * `%h[,,,]%H[,,,]%s[,,,]%an[-|-]`
+ * @param {*} str ``
+ * @param {*} repoName `uiwjs/uiw`
+ */
+function formatString(str = '', repoName = '') {
+  let result = '';
+  str.split('[-|-]').filter(Boolean).forEach((subStr) => {
+    const strArr = subStr.split('[,,,]');
+    const shortHash = strArr[0];
+    const hash = strArr[1];
+    let commit = strArr[2];
+    const author = strArr[3];
+    if (getRegExp('type', commit)) {
+      commit = `🆎 ${commit}`;
+    } else if (getRegExp('feat', commit)) {
+      commit = `🌟 ${commit}`;
+    } else if (getRegExp('style', commit)) {
+      commit = `🎨 ${commit}`;
+    } else if (getRegExp('chore', commit)) {
+      commit = `💄 ${commit}`;
+    } else if (getRegExp('doc', commit) || getRegExp('docs', commit)) {
+      commit = `📖 ${commit}`;
+    } else if (getRegExp('fix', commit)) {
+      commit = `🐞 ${commit}`;
+    } else if (getRegExp('test', commit)) {
+      commit = `⛑ ${commit}`;
+    } else if (getRegExp('refactor', commit)) {
+      commit = `🐝 ${commit}`;
+    } else if (getRegExp('website', commit)) {
+      commit = `🌍 ${commit}`;
+    } else if (getRegExp('revert', commit)) {
+      commit = `🔙 ${commit}`;
+    } else if (getRegExp('clean', commit)) {
+      commit = `💊 ${commit}`;
+    } else {
+      commit = `📄 ${commit}`;
+    }
+    result += `- ${commit} [\`${shortHash}\`](http://github.com/${repoName}/commit/${hash})\n`;
+  });
+  return result;
+}
+
+function getRegExp(str = '', commit = '') {
+  return (new RegExp(`^(${str}\s+[\s|(|:])|(${str}[(|:])`)).test(commit.trim().toLocaleLowerCase());
 }
 
 try {
