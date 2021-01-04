@@ -35,11 +35,20 @@ async function run() {
       } else {
         core.setFailed(
           `There are no releases on ${owner}/${repo}. Tags are not releases.`
-        )
+        );
       }
     }
-    console.log(`head-ref1: ${headRef}`)
-    console.log(`base-ref1: ${baseRef}`)
+    if (!headRef) {
+      headRef = github.context.sha;
+    }
+
+    const tag = await octokit.repos.getReleaseByTag();
+
+
+
+    console.log(`tag: ${JSON.stringify(tag)}`);
+    console.log(`head-ref1: ${headRef}`);
+    console.log(`base-ref1: ${baseRef}`);
 
   } catch (error) {
     core.setFailed(error.message);
