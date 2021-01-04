@@ -4,8 +4,7 @@
   "description": "A GitHub Action that compares the commit differences between two branches",
   "main": "index.js",
   "scripts": {
-    "build": "ncc build ./index.js",
-    "precommit": "npm run build && git add dist/"
+    "build": "ncc build ./index.js"
   },
   "repository": {
     "type": "git",
@@ -17,12 +16,18 @@
     "url": "https://github.com/jaywcjlove/changelog-generator/issues"
   },
   "homepage": "https://github.com/jaywcjlove/changelog-generator#readme",
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run build && git add dist/"
+    }
+  },
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/exec": "^1.0.4",
     "@actions/github": "^4.0.0"
   },
   "devDependencies": {
-    "@vercel/ncc": "0.26.1"
+    "@vercel/ncc": "0.26.1",
+    "husky": "4.3.6"
   }
 }
