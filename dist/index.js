@@ -109,6 +109,7 @@ function formatString(str = '', repoName = '') {
   str.split('\n').filter(Boolean).forEach((subStr) => {
     console.log('\x1b[32m%s\x1b[0m', `Changelog>>>> ${subStr}`);
     const strArr = subStr.split('[,,,]');
+    console.log('\x1b[32m%s\x1b[0m', `StrArr>>>> ${JSON.stringify(strArr)}`);
     const shortHash = strArr[1];
     const hash = strArr[2];
     let commit = strArr[3];
