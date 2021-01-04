@@ -35,14 +35,10 @@ async function run() {
       headRef = github.context.sha;
     }
 
-    const tag = await octokit.repos.getReleaseByTag({
-      owner: owner,
-      repo: repo
-    });
 
 
 
-    console.log(`tag: ${JSON.stringify(tag)}`);
+    console.log(`tag: ${JSON.stringify(github.context.sha)}`);
     console.log(`head-ref1: ${headRef}`);
     console.log(`base-ref1: ${baseRef}`);
 
