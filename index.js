@@ -1,0 +1,25 @@
+const core = require('@actions/core');
+const exec = require('@actions/exec');
+const github = require('@actions/github');
+
+const src = __dirname;
+
+async function run() {
+  try {
+    var headRef = core.getInput('head-ref');
+    var baseRef = core.getInput('base-ref');
+    const myToken = core.getInput('myToken');
+    console.log(`head-ref: ${headRef}`)
+    console.log(`base-ref: ${baseRef}`)
+
+  } catch (error) {
+    core.setFailed(error.message);
+  }
+}
+
+
+try {
+  run();
+} catch (error) {
+  core.setFailed(error.message);
+}
