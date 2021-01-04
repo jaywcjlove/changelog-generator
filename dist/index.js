@@ -39,8 +39,8 @@ async function run() {
 
     console.log(`repo: ${owner}/${repo}`);
     console.log(`ref: ${JSON.stringify(github.context.ref)}`);
-    console.log(`head-ref1: ${headRef}`);
-    console.log(`base-ref1: ${baseRef}`);
+    console.log(`head-ref: ${headRef}`);
+    console.log(`base-ref: ${baseRef}`);
 
     if (
       !!headRef &&
@@ -48,6 +48,12 @@ async function run() {
       regexp.test(headRef) &&
       regexp.test(baseRef)
     ) {
+      if (/^refs\/tags\//.test(github.context.ref)) {
+        core.setOutput('tag', github.context.ref.replace(/.*(?=\/)\//, ''));
+      }
+      if (/^refs\/heads\//.test(github.context.ref)) {
+        core.setOutput('branch', github.context.ref.replace(/.*(?=\/)\//, ''));
+      }
       getChangelog(headRef, baseRef, owner + '/' + repo);
     } else {
       core.setFailed(
