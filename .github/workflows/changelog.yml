@@ -14,8 +14,14 @@ jobs:
         with:
           myToken: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get the changelog
-        run: echo "${{ steps.changelog.outputs.changelog }}"
+      - name: Get the tag name
+        run: echo "${{ steps.changelog.outputs.tag }}"
+
+      - name: Get the branch name
+        run: echo "${{ steps.changelog.outputs.branch }}"
 
       - name: Get comparing changes url,
-        run: echo "${{ steps.changelog.outputs.compareurl }} \n ${{ steps.changelog.outputs.changelog }}"
+        run: echo "${{ steps.changelog.outputs.compareurl }}"
+
+      - name: Get changelog,
+        run: echo "${{ steps.changelog.outputs.changelog }}"
