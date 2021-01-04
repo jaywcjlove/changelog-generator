@@ -83,9 +83,10 @@ async function getChangelog(headRef, baseRef, repoName) {
     );
 
     if (output) {
-      console.log('\x1b[32m%s\x1b[0m', `Changelog between ${baseRef} and ${headRef}:\n${output}`);
+      const changelog = formatString(output, repoName);
+      console.log('\x1b[32m%s\x1b[0m', `Changelog between ${baseRef} and ${headRef}:\n${changelog}`);
       core.setOutput('compareurl', `https://github.com/${repoName}/compare/${baseRef}...${headRef}`);
-      core.setOutput('changelog', formatString(output, repoName));
+      core.setOutput('changelog', changelog);
     } else {
       core.setFailed(err);
       process.exit(1);
@@ -113,7 +114,6 @@ function formatString(str = '', repoName = '') {
     const hash = strArr[2];
     let commit = strArr[3];
     const author = strArr[4];
-    console.log('\x1b[32m%s\x1b[0m', `StrArr> ${shortHash}>>> ${JSON.stringify(strArr)}`);
     if (getRegExp('type', commit)) {
       commit = `🆎 ${commit}`;
     } else if (getRegExp('feat', commit)) {
@@ -141,7 +141,6 @@ function formatString(str = '', repoName = '') {
     }
     result += `- ${commit} [\`${shortHash}\`](http://github.com/${repoName}/commit/${hash})\n`;
   });
-  console.log('\x1b[32m%s\x1b[0m', `result>>>> ${result}`);
   return result;
 }
 
