@@ -11,6 +11,8 @@ async function run() {
     const myToken = core.getInput('myToken');
     console.log(`head-ref: ${headRef}`)
     console.log(`base-ref: ${baseRef}`)
+    console.log(`myToken: ${myToken}`)
+    console.log(`github.context: ${JSON.stringify(github.context)}`)
 
   } catch (error) {
     core.setFailed(error.message);
