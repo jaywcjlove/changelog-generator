@@ -99,12 +99,12 @@ async function getChangelog(headRef, baseRef, repoName) {
  */
 function formatString(str = '', repoName = '') {
   let result = '';
-  str.split('[-|-]').filter(Boolean).forEach((subStr) => {
-    const strArr = subStr.replace(/(^\n+)|(\n*$)/g, '').split('[,,,]');
-    const shortHash = strArr[0];
-    const hash = strArr[1];
-    let commit = strArr[2];
-    const author = strArr[3];
+  str.split('\n').filter(Boolean).forEach((subStr) => {
+    const strArr = subStr.split('[,,,]');
+    const shortHash = strArr[1];
+    const hash = strArr[2];
+    let commit = strArr[3];
+    const author = strArr[4];
     if (getRegExp('type', commit)) {
       commit = `🆎 ${commit}`;
     } else if (getRegExp('feat', commit)) {
