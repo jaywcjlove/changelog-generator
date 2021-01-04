@@ -15,6 +15,9 @@ async function run() {
   try {
     var headRef = core.getInput('head-ref');
     var baseRef = core.getInput('base-ref');
+    const { owner, repo } = github.context.repo;
+    console.log(`owner: ${owner}`);
+    console.log(`repo: ${repo}`);
     const myToken = core.getInput('myToken');
     console.log(`head-ref: ${headRef}`)
     console.log(`base-ref: ${baseRef}`)
