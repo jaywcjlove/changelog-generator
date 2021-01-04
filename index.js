@@ -62,6 +62,10 @@ async function getChangelog(headRef, baseRef, repoName) {
     const options = {}
     options.listeners = {
       stdout: data => {
+        console.log(
+          '\x1b[32m%s\x1b[0m',
+          `Changelog between ->> ${data.toString()}`
+        )
         output += data.toString();
       },
       stderr: data => {
