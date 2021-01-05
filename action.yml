@@ -1,4 +1,4 @@
-name: 'github-changelog-generator'
+name: 'Github Release Changelog Generator'
 author: 'Kenny Wong'
 description: 'Returns the commit difference count between two git references.'
 inputs:
