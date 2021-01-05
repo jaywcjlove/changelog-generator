@@ -54,12 +54,12 @@ async function run() {
       await exec.exec('git fetch --prune --unshallow');
 
       let tagRef = '';
-      if (/^refs\/tags\//.test(github.context.ref)) {
+      if ((github.context.ref || '').startsWith('refs/tags/')) {
         tagRef = github.context.ref.replace(/.*(?=\/)\//, '');
         console.log(`tag-> : ${tagRef}`);
         core.setOutput('tag', tagRef);
       }
-      if (/^refs\/heads\//.test(github.context.ref)) {
+      if ((github.context.ref || '').startsWith('refs/heads/')) {
         const branch = github.context.ref.replace(/.*(?=\/)\//, '');
         console.log(`branch: ${branch}`);
         core.setOutput('branch', branch);
