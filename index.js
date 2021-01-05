@@ -13,6 +13,7 @@ async function run() {
     const { owner, repo } = github.context.repo;
 
     const octokit = github.getOctokit(myToken);
+    const currentUser = '';
     if (!baseRef) {
       const latestRelease = await octokit.repos.getLatestRelease({
         owner: owner,
@@ -20,6 +21,7 @@ async function run() {
       });
       if (latestRelease) {
         baseRef = latestRelease.data.tag_name;
+        currentUser = latestRelease.data.author.login;
       } else {
         core.setFailed(
           `There are no releases on ${owner}/${repo}. Tags are not releases.`
@@ -52,7 +54,7 @@ async function run() {
         console.log(`branch: ${branch}`);
         core.setOutput('branch', branch);
       }
-      getChangelog(headRef, baseRef, owner + '/' + repo, tagRef);
+      getChangelog(headRef, baseRef, { repoName: owner + '/' + repo, tagRef, currentUser });
     } else {
       core.setFailed(
         'Branch names must contain only numbers, strings, underscores, periods, and dashes.'
@@ -64,7 +66,7 @@ async function run() {
   }
 }
 
-async function getChangelog(headRef, baseRef, repoName, tagRef) {
+async function getChangelog(headRef, baseRef, { repoName, tagRef, currentUser }) {
   try {
     let output = ''
     let err = ''
@@ -88,7 +90,7 @@ async function getChangelog(headRef, baseRef, repoName, tagRef) {
 
     if (output) {
       const regExp = core.getInput('filter');
-      const changelog = formatString(output, repoName, regExp);
+      const changelog = formatString(output, repoName, { regExp, currentUser });
       console.log('\x1b[32m%s\x1b[0m', `Changelog between ${baseRef} and ${headRef}:\n${changelog}`);
       core.setOutput('compareurl', `https://github.com/${repoName}/compare/${baseRef}...${tagRef || headRef}`);
       core.setOutput('changelog', changelog);
@@ -111,7 +113,7 @@ async function getChangelog(headRef, baseRef, repoName, tagRef) {
  * @param {*} repoName `uiwjs/uiw`
  * @param {*} regExp `^released`
  */
-function formatString(str = '', repoName = '', regExp) {
+function formatString(str = '', repoName = '', { regExp, currentUser }) {
   let result = '';
   str.split('\n').filter(Boolean).forEach((subStr) => {
     const strArr = subStr.split('[,,,]');
@@ -149,7 +151,7 @@ function formatString(str = '', repoName = '', regExp) {
     } else {
       commit = `📄 ${commit}`;
     }
-    const changelog = `- ${commit} [\`${shortHash}\`](http://github.com/${repoName}/commit/${hash})`;
+    const changelog = `- ${commit} [\`${shortHash}\`](http://github.com/${repoName}/commit/${hash})${currentUser && currentUser === author ? '' : ` @${author}`}`;
     result += `${changelog}\n`;
   });
   return result;
