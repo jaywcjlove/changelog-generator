@@ -47,7 +47,7 @@ Why do we need `myToken`? Read more here: [About the GITHUB_TOKEN secret](https:
 
 #### `filter`
 
-Regular expression filtering.
+Regular expression filtering. Example: [`filter: (^[\s]+?[R|r]elease)|(^[R|r]elease)`](https://github.com/jaywcjlove/changelog-generator/blob/b372394a4e7265d4041c479b4d1f515a9c21ec37/.github/workflows/release.yml#L21)
 
 #### `head-ref`
 
@@ -80,3 +80,7 @@ repository uses this action and GitHub releases for an [example](.github/workflo
 
 - Thanks [@jessicalostinspace/commit](https://github.com/jessicalostinspace/commit-difference-action).
 - Thanks [@jessicalostinspace/commit](https://github.com/metcalfc/changelog-generator).
+
+## License
+
+The scripts and documentation in this project are released under the [MIT License](./LICENSE)
