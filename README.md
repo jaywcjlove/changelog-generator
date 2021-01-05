@@ -3,7 +3,9 @@ changelog-generator
 
 This [Action](https://github.com/actions) returns a markdown formatted changelog between two git references. There are other projects that use milestones, labeled PRs, etc. Those are just to much work for simple projects.
 
-<img src="https://user-images.githubusercontent.com/1680273/103605228-53636b80-4f4e-11eb-9fa3-c53e7358f645.png" height="320" alt="Changelog Generator" />
+<a target="__blank" href="https://github.com/jaywcjlove/changelog-generator/releases">
+  <img src="https://user-images.githubusercontent.com/1680273/103605228-53636b80-4f4e-11eb-9fa3-c53e7358f645.png" height="320" alt="Changelog Generator" />
+</a>
 
 I just wanted a simple way to populate the body of a GitHub Release.
 
@@ -41,9 +43,7 @@ Then you can to use the resulting changelog.
 
 #### `myToken`
 
-A GITHUB_TOKEN with the ability to pull from the repo in question. This is required.
-
-Why do we need `myToken`? Read more here: [About the GITHUB_TOKEN secret](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret)
+A GITHUB_TOKEN with the ability to pull from the repo in question. This is required. Why do we need `myToken`? Read more here: [About the GITHUB_TOKEN secret](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret)
 
 #### `filter-author`
 
@@ -70,7 +70,7 @@ The name of the second branch. Defaults to the `tag_name` of the latest GitHub r
 
 ## Troubleshooting
 
-### Error not found
+#### Error not found
 
 ```
 Error: Not Found
