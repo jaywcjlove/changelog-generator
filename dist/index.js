@@ -14,7 +14,7 @@ async function run() {
   try {
     var headRef = core.getInput('head-ref');
     var baseRef = core.getInput('base-ref');
-    const myToken = core.getInput('myToken');
+    const myToken = core.getInput('token');
     const { owner, repo } = github.context.repo;
     const octokit = github.getOctokit(myToken);
 

@@ -15,7 +15,7 @@ I just wanted a simple way to populate the body of a GitHub Release.
   id: changelog
   uses: jaywcjlove/changelog-generator@main
   with:
-    myToken: ${{ secrets.GITHUB_TOKEN }}
+    token: ${{ secrets.GITHUB_TOKEN }}
     filter-author: (jaywcjlove|小弟调调™|dependabot\[bot\]|Renovate Bot)
     filter: (^[\s]+?[R|r]elease)|(^[R|r]elease)
 ```
@@ -43,9 +43,9 @@ Then you can to use the resulting changelog.
 
 ## Inputs
 
-#### `myToken`
+#### `token`
 
-A GITHUB_TOKEN with the ability to pull from the repo in question. This is required. Why do we need `myToken`? Read more here: [About the GITHUB_TOKEN secret](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret)
+A GITHUB_TOKEN with the ability to pull from the repo in question. This is required. Why do we need `token`? Read more here: [About the GITHUB_TOKEN secret](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret)
 
 #### `filter-author`
 

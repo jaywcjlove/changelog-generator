@@ -2,7 +2,7 @@ name: 'Github Release Changelog Generator'
 author: 'Kenny Wong'
 description: 'Returns the commit difference count between two git references.'
 inputs:
-  mytoken:
+  token:
     description: 'Your GITHUB_TOKEN'
     default: ''
     required: true
