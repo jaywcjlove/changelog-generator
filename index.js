@@ -79,7 +79,7 @@ async function getChangelog(headRef, baseRef, { repoName, tagRef }) {
 
     // These are option configurations for the @actions/exec lib`
     await exec.exec(
-      `git log "${baseRef}...${headRef}" --pretty=format:"[,,,]%h[,,,]%H[,,,]%s[,,,]%an" --reverse`,
+      `git log "${baseRef}...${headRef}" --pretty="format:[,,,]%h[,,,]%H[,,,]%s[,,,]%an" --reverse`,
       [],
       {
         cwd: './',
