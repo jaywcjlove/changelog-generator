@@ -7,12 +7,9 @@ async function run() {
   try {
     var headRef = core.getInput('head-ref');
     var baseRef = core.getInput('base-ref');
-    var filterAuthor = core.getInput('filter-author');
     const myToken = core.getInput('myToken');
     const { owner, repo } = github.context.repo;
-
     const octokit = github.getOctokit(myToken);
-    core.saveState("filterAuthor", filterAuthor ? filterAuthor : false);
 
     if (!baseRef) {
       const latestRelease = await octokit.repos.getLatestRelease({
@@ -120,6 +117,7 @@ async function getChangelog(headRef, baseRef, { repoName, tagRef }) {
  * @param {*} regExp `^released`
  */
 function formatString(str = '', repoName = '', { regExp }) {
+  const filterAuthor = core.getInput('filter-author');
   let result = '';
   str.split('\n').filter(Boolean).forEach((subStr) => {
     const strArr = subStr.split('[,,,]');
@@ -127,8 +125,7 @@ function formatString(str = '', repoName = '', { regExp }) {
     const hash = strArr[2];
     let commit = strArr[3];
     let author = strArr[4];
-    const filterAuthor = core.getState('filterAuthor');
-    console.log('FilterAuthor: \x1b[32m%s\x1b[0m', filterAuthor)
+    console.log('FilterAuthor: ', filterAuthor)
     if ((new RegExp(filterAuthor)).test(author) || filterAuthor === false) {
       author = '';
     }
