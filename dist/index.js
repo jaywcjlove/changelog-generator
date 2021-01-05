@@ -51,10 +51,17 @@ async function run() {
       regexp.test(headRef) &&
       regexp.test(baseRef)
     ) {
+
+      // By default a GitHub action checkout is shallow. Get all the tags, branches,
+      // and history. Redirect output to standard error which we can collect in the
+      // action.
+      await exec.exec('git fetch --depth=1 origin +refs/tags/*:refs/tags/*');
+      await exec.exec('git fetch --prune --unshallow');
+
       let tagRef = '';
       if (/^refs\/tags\//.test(github.context.ref)) {
         tagRef = github.context.ref.replace(/.*(?=\/)\//, '');
-        console.log(`tag: ${tagRef}`);
+        console.log(`tag-> : ${tagRef}`);
         core.setOutput('tag', tagRef);
       }
       if (/^refs\/heads\//.test(github.context.ref)) {
@@ -91,9 +98,16 @@ async function getChangelog(headRef, baseRef, { repoName, tagRef }) {
     }
     options.cwd = './';
     await exec.exec(
-      path.join(src, '..', 'changelog.sh'),
-      [headRef, baseRef, repoName],
-      options
+      `git log "${baseRef}...${headRef}" --pretty=format:"[,,,]%h[,,,]%H[,,,]%s[,,,]%an" --reverse`,
+      [],
+      {
+        stdout: data => {
+          output += data.toString();
+        },
+        stderr: data => {
+          err += data.toString();
+        }
+      }
     );
 
     if (output) {
