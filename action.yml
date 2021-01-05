@@ -1,4 +1,4 @@
-name: 'Get a changelog between two references'
+name: 'changelog-generator'
 author: 'Kenny Wong'
 description: 'Returns the commit difference count between two git references.'
 inputs:
