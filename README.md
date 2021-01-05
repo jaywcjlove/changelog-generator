@@ -80,7 +80,7 @@ Error: Not Found
 
 If you are seeing this error its likely that you do not yet have a GitHub release. You might have a git tag and that shows up in the release tab. The
 API this Action uses only works with GitHub Releases. Convert one of your tags to a release and you'll be on your way. You can check out how this
-repository uses this action and GitHub releases for an [example](.github/workflows/release.yml).
+repository uses this action and GitHub releases for an [example](https://github.com/jaywcjlove/changelog-generator/blob/600f36ff605c63a74a264ab324247f0c392bf7a2/.github/workflows/changelog.yml#L12-L18).
 
 ## Related
 
