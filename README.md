@@ -3,7 +3,7 @@ changelog-generator
 
 This [Action](https://github.com/actions) returns a markdown formatted changelog between two git references. There are other projects that use milestones, labeled PRs, etc. Those are just to much work for simple projects.
 
-<img src="https://user-images.githubusercontent.com/1680273/103601680-1fd01380-4f45-11eb-9ff3-84a435288ac1.png" height="320" alt="Changelog Generator" />
+<img src="https://user-images.githubusercontent.com/1680273/103605228-53636b80-4f4e-11eb-9fa3-c53e7358f645.png" height="320" alt="Changelog Generator" />
 
 I just wanted a simple way to populate the body of a GitHub Release.
 
