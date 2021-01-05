@@ -83,7 +83,7 @@ repository uses this action and GitHub releases for an [example](.github/workflo
 ## Acknowledgements
 
 - Thanks [@jessicalostinspace/commit](https://github.com/jessicalostinspace/commit-difference-action).
-- Thanks [@jessicalostinspace/commit](https://github.com/metcalfc/changelog-generator).
+- Thanks [@metcalfc/changelog-generator](https://github.com/metcalfc/changelog-generator).
 
 ## License
 
