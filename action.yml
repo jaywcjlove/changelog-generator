@@ -10,6 +10,10 @@ inputs:
     description: 'Regular expression filtering'
     default: ''
     required: false
+  filter-author:
+    description: 'Regular expression filtering'
+    default: ''
+    required: false
   head-ref:
     description: 'The name of the head reference'
     default: ''
@@ -18,6 +22,7 @@ inputs:
     description: 'The name of the base reference'
     default: ''
     required: false
+
 outputs:
   changelog:
     description: 'Markdown formatted changelog'

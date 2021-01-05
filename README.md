@@ -1,7 +1,7 @@
 changelog-generator
 ----
 
-This Action returns a markdown formatted changelog between two git references. There are other projects that use milestones, labeled PRs, etc. Those are just to much work for simple projects.
+This [Action](https://github.com/actions) returns a markdown formatted changelog between two git references. There are other projects that use milestones, labeled PRs, etc. Those are just to much work for simple projects.
 
 <img src="https://user-images.githubusercontent.com/1680273/103601680-1fd01380-4f45-11eb-9ff3-84a435288ac1.png" height="320" alt="Changelog Generator" />
 
@@ -45,9 +45,13 @@ A GITHUB_TOKEN with the ability to pull from the repo in question. This is requi
 
 Why do we need `myToken`? Read more here: [About the GITHUB_TOKEN secret](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret)
 
+#### `filter-author`
+
+Regular expression filtering author. Default `false`.
+
 #### `filter`
 
-Regular expression filtering. Example: [`filter: (^[\s]+?[R|r]elease)|(^[R|r]elease)`](https://github.com/jaywcjlove/changelog-generator/blob/b372394a4e7265d4041c479b4d1f515a9c21ec37/.github/workflows/release.yml#L21)
+Regular expression filtering changelog. Example: [`filter: (^[\s]+?[R|r]elease)|(^[R|r]elease)`](https://github.com/jaywcjlove/changelog-generator/blob/b372394a4e7265d4041c479b4d1f515a9c21ec37/.github/workflows/release.yml#L21)
 
 #### `head-ref`
 

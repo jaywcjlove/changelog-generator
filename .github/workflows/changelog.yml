@@ -14,6 +14,7 @@ jobs:
         uses: jaywcjlove/changelog-generator@main
         with:
           myToken: ${{ secrets.GITHUB_TOKEN }}
+          filter-author: (jaywcjlove|小弟调调™|dependabot\[bot\]|Renovate Bot)
           filter: (^[\s]+?[R|r]elease)|(^[R|r]elease)
 
       - name: Get the tag name
