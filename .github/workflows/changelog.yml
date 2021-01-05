@@ -25,3 +25,18 @@ jobs:
 
       - name: Get comparing changes url,
         run: echo "${{ steps.changelog.outputs.compareurl }}"
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@latest
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          body: |
+            ${{ steps.changelog.outputs.compareurl }}
+            ${{ steps.changelog.outputs.changelog }}
+          draft: false
+          prerelease: false
