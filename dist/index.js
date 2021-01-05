@@ -87,25 +87,18 @@ async function getChangelog(headRef, baseRef, { repoName, tagRef }) {
     let err = ''
 
     // These are option configurations for the @actions/exec lib`
-    const options = {}
-    options.listeners = {
-      stdout: data => {
-        output += data.toString();
-      },
-      stderr: data => {
-        err += data.toString();
-      }
-    }
-    options.cwd = './';
     await exec.exec(
       `git log "${baseRef}...${headRef}" --pretty=format:"[,,,]%h[,,,]%H[,,,]%s[,,,]%an" --reverse`,
       [],
       {
-        stdout: data => {
-          output += data.toString();
-        },
-        stderr: data => {
-          err += data.toString();
+        cwd: './',
+        listeners: {
+          stdout: data => {
+            output += data.toString();
+          },
+          stderr: data => {
+            err += data.toString();
+          }
         }
       }
     );
