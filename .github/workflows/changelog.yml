@@ -8,6 +8,7 @@ jobs:
       # To use this repository's private action, you must check out the repository
       - name: Checkout
         uses: actions/checkout@v2
+
       - name: Generate changelog
         id: changelog
         uses: jaywcjlove/changelog-generator@main
@@ -22,6 +23,3 @@ jobs:
 
       - name: Get comparing changes url,
         run: echo "${{ steps.changelog.outputs.compareurl }}"
-
-      - name: Get changelog,
-        run: echo "${{ steps.changelog.outputs.changelog }}"
