@@ -82,6 +82,10 @@ If you are seeing this error its likely that you do not yet have a GitHub releas
 API this Action uses only works with GitHub Releases. Convert one of your tags to a release and you'll be on your way. You can check out how this
 repository uses this action and GitHub releases for an [example](.github/workflows/release.yml).
 
+## Related
+
+- [Create Tags From](https://github.com/jaywcjlove/create-tag-action) Auto create tags from commit or package.json.
+
 ## Acknowledgements
 
 - [@jessicalostinspace/commit](https://github.com/jessicalostinspace/commit-difference-action).
