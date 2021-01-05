@@ -3,6 +3,8 @@ changelog-generator
 
 A GitHub Action that compares the commit differences between two branches
 
+![Changelog Generator](https://user-images.githubusercontent.com/1680273/103601680-1fd01380-4f45-11eb-9ff3-84a435288ac1.png)
+
 This Action returns a markdown formatted changelog between two git references. There are other projects that use milestones, labeled PRs, etc. Those are just to much work for simple projects.
 
 I just wanted a simple way to populate the body of a GitHub Release.
