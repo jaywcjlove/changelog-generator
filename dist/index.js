@@ -20,7 +20,7 @@ async function run() {
     const { owner, repo } = github.context.repo;
 
     const octokit = github.getOctokit(myToken);
-    const currentUser = '';
+    var currentUser = '';
     if (!baseRef) {
       const latestRelease = await octokit.repos.getLatestRelease({
         owner: owner,
