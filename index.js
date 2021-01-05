@@ -1,9 +1,7 @@
 const core = require('@actions/core');
 const exec = require('@actions/exec');
 const github = require('@actions/github');
-const path = require('path');
 const regexp = /^[.A-Za-z0-9_-]*$/;
-const src = __dirname;
 
 async function run() {
   try {
