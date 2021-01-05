@@ -16,6 +16,8 @@ I just wanted a simple way to populate the body of a GitHub Release.
   uses: jaywcjlove/changelog-generator@main
   with:
     myToken: ${{ secrets.GITHUB_TOKEN }}
+    filter-author: (jaywcjlove|小弟调调™|dependabot\[bot\]|Renovate Bot)
+    filter: (^[\s]+?[R|r]elease)|(^[R|r]elease)
 ```
 
 Then you can to use the resulting changelog.
