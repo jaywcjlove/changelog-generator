@@ -132,7 +132,6 @@ function formatString(str = '', repoName = '', { regExp }) {
     const hash = strArr[2];
     let commit = strArr[3];
     let author = strArr[4];
-    console.log('FilterAuthor: ', filterAuthor)
     if ((new RegExp(filterAuthor)).test(author) || filterAuthor === false) {
       author = '';
     }
