@@ -135,6 +135,7 @@ function formatString(str = '', repoName = '', { regExp }) {
     let commit = strArr[3];
     let author = strArr[4];
     const filterAuthor = core.getState('filterAuthor');
+    console.log('FilterAuthor: \x1b[32m%s\x1b[0m', filterAuthor)
     if ((new RegExp(filterAuthor)).test(author) || filterAuthor === false) {
       author = '';
     }
