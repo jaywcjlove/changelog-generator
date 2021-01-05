@@ -87,7 +87,8 @@ async function getChangelog(headRef, baseRef, repoName, tagRef) {
     );
 
     if (output) {
-      const changelog = formatString(output, repoName);
+      const regExp = core.getInput('filter');
+      const changelog = formatString(output, repoName, regExp);
       console.log('\x1b[32m%s\x1b[0m', `Changelog between ${baseRef} and ${headRef}:\n${changelog}`);
       core.setOutput('compareurl', `https://github.com/${repoName}/compare/${baseRef}...${tagRef || headRef}`);
       core.setOutput('changelog', changelog);
@@ -108,8 +109,9 @@ async function getChangelog(headRef, baseRef, repoName, tagRef) {
  * `%h[,,,]%H[,,,]%s[,,,]%an[-|-]`
  * @param {*} str ``
  * @param {*} repoName `uiwjs/uiw`
+ * @param {*} regExp `^released`
  */
-function formatString(str = '', repoName = '') {
+function formatString(str = '', repoName = '', regExp) {
   let result = '';
   str.split('\n').filter(Boolean).forEach((subStr) => {
     const strArr = subStr.split('[,,,]');
@@ -117,6 +119,11 @@ function formatString(str = '', repoName = '') {
     const hash = strArr[2];
     let commit = strArr[3];
     const author = strArr[4];
+
+    if (regExp && (new RegExp(regExp).test(commit))) {
+      return;
+    }
+
     if (getRegExp('type', commit)) {
       commit = `🆎 ${commit}`;
     } else if (getRegExp('feat', commit)) {

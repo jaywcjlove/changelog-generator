@@ -45,6 +45,10 @@ A GITHUB_TOKEN with the ability to pull from the repo in question. This is requi
 
 Why do we need `myToken`? Read more here: [About the GITHUB_TOKEN secret](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret)
 
+#### `filter`
+
+Regular expression filtering.
+
 #### `head-ref`
 
 The name of the head reference. Default `${{github.sha}}`.
