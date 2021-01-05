@@ -43,7 +43,7 @@ Then you can to use the resulting changelog.
 
 A GITHUB_TOKEN with the ability to pull from the repo in question. This is required.
 
-Why do we need `myToken`? Read more here: https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret
+Why do we need `myToken`? Read more here: [About the GITHUB_TOKEN secret](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret)
 
 #### `head-ref`
 
