@@ -15,7 +15,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           filter-author: (jaywcjlove|小弟调调™|dependabot\[bot\]|Renovate Bot)
-          filter: (^[\s]+?[R|r]elease)|(^[R|r]elease)
+          filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
 
       - name: Get the tag name
         run: echo "${{ steps.changelog.outputs.tag }}"
