@@ -17,7 +17,7 @@ I just wanted a simple way to populate the body of a GitHub Release.
   with:
     token: ${{ secrets.GITHUB_TOKEN }}
     filter-author: (jaywcjlove|小弟调调™|dependabot\[bot\]|Renovate Bot)
-    filter: (^[\s]+?[R|r]elease)|(^[R|r]elease)
+    filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
 ```
 
 Then you can to use the resulting changelog.
@@ -53,7 +53,7 @@ Regular expression filtering author. Default `false`. Example: [`filter-author: 
 
 #### `filter`
 
-Regular expression filtering changelog. Example: [`filter: (^[\s]+?[R|r]elease)|(^[R|r]elease)`](https://github.com/jaywcjlove/changelog-generator/blob/b372394a4e7265d4041c479b4d1f515a9c21ec37/.github/workflows/release.yml#L21)
+Regular expression filtering changelog. Example: [`filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'`](https://github.com/jaywcjlove/changelog-generator/blob/b372394a4e7265d4041c479b4d1f515a9c21ec37/.github/workflows/release.yml#L21)
 
 #### `head-ref`
 
