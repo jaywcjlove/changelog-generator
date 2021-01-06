@@ -3,6 +3,16 @@ const exec = require('@actions/exec');
 const github = require('@actions/github');
 const regexp = /^[.A-Za-z0-9_-]*$/;
 
+
+const getVersion = (ver) => {
+  let currentVersion = ''
+  ver.replace(/([v|V]\d(\.\d+){0,2})/i, (str) => {
+    currentVersion = str
+    return str
+  })
+  return currentVersion
+}
+
 async function run() {
   try {
     var headRef = core.getInput('head-ref');
@@ -28,10 +38,8 @@ async function run() {
       headRef = github.context.sha;
     }
 
-    console.log(`repo: ${owner}/${repo}`);
-    console.log(`ref: ${JSON.stringify(github.context.ref)}`);
-    console.log(`head-ref: ${headRef}`);
-    console.log(`base-ref: ${baseRef}`);
+    core.info(`Commit Content: \x1b[34m${owner}/${repo}\x1b[0m`)
+    core.info(`Ref: \x1b[34m${github.context.ref}\x1b[0m`)
 
     if (
       !!headRef &&
@@ -48,15 +56,20 @@ async function run() {
 
       let tagRef = '';
       if ((github.context.ref || '').startsWith('refs/tags/')) {
-        tagRef = github.context.ref.replace(/.*(?=\/)\//, '');
-        console.log(`tag-> : ${tagRef}`);
+        tagRef = getVersion(github.context.ref)
+        core.info(`Tag: \x1b[34m${tagRef}\x1b[0m`)
         core.setOutput('tag', tagRef);
       }
+
       if ((github.context.ref || '').startsWith('refs/heads/')) {
         const branch = github.context.ref.replace(/.*(?=\/)\//, '');
-        console.log(`branch: ${branch}`);
         core.setOutput('branch', branch);
       }
+
+      core.info(`Tag: \x1b[34m${tagRef}\x1b[0m`)
+      core.info(`Branch: \x1b[34m${branch}\x1b[0m`)
+      core.info(`Input head-ref: \x1b[34m${headRef}\x1b[0m`)
+      core.info(`Input base-ref: \x1b[34m${baseRef}\x1b[0m`)
       getChangelog(headRef, baseRef, { repoName: owner + '/' + repo, tagRef });
     } else {
       core.setFailed(
