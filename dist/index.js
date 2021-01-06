@@ -61,10 +61,9 @@ async function run() {
           `There are no releases on ${owner}/${repo}. Tags are not releases. (status=${commits.status}) ${commits.data.message || ''}`
         );
       }
-      core.info(`Latest Ref: \x1b[34m${JSON.stringify(commits.data.commits)}\x1b[0m`)
 
       for (const data of commits.data.commits) {
-        core.info(`Commit: \x1b[34m${data.commit.message}\x1b[0m \x1b[34m${data.commit.message}\x1b[0m ${data.commit.author.name}`)
+        core.info(`Commit: \x1b[34m${data.commit.message}\x1b[0m \x1b[34m${data.commit.message}\x1b[0m ${data.commit.author.name} ${data.sha}`)
       }
 
       // By default a GitHub action checkout is shallow. Get all the tags, branches,
