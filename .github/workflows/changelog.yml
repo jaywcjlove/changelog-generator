@@ -9,6 +9,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Create Tag
+        id: create_tag
+        uses: jaywcjlove/create-tag-action@v1.0.2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # test: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
+          package-path: ./package.json
+
       - name: Generate changelog
         id: changelog
         uses: jaywcjlove/changelog-generator@main
@@ -29,7 +37,8 @@ jobs:
       - name: Create Release
         id: create_release
         uses: actions/create-release@latest
-        if: startsWith(github.ref, 'refs/tags/')
+        # if: startsWith(github.ref, 'refs/tags/')
+        if: steps.create_tag.outputs.successful
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
