@@ -42,8 +42,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
+          tag_name: ${{ steps.create_tag.outputs.version }}
+          release_name: ${{ steps.create_tag.outputs.version }}
           body: |
             ```yml
             - name: Generate changelog
