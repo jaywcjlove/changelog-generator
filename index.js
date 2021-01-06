@@ -56,12 +56,14 @@ async function run() {
         );
       }
       let changelog = '';
+      core.group('Commit Group');
       for (const data of commits.data.commits) {
-        core.info(`Commit: \x1b[34m${data.commit.message}\x1b[0m \x1b[34m${data.author.name}\x1b[0m ${data.sha}`);
+        core.info(`Commit: \x1b[34m${data.commit.message}\x1b[0m \x1b[34m${data.committer.name}\x1b[0m ${data.sha}`);
         changelog += formatStringCommit(data.commit.message, `${owner}/${repo}`, {
-          regExp, shortHash: data.sha.slice(0, 7), filterAuthor, hash: data.sha, author: data.author.name
+          regExp, shortHash: data.sha.slice(0, 7), filterAuthor, hash: data.sha, author: data.committer.name
         });
       }
+      core.endGroup();
 
       let tagRef = '';
       if ((github.context.ref || '').startsWith('refs/tags/')) {
