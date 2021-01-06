@@ -58,7 +58,7 @@ async function run() {
       let changelog = '';
       for (const data of commits.data.commits) {
         core.startGroup(`Commit: \x1b[34m${data.commit.message}\x1b[0m \x1b[34m${data.commit.committer.name}\x1b[0m ${data.sha}`);
-        core.info(`Commit: ${data.commit.message}`);
+        core.info(`${JSON.stringify(data)}`);
         core.endGroup();
         changelog += formatStringCommit(data.commit.message, `${owner}/${repo}`, {
           regExp, shortHash: data.sha.slice(0, 7), filterAuthor, hash: data.sha, author: data.commit.committer.name
