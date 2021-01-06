@@ -61,6 +61,14 @@ async function run() {
       await exec.exec('git fetch --depth=1 origin +refs/tags/*:refs/tags/*');
       await exec.exec('git fetch --prune --unshallow');
 
+      const commitList = await octokit.repos.listBranchesForHeadCommit({
+        ...github.context.repo,
+        commit_sha: baseRef
+      })
+      core.info(`Commit List: \x1b[34m${JSON.stringify(commitList.data)}\x1b[0m`)
+      // octokit.repos.listCommits({})
+      // octokit.repos.listCommentsForCommit
+
       let tagRef = '';
       if ((github.context.ref || '').startsWith('refs/tags/')) {
         tagRef = getVersion(github.context.ref)
