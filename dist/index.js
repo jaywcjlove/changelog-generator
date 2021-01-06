@@ -63,14 +63,13 @@ async function run() {
         );
       }
       let changelog = '';
-      core.group('Commit Group');
       for (const data of commits.data.commits) {
+        core.info(`Commit Data: \x1b[34m${JSON.stringify(data)}\x1b[0m`);
         core.info(`Commit: \x1b[34m${data.commit.message}\x1b[0m \x1b[34m${data.committer.name}\x1b[0m ${data.sha}`);
         changelog += formatStringCommit(data.commit.message, `${owner}/${repo}`, {
           regExp, shortHash: data.sha.slice(0, 7), filterAuthor, hash: data.sha, author: data.committer.name
         });
       }
-      core.endGroup();
 
       let tagRef = '';
       if ((github.context.ref || '').startsWith('refs/tags/')) {
@@ -86,7 +85,9 @@ async function run() {
       core.info(`Tag: \x1b[34m${tagRef || '-'}\x1b[0m`);
       core.info(`Input head-ref: \x1b[34m${headRef}\x1b[0m`);
       core.info(`Input base-ref: \x1b[34m${baseRef}\x1b[0m`);
-      core.info(`Result Changelog:\n \x1b[34m${changelog}\x1b[0m`);
+      core.group('Result Changelog');
+      core.info(`\x1b[34m${changelog}\x1b[0m`);
+      core.endGroup();
       core.setOutput('compareurl', `https://github.com/${owner}/${repo}/compare/${baseRef}...${tagRef || headRef}`);
       core.setOutput('changelog', changelog);
     } else {
@@ -103,7 +104,7 @@ async function run() {
   }
 }
 
-function formatStringCommit(commit = '', repoName = '', { regExp, shortHash, filterAuthor, hash, author }) {
+function formatStringCommit(commit = '', repoName = '', { regExp, shortHash, filterAuthor, hash, author = '' }) {
   if ((new RegExp(filterAuthor)).test(author) || filterAuthor === false) {
     author = '';
   }
