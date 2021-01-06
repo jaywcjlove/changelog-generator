@@ -77,6 +77,7 @@ async function run() {
       core.info(`Tag: \x1b[34m${tagRef || '-'}\x1b[0m`);
       core.info(`Input head-ref: \x1b[34m${headRef}\x1b[0m`);
       core.info(`Input base-ref: \x1b[34m${baseRef}\x1b[0m`);
+      core.info(`Result Changelog: \x1b[34m${changelog}\x1b[0m`);
       core.setOutput('compareurl', `https://github.com/${owner}/${repo}/compare/${baseRef}...${tagRef || headRef}`);
       core.setOutput('changelog', changelog);
     } else {
