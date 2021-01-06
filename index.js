@@ -56,6 +56,10 @@ async function run() {
       }
       core.info(`Latest Ref: \x1b[34m${JSON.stringify(commits.data.commits)}\x1b[0m`)
 
+      for (const data of commits.data.commits) {
+        core.info(`Commit: \x1b[34m${data.commit.message}\x1b[0m \x1b[34m${data.commit.message}\x1b[0m ${data.commit.author.name}`)
+      }
+
       // By default a GitHub action checkout is shallow. Get all the tags, branches,
       // and history. Redirect output to standard error which we can collect in the
       // action.
