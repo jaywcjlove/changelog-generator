@@ -30,10 +30,7 @@ async function run() {
 
 
     if (!baseRef) {
-      const latestRelease = await octokit.repos.getLatestRelease({
-        owner: owner,
-        repo: repo
-      });
+      const latestRelease = await octokit.repos.getLatestRelease({ ...github.context.repo });
       if (latestRelease.status !== 200) {
         core.setFailed(
           `There are no releases on ${owner}/${repo}. Tags are not releases. (status=${latestRelease.status}) ${latestRelease.data.message || ''}`
@@ -65,6 +62,8 @@ async function run() {
         );
       }
       var baseHash = latestRef.data.object.sha;
+
+      core.info(`Latest Ref: \x1b[34m${JSON.stringify(latestRef.data)}\x1b[0m`)
 
       // By default a GitHub action checkout is shallow. Get all the tags, branches,
       // and history. Redirect output to standard error which we can collect in the
