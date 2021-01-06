@@ -21,18 +21,18 @@ async function run() {
     const { owner, repo } = github.context.repo;
     const octokit = github.getOctokit(myToken);
 
+
     if (!baseRef) {
       const latestRelease = await octokit.repos.getLatestRelease({
         owner: owner,
         repo: repo
       });
-      if (latestRelease) {
-        baseRef = latestRelease.data.tag_name;
-      } else {
+      if (latestRelease.status !== 200) {
         core.setFailed(
-          `There are no releases on ${owner}/${repo}. Tags are not releases.`
+          `There are no releases on ${owner}/${repo}. Tags are not releases. (status=${latestRelease.status}) ${latestRelease.data.message || ''}`
         );
       }
+      baseRef = latestRelease.data.tag_name;
     }
     if (!headRef) {
       headRef = github.context.sha;
@@ -47,6 +47,17 @@ async function run() {
       regexp.test(headRef) &&
       regexp.test(baseRef)
     ) {
+      const latestRef = await octokit.git.getRef({
+        ...github.context.repo,
+        ref: `tags/${baseRef}`
+      });
+
+      if (latestRef.status !== 200) {
+        core.setFailed(
+          `There are no releases on ${owner}/${repo}. Tags are not releases. (status=${latestRef.status}) ${latestRelease.data.message || ''}`
+        );
+      }
+      var baseHash = latestRef.data.object.sha;
 
       // By default a GitHub action checkout is shallow. Get all the tags, branches,
       // and history. Redirect output to standard error which we can collect in the
@@ -56,11 +67,12 @@ async function run() {
 
       const commitList = await octokit.repos.listBranchesForHeadCommit({
         ...github.context.repo,
-        commit_sha: baseRef
+        commit_sha: baseHash || baseRef
       })
       core.info(`Commit List: \x1b[34m${JSON.stringify(commitList.data)}\x1b[0m`)
       // octokit.repos.listCommits({})
       // octokit.repos.listCommentsForCommit
+      octokit.repos.listBranchesForHeadCommit
 
       let tagRef = '';
       if ((github.context.ref || '').startsWith('refs/tags/')) {
