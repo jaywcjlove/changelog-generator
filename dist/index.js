@@ -65,7 +65,7 @@ async function run() {
       let changelog = '';
       for (const data of commits.data.commits) {
         core.startGroup(`Commit: \x1b[34m${data.commit.message}\x1b[0m \x1b[34m${data.commit.author.name}\x1b[0m ${data.sha}`);
-        core.info(`${JSON.stringify(data)}`);
+        core.info(`${JSON.stringify(data, null, 2)}`);
         core.endGroup();
         changelog += formatStringCommit(data.commit.message, `${owner}/${repo}`, {
           regExp, shortHash: data.sha.slice(0, 7), filterAuthor, hash: data.sha, author: data.commit.author.name
@@ -87,7 +87,7 @@ async function run() {
       core.info(`Input head-ref: \x1b[34m${headRef}\x1b[0m`);
       core.info(`Input base-ref: \x1b[34m${baseRef}\x1b[0m`);
       core.startGroup('Result Changelog');
-      console.log(`${changelog}`);
+      core.info(`${changelog}`);
       core.endGroup();
       core.setOutput('compareurl', `https://github.com/${owner}/${repo}/compare/${baseRef}...${tagRef || headRef}`);
       core.setOutput('changelog', changelog);
