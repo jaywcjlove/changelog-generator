@@ -57,7 +57,7 @@ async function run() {
       }
       let changelog = '';
       for (const data of commits.data.commits) {
-        const message = commits.data.commits.split('\n\n')[0];
+        const message = data.commit.message.split('\n\n')[0];
         core.startGroup(`Commit: \x1b[34m${message}\x1b[0m \x1b[34m${data.commit.author.name}\x1b[0m ${data.sha}`);
         core.info(`${JSON.stringify(data, null, 2)}`);
         core.endGroup();
