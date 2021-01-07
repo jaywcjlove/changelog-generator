@@ -24,6 +24,6 @@
   },
   "devDependencies": {
     "@vercel/ncc": "0.26.1",
-    "husky": "4.3.6"
+    "husky": "4.3.7"
   }
 }
