@@ -104,7 +104,7 @@ function formatStringCommit(commit = '', repoName = '', { regExp, shortHash, fil
     author = '';
   }
   if (regExp && (new RegExp(regExp).test(commit))) {
-    return;
+    return '';
   }
   if (getRegExp('type', commit)) {
     commit = `🆎 ${commit}`;
