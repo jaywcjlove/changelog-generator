@@ -63,7 +63,7 @@ async function run() {
         core.endGroup();
         changelog += formatStringCommit(message, `${owner}/${repo}`, {
           regExp, shortHash: data.sha.slice(0, 7), filterAuthor, hash: data.sha, author: data.commit.author.name
-        });
+        }) || '';
       }
 
       let tagRef = '';
