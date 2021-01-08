@@ -32,8 +32,11 @@ jobs:
       - name: Get the branch name
         run: echo "${{ steps.changelog.outputs.branch }}"
 
-      - name: Get comparing changes url,
+      - name: Get comparing changes url.
         run: echo "${{ steps.changelog.outputs.compareurl }}"
+
+      - name: The version number of the tag created.
+        run: echo "${{ steps.changelog.outputs.version }}"
 
       - name: Create Release
         id: create_release

@@ -67,7 +67,8 @@ The name of the second branch. Defaults to the `tag_name` of the latest GitHub r
 
 - `changelog` Markdown formatted changelog.
 - `compareurl` Comparing two branches to see what’s changed or to start a new pull request.
-- `tag` Tag name.
+- `tag` Tag name `v1.0.0`.
+- `version` The version number of the tag created. example: `1.0.0`
 - `branch` Branch name.
 
 ## Troubleshooting

@@ -103,6 +103,7 @@ async function run() {
       core.endGroup();
       core.setOutput('compareurl', `https://github.com/${owner}/${repo}/compare/${baseRef}...${tagRef || headRef}`);
       core.setOutput('changelog', changelog);
+      core.setOutput('version', getVersion(github.ref).replace(/^v/, ''));
     } else {
       core.setFailed(
         'Branch names must contain only numbers, strings, underscores, periods, and dashes.'

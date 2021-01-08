@@ -24,6 +24,8 @@ inputs:
     required: false
 
 outputs:
+  version:
+    description: 'The version number of the tag created. example: 1.0.0'
   changelog:
     description: 'Markdown formatted changelog'
   compareurl:
