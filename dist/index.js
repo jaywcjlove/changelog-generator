@@ -38,7 +38,7 @@ async function run() {
       }
       baseRef = latestRelease.data.tag_name;
       core.startGroup(
-        `Latest Release Result Data: \x1b[32m${tag_rsp.status || '-'}\x1b[0m \x1b[32m${latestRelease.data.tag_name}\x1b[0m`
+        `Latest Release Result Data: \x1b[32m${latestRelease.status || '-'}\x1b[0m \x1b[32m${latestRelease.data.tag_name}\x1b[0m`
       )
       core.info(`${JSON.stringify(latestRelease, null, 2)}`)
       core.endGroup()
