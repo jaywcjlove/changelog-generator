@@ -37,6 +37,11 @@ async function run() {
         );
       }
       baseRef = latestRelease.data.tag_name;
+      core.startGroup(
+        `Latest Release Result Data: \x1b[32m${tag_rsp.status || '-'}\x1b[0m \x1b[32m${latestRelease.data.tag_name}\x1b[0m`
+      )
+      core.info(`${JSON.stringify(latestRelease, null, 2)}`)
+      core.endGroup()
     }
     if (!headRef) {
       headRef = github.context.sha;
@@ -62,6 +67,12 @@ async function run() {
           `There are no releases on ${owner}/${repo}. Tags are not releases. (status=${commits.status}) ${commits.data.message || ''}`
         );
       }
+      core.startGroup(
+        `Compare Commits Result Data: \x1b[32m${commits.status || '-'}\x1b[0m \x1b[32m${baseRef}\x1b[0m...\x1b[32m${headRef}\x1b[0m`
+      )
+      core.info(`${JSON.stringify(commits, null, 2)}`)
+      core.endGroup()
+
       let changelog = '';
       for (const data of commits.data.commits) {
         const message = data.commit.message.split('\n\n')[0];
