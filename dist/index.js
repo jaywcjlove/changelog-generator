@@ -76,11 +76,13 @@ async function run() {
       let changelog = '';
       for (const data of commits.data.commits) {
         const message = data.commit.message.split('\n\n')[0];
-        core.startGroup(`Commit: \x1b[34m${message}\x1b[0m \x1b[34m${data.commit.author.name}\x1b[0m ${data.sha}`);
+        core.startGroup(`Commit: \x1b[34m${message}\x1b[0m \x1b[34m${data.commit.author.name}(${data.author.login})\x1b[0m ${data.sha}`);
         core.info(`${JSON.stringify(data, null, 2)}`);
         core.endGroup();
         changelog += formatStringCommit(message, `${owner}/${repo}`, {
-          regExp, shortHash: data.sha.slice(0, 7), filterAuthor, hash: data.sha, author: data.commit.author.name
+          regExp, shortHash: data.sha.slice(0, 7), filterAuthor, hash: data.sha,
+          author: data.commit.author.name,
+          login: data.author.login,
         }) || '';
       }
 
@@ -118,9 +120,9 @@ async function run() {
   }
 }
 
-function formatStringCommit(commit = '', repoName = '', { regExp, shortHash, filterAuthor, hash, author = '' }) {
-  if ((new RegExp(filterAuthor)).test(author) || filterAuthor === false) {
-    author = '';
+function formatStringCommit(commit = '', repoName = '', { regExp, shortHash, filterAuthor, hash, login = '' }) {
+  if ((new RegExp(filterAuthor)).test(login) || filterAuthor === false) {
+    login = '';
   }
   if (regExp && (new RegExp(regExp).test(commit))) {
     return '';
@@ -150,7 +152,7 @@ function formatStringCommit(commit = '', repoName = '', { regExp, shortHash, fil
   } else {
     commit = `📄 ${commit}`;
   }
-  return `- ${commit} [\`${shortHash}\`](http://github.com/${repoName}/commit/${hash})${author ?` @${author}`: ''}\n`;
+  return `- ${commit} [\`${shortHash}\`](http://github.com/${repoName}/commit/${hash})${login ?` @${login}`: ''}\n`;
 }
 
 function getRegExp(str = '', commit = '') {
