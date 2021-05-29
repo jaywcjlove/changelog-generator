@@ -5,9 +5,13 @@ jobs:
   test:
     runs-on: ubuntu-18.04
     steps:
-      # To use this repository's private action, you must check out the repository
-      - name: Checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - run: npm install
+      - run: npm run build
 
       - name: Create Tag
         id: create_tag
@@ -19,7 +23,8 @@ jobs:
 
       - name: Generate Changelog
         id: changelog
-        uses: jaywcjlove/changelog-generator@main
+        # uses: jaywcjlove/changelog-generator@main
+        uses: ./
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           head-ref: ${{steps.create_tag.outputs.version}}
