@@ -23,9 +23,7 @@ async function run() {
     const octokit = github.getOctokit(myToken);
 
     if (!baseRef) {
-      console.log(octokit.repos)
-      console.log(octokit)
-      const latestRelease = await octokit.repos.getLatestRelease({ ...github.context.repo });
+      const latestRelease = await octokit.rest.repos.getLatestRelease({ ...github.context.repo });
       if (latestRelease.status !== 200) {
         core.setFailed(
           `There are no releases on ${owner}/${repo}. Tags are not releases. (status=${latestRelease.status}) ${latestRelease.data.message || ''}`
