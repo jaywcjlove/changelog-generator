@@ -6192,7 +6192,7 @@ async function run() {
       regexp.test(headRef) &&
       regexp.test(baseRef)
     ) {
-      const commits = await octokit.repos.compareCommits({
+      const commits = await octokit.rest.repos.compareCommits({
         ...github.context.repo,
         base: baseRef,
         head: headRef,
