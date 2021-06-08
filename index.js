@@ -19,6 +19,7 @@ async function run() {
     const myToken = core.getInput('token');
     const filterAuthor = core.getInput('filter-author');
     const regExp = core.getInput('filter');
+    const originalMarkdown = core.getInput('original-markdown');
     const { owner, repo } = github.context.repo;
     const octokit = github.getOctokit(myToken);
 
@@ -73,6 +74,7 @@ async function run() {
         core.info(`${JSON.stringify(data, null, 2)}`);
         core.endGroup();
         changelog += formatStringCommit(message, `${owner}/${repo}`, {
+          originalMarkdown,
           regExp, shortHash: data.sha.slice(0, 7), filterAuthor, hash: data.sha,
           author: data.commit.author.name,
           login: data.author.login,
@@ -113,7 +115,7 @@ async function run() {
   }
 }
 
-function formatStringCommit(commit = '', repoName = '', { regExp, shortHash, filterAuthor, hash, login = '' }) {
+function formatStringCommit(commit = '', repoName = '', { regExp, shortHash, originalMarkdown = true, filterAuthor, hash, login = '' }) {
   if ((new RegExp(filterAuthor)).test(login) || filterAuthor === false) {
     login = '';
   }
@@ -144,6 +146,9 @@ function formatStringCommit(commit = '', repoName = '', { regExp, shortHash, fil
     commit = `💊 ${commit}`;
   } else {
     commit = `📄 ${commit}`;
+  }
+  if (originalMarkdown) {
+    return `- ${commit} ${shortHash}${login ?` @${login}`: ''}\n`;
   }
   return `- ${commit} [\`${shortHash}\`](http://github.com/${repoName}/commit/${hash})${login ?` @${login}`: ''}\n`;
 }

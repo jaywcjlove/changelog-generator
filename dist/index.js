@@ -134,7 +134,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getState = exports.saveState = exports.group = exports.endGroup = exports.startGroup = exports.info = exports.warning = exports.error = exports.debug = exports.isDebug = exports.setFailed = exports.setCommandEcho = exports.setOutput = exports.getBooleanInput = exports.getInput = exports.addPath = exports.setSecret = exports.exportVariable = exports.ExitCode = void 0;
+exports.getState = exports.saveState = exports.group = exports.endGroup = exports.startGroup = exports.info = exports.warning = exports.error = exports.debug = exports.isDebug = exports.setFailed = exports.setCommandEcho = exports.setOutput = exports.getBooleanInput = exports.getMultilineInput = exports.getInput = exports.addPath = exports.setSecret = exports.exportVariable = exports.ExitCode = void 0;
 const command_1 = __nccwpck_require__(351);
 const file_command_1 = __nccwpck_require__(717);
 const utils_1 = __nccwpck_require__(278);
@@ -220,6 +220,21 @@ function getInput(name, options) {
     return val.trim();
 }
 exports.getInput = getInput;
+/**
+ * Gets the values of an multiline input.  Each value is also trimmed.
+ *
+ * @param     name     name of the input to get
+ * @param     options  optional. See InputOptions.
+ * @returns   string[]
+ *
+ */
+function getMultilineInput(name, options) {
+    const inputs = getInput(name, options)
+        .split('\n')
+        .filter(x => x !== '');
+    return inputs;
+}
+exports.getMultilineInput = getMultilineInput;
 /**
  * Gets the input value of the boolean type in the YAML 1.2 "core schema" specification.
  * Support boolean input list: `true | True | TRUE | false | False | FALSE` .
@@ -6162,6 +6177,7 @@ async function run() {
     const myToken = core.getInput('token');
     const filterAuthor = core.getInput('filter-author');
     const regExp = core.getInput('filter');
+    const originalMarkdown = core.getInput('original-markdown');
     const { owner, repo } = github.context.repo;
     const octokit = github.getOctokit(myToken);
 
@@ -6216,6 +6232,7 @@ async function run() {
         core.info(`${JSON.stringify(data, null, 2)}`);
         core.endGroup();
         changelog += formatStringCommit(message, `${owner}/${repo}`, {
+          originalMarkdown,
           regExp, shortHash: data.sha.slice(0, 7), filterAuthor, hash: data.sha,
           author: data.commit.author.name,
           login: data.author.login,
@@ -6256,7 +6273,7 @@ async function run() {
   }
 }
 
-function formatStringCommit(commit = '', repoName = '', { regExp, shortHash, filterAuthor, hash, login = '' }) {
+function formatStringCommit(commit = '', repoName = '', { regExp, shortHash, originalMarkdown = true, filterAuthor, hash, login = '' }) {
   if ((new RegExp(filterAuthor)).test(login) || filterAuthor === false) {
     login = '';
   }
@@ -6287,6 +6304,9 @@ function formatStringCommit(commit = '', repoName = '', { regExp, shortHash, fil
     commit = `💊 ${commit}`;
   } else {
     commit = `📄 ${commit}`;
+  }
+  if (originalMarkdown) {
+    return `- ${commit} ${shortHash}${login ?` @${login}`: ''}\n`;
   }
   return `- ${commit} [\`${shortHash}\`](http://github.com/${repoName}/commit/${hash})${login ?` @${login}`: ''}\n`;
 }

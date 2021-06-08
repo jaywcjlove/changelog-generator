@@ -63,6 +63,10 @@ The name of the head reference. Default `${{github.sha}}`.
 
 The name of the second branch. Defaults to the `tag_name` of the latest GitHub release. *This must be a GitHub release. Git tags or branches will not work.*
 
+#### `original-markdown`
+
+Default `true`, Output clean markdown content.
+
 ## Outputs
 
 - `changelog` Markdown formatted changelog.
