@@ -6273,7 +6273,7 @@ async function run() {
   }
 }
 
-function formatStringCommit(commit = '', repoName = '', { regExp, shortHash, originalMarkdown = true, filterAuthor, hash, login = '' }) {
+function formatStringCommit(commit = '', repoName = '', { regExp, shortHash, originalMarkdown, filterAuthor, hash, login = '' }) {
   if ((new RegExp(filterAuthor)).test(login) || filterAuthor === false) {
     login = '';
   }
@@ -6306,7 +6306,7 @@ function formatStringCommit(commit = '', repoName = '', { regExp, shortHash, ori
     commit = `📄 ${commit}`;
   }
   if (originalMarkdown) {
-    return `- ${commit} ${shortHash}${login ?` @${login}`: ''}\n`;
+    return `- ${commit} ${shortHash} ${login ?`@${login}`: ''}\n`;
   }
   return `- ${commit} [\`${shortHash}\`](http://github.com/${repoName}/commit/${hash})${login ?` @${login}`: ''}\n`;
 }
