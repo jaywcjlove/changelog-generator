@@ -84,15 +84,15 @@ async function run() {
       let tagRef = '';
       if ((github.context.ref || '').startsWith('refs/tags/')) {
         tagRef = getVersion(github.context.ref);
-        core.info(`Tag: \x1b[34m${tagRef}\x1b[0m`);
-        core.setOutput('tag', tagRef);
+        core.info(`Tag: \x1b[34m${tagRef || headRef}\x1b[0m`);
+        core.setOutput('tag', tagRef || headRef);
       }
       if ((github.context.ref || '').startsWith('refs/heads/')) {
         const branch = github.context.ref.replace(/.*(?=\/)\//, '');
         core.setOutput('branch', branch);
         core.info(`Branch: \x1b[34m${branch}\x1b[0m`);
       }
-      core.info(`Tag: \x1b[34m${tagRef || '-'}\x1b[0m`);
+      core.info(`Tag: \x1b[34m${tagRef || headRef || '-'}\x1b[0m`);
       core.info(`Input head-ref: \x1b[34m${headRef}\x1b[0m`);
       core.info(`Input base-ref: \x1b[34m${baseRef}\x1b[0m`);
       core.startGroup('Result Changelog');
