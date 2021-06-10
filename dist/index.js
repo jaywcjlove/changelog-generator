@@ -6242,9 +6242,20 @@ async function run() {
       let tagRef = '';
       if ((github.context.ref || '').startsWith('refs/tags/')) {
         tagRef = getVersion(github.context.ref);
-        core.info(`Tag: \x1b[34m${tagRef || headRef}\x1b[0m`);
-        core.setOutput('tag', tagRef || headRef);
       }
+
+      if (!tagRef) {
+        const listTags = await octokit.rest.repos.listTags({owner, repo});
+        if (listTags.status !== 200) {
+          core.setFailed(`Failed to get tag lists (status=${listTags.status})`);
+          return
+        }
+        tagRef = listTags.data[0] && listTags.data[0].name ? listTags.data[0].name : '';
+      }
+  
+      core.info(`Tag: \x1b[34m${tagRef}\x1b[0m`);
+      core.setOutput('tag', tagRef);
+
       if ((github.context.ref || '').startsWith('refs/heads/')) {
         const branch = github.context.ref.replace(/.*(?=\/)\//, '');
         core.setOutput('branch', branch);
