@@ -6228,14 +6228,14 @@ async function run() {
       let changelog = '';
       for (const data of commits.data.commits) {
         const message = data.commit.message.split('\n\n')[0];
-        core.startGroup(`Commit: \x1b[34m${message}\x1b[0m \x1b[34m${data.commit.author.name}(${data.commit.author.login})\x1b[0m ${data.sha}`);
+        core.startGroup(`Commit: \x1b[34m${message}\x1b[0m \x1b[34m${data.commit.author.name}(${data.author.login})\x1b[0m ${data.sha}`);
         core.info(`${JSON.stringify(data, null, 2)}`);
         core.endGroup();
         changelog += formatStringCommit(message, `${owner}/${repo}`, {
           originalMarkdown,
           regExp, shortHash: data.sha.slice(0, 7), filterAuthor, hash: data.sha,
           author: data.commit.author.name,
-          login: data.commit.author.login,
+          login: data.author.login,
         }) || '';
       }
 
