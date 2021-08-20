@@ -23,7 +23,7 @@
     "@actions/github": "5.0.0"
   },
   "devDependencies": {
-    "@vercel/ncc": "0.29.0",
+    "@vercel/ncc": "0.29.2",
     "husky": "4.3.8"
   }
 }
