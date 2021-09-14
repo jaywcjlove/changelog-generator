@@ -5,6 +5,7 @@
   "description": "A GitHub Action that compares the commit differences between two branches",
   "main": "index.js",
   "scripts": {
+    "prepare": "husky install",
     "build": "ncc build ./index.js"
   },
   "repository": {
