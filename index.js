@@ -133,6 +133,7 @@ function formatStringCommit(commit = '', repoName = '', { regExp, shortHash, ori
   if (regExp && (new RegExp(regExp).test(commit))) {
     return '';
   }
+  login = login.replace(/\[bot\]/, '-bot');
   if (getRegExp('type', commit)) {
     commit = `🆎 ${commit}`;
   } else if (getRegExp('feat', commit)) {
@@ -159,9 +160,9 @@ function formatStringCommit(commit = '', repoName = '', { regExp, shortHash, ori
     commit = `📄 ${commit}`;
   }
   if (originalMarkdown) {
-    return `- ${commit} ${shortHash} ${login ?`@${login}`: ''}\n`;
+    return `- ${commit} ${shortHash} ${login ? `@${login}`: ''}\n`;
   }
-  return `- ${commit} [\`${shortHash}\`](http://github.com/${repoName}/commit/${hash})${login ?` @${login.replace(/\[bot\]/, '-bot')}`: ''}\n`;
+  return `- ${commit} [\`${shortHash}\`](http://github.com/${repoName}/commit/${hash})${login ? ` @${login}`: ''}\n`;
 }
 
 function getRegExp(str = '', commit = '') {
