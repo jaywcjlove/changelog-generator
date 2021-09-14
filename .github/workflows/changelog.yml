@@ -29,7 +29,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           head-ref: ${{steps.create_tag.outputs.version}}
           original-markdown: true
-          filter-author: (jaywcjlove|小弟调调™|dependabot|renovate\\[bot\\]|dependabot\\[bot\\]|Renovate Bot)
+          filter-author: (小弟调调™|dependabot|Renovate Bot)
           filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
 
       - name: Get the tag name
@@ -61,7 +61,7 @@ jobs:
               uses: jaywcjlove/changelog-generator@${{ steps.create_tag.outputs.version }}
               with:
                 token: # Your GITHUB_TOKEN
-                filter-author: (jaywcjlove|小弟调调™|)
+                filter-author: (jaywcjlove|小弟调调™|dependabot\[bot\]|Renovate Bot)
                 filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
             ```
             
