@@ -77,7 +77,7 @@ async function run() {
           originalMarkdown,
           regExp, shortHash: data.sha.slice(0, 7), filterAuthor, hash: data.sha,
           author: data.commit.author.name,
-          login: data.author.login,
+          login: data.author.login.replace(/\[bot\]/, '-bot'),
         }) || '';
       }
 
