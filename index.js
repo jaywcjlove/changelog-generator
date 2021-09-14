@@ -77,7 +77,7 @@ async function run() {
           originalMarkdown,
           regExp, shortHash: data.sha.slice(0, 7), filterAuthor, hash: data.sha,
           author: data.commit.author.name,
-          login: data.author.login.replace(/\[bot\]/, '-bot'),
+          login: data.author.login,
         }) || '';
       }
 
@@ -161,7 +161,7 @@ function formatStringCommit(commit = '', repoName = '', { regExp, shortHash, ori
   if (originalMarkdown) {
     return `- ${commit} ${shortHash} ${login ?`@${login}`: ''}\n`;
   }
-  return `- ${commit} [\`${shortHash}\`](http://github.com/${repoName}/commit/${hash})${login ?` @${login}`: ''}\n`;
+  return `- ${commit} [\`${shortHash}\`](http://github.com/${repoName}/commit/${hash})${login ?` @${login.replace(/\[bot\]/, '-bot')}`: ''}\n`;
 }
 
 function getRegExp(str = '', commit = '') {
