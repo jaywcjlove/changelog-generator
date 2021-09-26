@@ -13,6 +13,16 @@ jobs:
       - run: npm install
       - run: npm run build
 
+      - run: mkdir -p build
+      - run: npm i markdown-to-html-cli -g
+      - run: markdown-to-html --output build/index.html --github-corners https://github.com/jaywcjlove/changelog-generator
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
+
       - name: Create Tag
         id: create_tag
         uses: jaywcjlove/create-tag-action@v1.2.1
