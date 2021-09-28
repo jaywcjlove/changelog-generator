@@ -1,6 +1,8 @@
 changelog-generator
 ----
 
+[![Build & Test](https://github.com/jaywcjlove/changelog-generator/actions/workflows/changelog.yml/badge.svg)](https://github.com/jaywcjlove/changelog-generator/actions/workflows/changelog.yml)
+
 This [Action](https://github.com/actions) returns a markdown formatted changelog between two git references. There are other projects that use milestones, labeled PRs, etc. Those are just to much work for simple projects.
 
 <a target="__blank" href="https://github.com/jaywcjlove/changelog-generator/releases">
