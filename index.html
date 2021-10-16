@@ -33,19 +33,16 @@
   <span class="token key atrule">run</span><span class="token punctuation">:</span> echo "$<span class="token punctuation">{</span><span class="token punctuation">{</span> steps.changelog.outputs.changelog <span class="token punctuation">}</span><span class="token punctuation">}</span>"
 
 <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Create Release
-  <span class="token key atrule">id</span><span class="token punctuation">:</span> create_release
-  <span class="token key atrule">uses</span><span class="token punctuation">:</span> actions/create<span class="token punctuation">-</span>release@latest
-  <span class="token key atrule">env</span><span class="token punctuation">:</span>
-    <span class="token key atrule">GITHUB_TOKEN</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span><span class="token punctuation">{</span> secrets.GITHUB_TOKEN <span class="token punctuation">}</span><span class="token punctuation">}</span>
+  <span class="token key atrule">uses</span><span class="token punctuation">:</span> ncipollo/release<span class="token punctuation">-</span>action@v1
+  <span class="token key atrule">if</span><span class="token punctuation">:</span> steps.create_tag.outputs.successful
   <span class="token key atrule">with</span><span class="token punctuation">:</span>
-    <span class="token key atrule">tag_name</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span><span class="token punctuation">{</span> github.ref <span class="token punctuation">}</span><span class="token punctuation">}</span>
-    <span class="token key atrule">release_name</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span><span class="token punctuation">{</span> github.ref <span class="token punctuation">}</span><span class="token punctuation">}</span>
+    <span class="token key atrule">token</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span><span class="token punctuation">{</span> secrets.GITHUB_TOKEN <span class="token punctuation">}</span><span class="token punctuation">}</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span><span class="token punctuation">{</span> steps.create_tag.outputs.version <span class="token punctuation">}</span><span class="token punctuation">}</span>
+    <span class="token key atrule">tag</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span><span class="token punctuation">{</span> steps.create_tag.outputs.version <span class="token punctuation">}</span><span class="token punctuation">}</span>
     <span class="token key atrule">body</span><span class="token punctuation">:</span> <span class="token punctuation">|</span><span class="token scalar string">
       ${{ steps.changelog.outputs.compareurl }}</span>
 
       $<span class="token punctuation">{</span><span class="token punctuation">{</span> steps.changelog.outputs.changelog <span class="token punctuation">}</span><span class="token punctuation">}</span>
-    <span class="token key atrule">draft</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
-    <span class="token key atrule">prerelease</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
 </code></pre>
       <h2 id="inputs"><a class="anchor" aria-hidden="true" tabindex="-1" href="#inputs"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">
             <path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path>
@@ -57,7 +54,7 @@
       <h4 id="filter-author"><a class="anchor" aria-hidden="true" tabindex="-1" href="#filter-author"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">
             <path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path>
           </svg></a><code>filter-author</code></h4>
-      <p>Regular expression filtering author. Default <code>false</code>. Example: <a href="https://github.com/jaywcjlove/changelog-generator/blob/f48f63cdb5f3c5d8b6499c6d96e3450ee7bdb9f5/.github/workflows/changelog.yml#L17"><code>filter-author: (jaywcjlove|小弟调调™|dependabot\[bot\]|Renovate Bot)</code></a></p>
+      <p>Regular expression filtering author. Example: <a href="https://github.com/jaywcjlove/changelog-generator/blob/f48f63cdb5f3c5d8b6499c6d96e3450ee7bdb9f5/.github/workflows/changelog.yml#L17"><code>filter-author: (jaywcjlove|小弟调调™|dependabot\[bot\]|Renovate Bot)</code></a></p>
       <h4 id="filter"><a class="anchor" aria-hidden="true" tabindex="-1" href="#filter"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">
             <path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path>
           </svg></a><code>filter</code></h4>
