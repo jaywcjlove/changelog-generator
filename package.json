@@ -1,6 +1,6 @@
 {
   "name": "changelog-generator",
-  "version": "1.4.7",
+  "version": "1.4.8",
   "private": true,
   "description": "A GitHub Action that compares the commit differences between two branches",
   "main": "index.js",
@@ -14,11 +14,6 @@
   },
   "author": "jaywcjlove",
   "license": "MIT",
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run build && git add dist/"
-    }
-  },
   "dependencies": {
     "@actions/core": "1.6.0",
     "@actions/github": "5.0.0"
