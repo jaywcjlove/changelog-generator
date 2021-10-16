@@ -37,7 +37,7 @@ Then you can to use the resulting changelog.
     tag: ${{ steps.create_tag.outputs.version }}
     body: |
       ${{ steps.changelog.outputs.compareurl }}
-      
+
       ${{ steps.changelog.outputs.changelog }}
 ```
 
@@ -49,7 +49,7 @@ A GITHUB_TOKEN with the ability to pull from the repo in question. This is requi
 
 #### `filter-author`
 
-Regular expression filtering author. Default `false`. Example: [`filter-author: (jaywcjlove|小弟调调™|dependabot\[bot\]|Renovate Bot)`](https://github.com/jaywcjlove/changelog-generator/blob/f48f63cdb5f3c5d8b6499c6d96e3450ee7bdb9f5/.github/workflows/changelog.yml#L17)
+Regular expression filtering author. Example: [`filter-author: (jaywcjlove|小弟调调™|dependabot\[bot\]|Renovate Bot)`](https://github.com/jaywcjlove/changelog-generator/blob/f48f63cdb5f3c5d8b6499c6d96e3450ee7bdb9f5/.github/workflows/changelog.yml#L17)
 
 #### `filter`
 

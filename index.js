@@ -2,7 +2,6 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const regexp = /^[.A-Za-z0-9_-]*$/;
 
-
 const getVersion = (ver) => {
   let currentVersion = ''
   ver.replace(/([v|V]\d(\.\d+){0,2})/i, (str) => {
@@ -127,7 +126,7 @@ async function run() {
 }
 
 function formatStringCommit(commit = '', repoName = '', { regExp, shortHash, originalMarkdown, filterAuthor, hash, login = '' }) {
-  if ((new RegExp(filterAuthor)).test(login) || filterAuthor === false) {
+  if ((new RegExp(filterAuthor)).test(login)) {
     login = '';
   }
   if (regExp && (new RegExp(regExp).test(commit))) {
