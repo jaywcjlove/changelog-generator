@@ -6452,7 +6452,7 @@ async function run() {
 }
 
 function formatStringCommit(commit = '', repoName = '', { regExp, shortHash, originalMarkdown, filterAuthor, hash, login = '' }) {
-  if ((new RegExp(filterAuthor)).test(login)) {
+  if (filterAuthor && (new RegExp(filterAuthor)).test(login)) {
     login = '';
   }
   if (regExp && (new RegExp(regExp).test(commit))) {
