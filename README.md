@@ -29,19 +29,16 @@ Then you can to use the resulting changelog.
   run: echo "${{ steps.changelog.outputs.changelog }}"
 
 - name: Create Release
-  id: create_release
-  uses: actions/create-release@latest
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  uses: ncipollo/release-action@v1
+  if: steps.create_tag.outputs.successful
   with:
-    tag_name: ${{ github.ref }}
-    release_name: ${{ github.ref }}
+    token: ${{ secrets.GITHUB_TOKEN }}
+    name: ${{ steps.create_tag.outputs.version }}
+    tag: ${{ steps.create_tag.outputs.version }}
     body: |
       ${{ steps.changelog.outputs.compareurl }}
-
+      
       ${{ steps.changelog.outputs.changelog }}
-    draft: false
-    prerelease: false
 ```
 
 ## Inputs
