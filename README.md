@@ -90,6 +90,7 @@ repository uses this action and GitHub releases for an [example](https://github.
 ## Related
 
 - [Create Tags From](https://github.com/jaywcjlove/create-tag-action) Auto create tags from commit or package.json.
+- [Github Action Contributors](https://github.com/jaywcjlove/github-action-contributors) Github action generates dynamic image URL for contributor list to display it!
 
 ## Acknowledgements
 
