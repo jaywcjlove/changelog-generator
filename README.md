@@ -87,10 +87,11 @@ If you are seeing this error its likely that you do not yet have a GitHub releas
 API this Action uses only works with GitHub Releases. Convert one of your tags to a release and you'll be on your way. You can check out how this
 repository uses this action and GitHub releases for an [example](https://github.com/jaywcjlove/changelog-generator/blob/600f36ff605c63a74a264ab324247f0c392bf7a2/.github/workflows/changelog.yml#L12-L18).
 
-## Related
+## See also
 
 - [Create Tags From](https://github.com/jaywcjlove/create-tag-action) Auto create tags from commit or package.json.
 - [Github Action Contributors](https://github.com/jaywcjlove/github-action-contributors) Github action generates dynamic image URL for contributor list to display it!
+- [Create Coverage Badges](https://github.com/jaywcjlove/coverage-badges-cli) Create coverage badges from coverage reports. (no 3rd parties servers)
 
 ## Acknowledgements
 
