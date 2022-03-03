@@ -39,20 +39,10 @@ jobs:
           original-markdown: true
           filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
 
-      - name: Get the tag name
-        run: echo "${{ steps.changelog.outputs.tag }}"
-
-      - name: Get the branch name
-        run: echo "${{ steps.changelog.outputs.branch }}"
-
-      - name: Get comparing changes url.
-        run: echo "${{ steps.changelog.outputs.compareurl }}"
-
-      - name: The version number of the tag created.
-        run: echo "${{ steps.changelog.outputs.version }}"
-
-      - name: The version number of the tag created.
-        run: echo "${{ steps.changelog.outputs.version }}"
+      - run: echo "outputs.tag - ${{ steps.changelog.outputs.tag }}"
+      - run: echo "outputs.branch - ${{ steps.changelog.outputs.branch }}"
+      - run: echo "outputs.compareurl - ${{ steps.changelog.outputs.compareurl }}"
+      - run: echo "outputs.version - ${{ steps.changelog.outputs.version }}"
 
       - name: Create Release
         id: create_release
