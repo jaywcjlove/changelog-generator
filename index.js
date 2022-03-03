@@ -41,7 +41,9 @@ async function run() {
     }
 
     core.info(`Commit Content: \x1b[34m${owner}/${repo}\x1b[0m`)
-    core.info(`Ref: \x1b[34m${github.context.ref}\x1b[0m`)
+    core.startGroup(`Ref: \x1b[34m${github.context.ref}\x1b[0m`);
+    core.info(`${JSON.stringify(github.context, null, 2)}`);
+    core.endGroup();
 
     let tagRef = '';
     if ((github.context.ref || '').startsWith('refs/tags/')) {

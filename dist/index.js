@@ -11666,7 +11666,9 @@ function _run() {
             }
 
             core.info("Commit Content: \x1B[34m".concat(owner, "/").concat(repo, "\x1B[0m"));
-            core.info("Ref: \x1B[34m".concat(github.context.ref, "\x1B[0m"));
+            core.startGroup("Ref: \x1B[34m".concat(github.context.ref, "\x1B[0m"));
+            core.info("".concat(JSON.stringify(github.context, null, 2)));
+            core.endGroup();
             tagRef = '';
 
             if ((github.context.ref || '').startsWith('refs/tags/')) {
@@ -11682,7 +11684,7 @@ function _run() {
             core.info("Ref: baseRef(\x1B[32m".concat(baseRef, "\x1B[0m), headRef(\x1B[32m").concat(headRef, "\x1B[0m), tagRef(\x1B[32m").concat(tagRef, "\x1B[0m)"));
 
             if (!((baseRef || '').replace(/^[vV]/, '') === headRef)) {
-              _context.next = 29;
+              _context.next = 31;
               break;
             }
 
@@ -11690,19 +11692,19 @@ function _run() {
             core.setOutput('version', baseRef.replace(/^[vV]/, ''));
             return _context.abrupt("return");
 
-          case 29:
+          case 31:
             if (!(!!headRef && !!baseRef && regexp.test(headRef) && regexp.test(baseRef))) {
-              _context.next = 61;
+              _context.next = 63;
               break;
             }
 
-            _context.next = 32;
+            _context.next = 34;
             return octokit.rest.repos.compareCommits(_objectSpread(_objectSpread({}, github.context.repo), {}, {
               base: baseRef,
               head: headRef
             }));
 
-          case 32:
+          case 34:
             commits = _context.sent;
 
             if (commits && commits.status !== 200) {
@@ -11739,31 +11741,31 @@ function _run() {
             }
 
             if (tagRef) {
-              _context.next = 48;
+              _context.next = 50;
               break;
             }
 
-            _context.next = 43;
+            _context.next = 45;
             return octokit.rest.repos.listTags({
               owner: owner,
               repo: repo
             });
 
-          case 43:
+          case 45:
             listTags = _context.sent;
 
             if (!(listTags.status !== 200)) {
-              _context.next = 47;
+              _context.next = 49;
               break;
             }
 
             core.setFailed("Failed to get tag lists (status=".concat(listTags.status, ")"));
             return _context.abrupt("return");
 
-          case 47:
+          case 49:
             tagRef = listTags.data[0] && listTags.data[0].name ? listTags.data[0].name : '';
 
-          case 48:
+          case 50:
             core.info("Tag: \x1B[34m".concat(tagRef, "\x1B[0m"));
             core.setOutput('tag', tagRef);
             core.info("Tag: \x1B[34m".concat(tagRef || headRef || '-', "\x1B[0m"));
@@ -11775,18 +11777,18 @@ function _run() {
             core.setOutput('compareurl', "https://github.com/".concat(owner, "/").concat(repo, "/compare/").concat(baseRef, "...").concat(tagRef || headRef));
             core.setOutput('changelog', changelog);
             core.setOutput('version', getVersion(tagRef || headRef || '').replace(/^v/, ''));
-            _context.next = 62;
+            _context.next = 64;
             break;
 
-          case 61:
+          case 63:
             core.setFailed('Branch names must contain only numbers, strings, underscores, periods, and dashes.');
 
-          case 62:
-            _context.next = 71;
+          case 64:
+            _context.next = 73;
             break;
 
-          case 64:
-            _context.prev = 64;
+          case 66:
+            _context.prev = 66;
             _context.t0 = _context["catch"](0);
             core.startGroup("Error: \x1B[34m".concat(_context.t0.message, "\x1B[0m"));
             core.info("".concat(JSON.stringify(_context.t0, null, 2)));
@@ -11794,12 +11796,12 @@ function _run() {
             core.setFailed("Could not generate changelog between references because: ".concat(_context.t0.message));
             process.exit(1);
 
-          case 71:
+          case 73:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 64]]);
+    }, _callee, null, [[0, 66]]);
   }));
   return _run.apply(this, arguments);
 }
