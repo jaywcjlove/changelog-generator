@@ -66,6 +66,7 @@ async function run() {
       core.info(`ghPages Data: ${ghPagesBranch}, ${ghPagesData.commit.sha}, ${JSON.stringify(ghPagesData, null, 2)}`);
       core.endGroup();
       core.setOutput('gh-pages-hash', ghPagesData.commit.sha);
+      core.setOutput('gh-pages-short-hash', ghPagesData.commit.sha.substring(0,7));
     } catch (error) {
       core.info(`Get Branch: \x1b[33m${error.message}\x1b[0m`);
     }

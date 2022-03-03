@@ -44,6 +44,8 @@ outputs:
     description: 'Branch name.'
   gh-pages-hash:
     description: 'Specify the branch name to get the hash from.'
+  gh-pages-short-hash:
+    description: 'Specify the branch name to get the short-hash from.'
 runs:
   using: 'node12'
   main: 'dist/index.js'

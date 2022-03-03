@@ -39,6 +39,8 @@ Then you can to use the resulting changelog.
       ${{ steps.changelog.outputs.compareurl }}
 
       ${{ steps.changelog.outputs.changelog }}
+      
+      Document Website: https://raw.githack.com/jaywcjlove/changelog-generator/${{ steps.changelog.outputs.gh-pages-short-hash }}/index.html
 ```
 
 ## Inputs
@@ -59,7 +61,8 @@ Then you can to use the resulting changelog.
 - `tag` Tag name `v1.0.0`.
 - `version` The version number of the tag created. example: `1.0.0`
 - `branch` Branch name.
-- `gh-pages-hash` Output to the latest hash of the specified branch. example: `f5a04a0`
+- `gh-pages-hash` Output to the latest hash of the specified branch. example: `cc088c571f86fe222ff68f565`
+- `gh-pages-short-hash` Specify the branch name to get the short-hash from. example: `cc088c5`
 
 ## Troubleshooting
 

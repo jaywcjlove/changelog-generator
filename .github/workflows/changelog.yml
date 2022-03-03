@@ -47,15 +47,12 @@ jobs:
       - run: echo "outputs.gh-pages-hash - ${{ steps.changelog.outputs['gh-pages-hash'] }}"
 
       - name: Create Release
-        id: create_release
-        uses: actions/create-release@latest
-        # if: startsWith(github.ref, 'refs/tags/')
+        uses: ncipollo/release-action@v1
         if: steps.create_tag.outputs.successful
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.create_tag.outputs.version }}
-          release_name: ${{ steps.create_tag.outputs.version }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: ${{ steps.create_tag.outputs.version }}
+          tag: ${{ steps.create_tag.outputs.version }}
           body: |
             ```yml
             - name: Generate changelog
@@ -70,5 +67,5 @@ jobs:
             ${{ steps.changelog.outputs.compareurl }}
             
             ${{ steps.changelog.outputs.changelog }}
-          draft: false
-          prerelease: false
+            
+            Document Website: https://raw.githack.com/jaywcjlove/changelog-generator/${{ steps.changelog.outputs.gh-pages-short-hash }}/index.html
