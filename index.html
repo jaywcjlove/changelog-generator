@@ -64,18 +64,29 @@
       ${{ steps.changelog.outputs.changelog }}
 " class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
       <h2 id="inputs"><a class="anchor" aria-hidden="true" tabindex="-1" href="#inputs"><span class="octicon octicon-link"></span></a>Inputs</h2>
-      <h4 id="token"><a class="anchor" aria-hidden="true" tabindex="-1" href="#token"><span class="octicon octicon-link"></span></a><code>token</code></h4>
-      <p>A GITHUB_TOKEN with the ability to pull from the repo in question. This is required. Why do we need <code>token</code>? Read more here: <a href="https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret">About the GITHUB_TOKEN secret</a></p>
-      <h4 id="filter-author"><a class="anchor" aria-hidden="true" tabindex="-1" href="#filter-author"><span class="octicon octicon-link"></span></a><code>filter-author</code></h4>
-      <p>Regular expression filtering author. Example: <a href="https://github.com/jaywcjlove/changelog-generator/blob/f48f63cdb5f3c5d8b6499c6d96e3450ee7bdb9f5/.github/workflows/changelog.yml#L17"><code>filter-author: (jaywcjlove|小弟调调™|dependabot\[bot\]|Renovate Bot)</code></a></p>
-      <h4 id="filter"><a class="anchor" aria-hidden="true" tabindex="-1" href="#filter"><span class="octicon octicon-link"></span></a><code>filter</code></h4>
-      <p>Regular expression filtering changelog. Example: <a href="https://github.com/jaywcjlove/changelog-generator/blob/b372394a4e7265d4041c479b4d1f515a9c21ec37/.github/workflows/release.yml#L21"><code>filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'</code></a></p>
-      <h4 id="head-ref"><a class="anchor" aria-hidden="true" tabindex="-1" href="#head-ref"><span class="octicon octicon-link"></span></a><code>head-ref</code></h4>
-      <p>The name of the head reference. Default <code>${{github.sha}}</code>.</p>
-      <h4 id="base-ref"><a class="anchor" aria-hidden="true" tabindex="-1" href="#base-ref"><span class="octicon octicon-link"></span></a><code>base-ref</code></h4>
-      <p>The name of the second branch. Defaults to the <code>tag_name</code> of the latest GitHub release. <em>This must be a GitHub release. Git tags or branches will not work.</em></p>
-      <h4 id="original-markdown"><a class="anchor" aria-hidden="true" tabindex="-1" href="#original-markdown"><span class="octicon octicon-link"></span></a><code>original-markdown</code></h4>
-      <p>Default <code>true</code>, Output clean markdown content.</p>
+      <ul>
+        <li>
+          <p><code>token</code> A GITHUB_TOKEN with the ability to pull from the repo in question. This is required. Why do we need <code>token</code>? Read more here: <a href="https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret">About the GITHUB_TOKEN secret</a>. Default: <code>${{ github.token }}</code></p>
+        </li>
+        <li>
+          <p><code>filter-author</code> Regular expression filtering author. Example: <a href="https://github.com/jaywcjlove/changelog-generator/blob/f48f63cdb5f3c5d8b6499c6d96e3450ee7bdb9f5/.github/workflows/changelog.yml#L17"><code>filter-author: (jaywcjlove|小弟调调™|dependabot\[bot\]|Renovate Bot)</code></a></p>
+        </li>
+        <li>
+          <p><code>filter</code> Regular expression filtering changelog. Example: <a href="https://github.com/jaywcjlove/changelog-generator/blob/b372394a4e7265d4041c479b4d1f515a9c21ec37/.github/workflows/release.yml#L21"><code>filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'</code></a></p>
+        </li>
+        <li>
+          <p><code>head-ref</code> The name of the head reference. Default <code>${{github.sha}}</code>.</p>
+        </li>
+        <li>
+          <p><code>base-ref</code> The name of the second branch. Defaults to the <code>tag_name</code> of the latest GitHub release. <em>This must be a GitHub release. Git tags or branches will not work.</em></p>
+        </li>
+        <li>
+          <p><code>original-markdown</code> Default <code>true</code>, Output clean markdown content.</p>
+        </li>
+        <li>
+          <p><code>gh-pages</code> Default <code>gh-pages</code>, Specify the branch name to get the hash from</p>
+        </li>
+      </ul>
       <h2 id="outputs"><a class="anchor" aria-hidden="true" tabindex="-1" href="#outputs"><span class="octicon octicon-link"></span></a>Outputs</h2>
       <ul>
         <li><code>changelog</code> Markdown formatted changelog.</li>
@@ -83,6 +94,7 @@
         <li><code>tag</code> Tag name <code>v1.0.0</code>.</li>
         <li><code>version</code> The version number of the tag created. example: <code>1.0.0</code></li>
         <li><code>branch</code> Branch name.</li>
+        <li><code>gh-pages-hash</code> Output to the latest hash of the specified branch. example: <code>f5a04a0</code></li>
       </ul>
       <h2 id="troubleshooting"><a class="anchor" aria-hidden="true" tabindex="-1" href="#troubleshooting"><span class="octicon octicon-link"></span></a>Troubleshooting</h2>
       <h4 id="error-not-found"><a class="anchor" aria-hidden="true" tabindex="-1" href="#error-not-found"><span class="octicon octicon-link"></span></a>Error not found</h4>
