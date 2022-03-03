@@ -11686,8 +11686,8 @@ function _run() {
               break;
             }
 
-            core.setOutput('version', getVersion(tagRef || headRef || '').replace(/^v/, ''));
             core.setOutput('tag', baseRef);
+            core.setOutput('version', baseRef.replace(/^[vV]/, ''));
             return _context.abrupt("return");
 
           case 29:

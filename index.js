@@ -56,8 +56,8 @@ async function run() {
     core.info(`Ref: baseRef(\x1b[32m${baseRef}\x1b[0m), headRef(\x1b[32m${headRef}\x1b[0m), tagRef(\x1b[32m${tagRef}\x1b[0m)`);
 
     if ((baseRef || '').replace(/^[vV]/, '') === headRef) {
-      core.setOutput('version', getVersion(tagRef || headRef || '').replace(/^v/, ''));
       core.setOutput('tag', baseRef);
+      core.setOutput('version', baseRef.replace(/^[vV]/, ''));
       return;
     }
 
