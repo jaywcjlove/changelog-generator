@@ -59,7 +59,7 @@ async function run() {
     core.info(`Ref: baseRef(\x1b[32m${baseRef}\x1b[0m), headRef(\x1b[32m${headRef}\x1b[0m), tagRef(\x1b[32m${tagRef}\x1b[0m)`);
 
     try {
-      const branchData = await octokit.rest.repos.getBranch({ ...github.context.repo, branch: ghPagesBranch });
+      const branchData = await octokit.request('GET /repos/{owner}/{repo}/branches', { ...github.context.repo });
       core.startGroup(`\x1b[34mGet Branch \x1b[0m`);
       core.info(`${JSON.stringify(branchData, null, 2)}`);
       core.endGroup();

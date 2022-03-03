@@ -11685,9 +11685,7 @@ function _run() {
             core.info("Ref: baseRef(\x1B[32m".concat(baseRef, "\x1B[0m), headRef(\x1B[32m").concat(headRef, "\x1B[0m), tagRef(\x1B[32m").concat(tagRef, "\x1B[0m)"));
             _context.prev = 28;
             _context.next = 31;
-            return octokit.rest.repos.getBranch(_objectSpread(_objectSpread({}, github.context.repo), {}, {
-              branch: ghPagesBranch
-            }));
+            return octokit.request('GET /repos/{owner}/{repo}/branches', _objectSpread({}, github.context.repo));
 
           case 31:
             branchData = _context.sent;
