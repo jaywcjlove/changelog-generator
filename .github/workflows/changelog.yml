@@ -43,6 +43,7 @@ jobs:
       - run: echo "outputs.branch - ${{ steps.changelog.outputs.branch }}"
       - run: echo "outputs.compareurl - ${{ steps.changelog.outputs.compareurl }}"
       - run: echo "outputs.version - ${{ steps.changelog.outputs.version }}"
+      - run: echo "outputs.gh-pages-hash - ${{ steps.changelog.outputs.gh-pages-hash }}"
 
       - name: Create Release
         id: create_release
