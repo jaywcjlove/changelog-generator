@@ -1,5 +1,5 @@
-changelog-generator
-----
+Changelog Generator
+===
 
 [![Build & Test](https://github.com/jaywcjlove/changelog-generator/actions/workflows/changelog.yml/badge.svg)](https://github.com/jaywcjlove/changelog-generator/actions/workflows/changelog.yml)
 
