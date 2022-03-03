@@ -63,7 +63,7 @@ async function run() {
       const ghPagesData = branchData.data.find((item) => item.name === ghPagesBranch);
       core.startGroup(`\x1b[34mGet Branch \x1b[0m`);
       core.info(`Branch Data: ${JSON.stringify(branchData.data, null, 2)}`);
-      core.info(`ghPages Data: ${ghPagesBranch}, ${JSON.stringify(ghPagesData, null, 2)}`);
+      core.info(`ghPages Data: ${ghPagesBranch}, ${ghPagesData.commit.hash}, ${JSON.stringify(ghPagesData, null, 2)}`);
       core.endGroup();
       core.setOutput('gh-pages-hash', ghPagesData.commit.hash);
     } catch (error) {
