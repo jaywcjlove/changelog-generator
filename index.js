@@ -118,10 +118,11 @@ async function run() {
     }
 
   } catch (error) {
+    core.info(`${JSON.stringify(error, null, 2)}`);
     core.setFailed(
       `Could not generate changelog between references because: ${error.message}`
     );
-    process.exit(0);
+    process.exit(1);
   }
 }
 

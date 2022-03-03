@@ -11772,16 +11772,17 @@ function _run() {
             core.setFailed('Branch names must contain only numbers, strings, underscores, periods, and dashes.');
 
           case 57:
-            _context.next = 63;
+            _context.next = 64;
             break;
 
           case 59:
             _context.prev = 59;
             _context.t0 = _context["catch"](0);
+            core.info("".concat(JSON.stringify(_context.t0, null, 2)));
             core.setFailed("Could not generate changelog between references because: ".concat(_context.t0.message));
-            process.exit(0);
+            process.exit(1);
 
-          case 63:
+          case 64:
           case "end":
             return _context.stop();
         }
