@@ -95,6 +95,7 @@ repository uses this action and GitHub releases for an [example](https://github.
 - [uiwjs/react-code-preview](https://github.com/uiwjs/react-code-preview/blob/fb9829440a21fddbb57100db62ae113be3c01161/.github/workflows/ci.yml#L42-L50)
 - [uiwjs/react-amap](https://github.com/uiwjs/react-amap/blob/550599511bdf42260580fad380c4c9741142e572/.github/workflows/ci.yml#L29-L36)
 - [uiwjs/react-heat-map](https://github.com/uiwjs/react-heat-map/blob/f828826111dc6d79249fdd106648d835ae8e47ba/.github/workflows/ci.yml#L29-L36)
+- [More Examples...](https://github.com/jaywcjlove/changelog-generator/network/dependents)
 
 ## License
 
