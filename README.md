@@ -43,29 +43,14 @@ Then you can to use the resulting changelog.
 
 ## Inputs
 
-#### `token`
+- `token` A GITHUB_TOKEN with the ability to pull from the repo in question. This is required. Why do we need `token`? Read more here: [About the GITHUB_TOKEN secret](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret). Default: `${{ github.token }}`
+- `filter-author` Regular expression filtering author. Example: [`filter-author: (jaywcjlove|小弟调调™|dependabot\[bot\]|Renovate Bot)`](https://github.com/jaywcjlove/changelog-generator/blob/f48f63cdb5f3c5d8b6499c6d96e3450ee7bdb9f5/.github/workflows/changelog.yml#L17)
+- `filter` Regular expression filtering changelog. Example: [`filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'`](https://github.com/jaywcjlove/changelog-generator/blob/b372394a4e7265d4041c479b4d1f515a9c21ec37/.github/workflows/release.yml#L21)
 
-A GITHUB_TOKEN with the ability to pull from the repo in question. This is required. Why do we need `token`? Read more here: [About the GITHUB_TOKEN secret](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret)
-
-#### `filter-author`
-
-Regular expression filtering author. Example: [`filter-author: (jaywcjlove|小弟调调™|dependabot\[bot\]|Renovate Bot)`](https://github.com/jaywcjlove/changelog-generator/blob/f48f63cdb5f3c5d8b6499c6d96e3450ee7bdb9f5/.github/workflows/changelog.yml#L17)
-
-#### `filter`
-
-Regular expression filtering changelog. Example: [`filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'`](https://github.com/jaywcjlove/changelog-generator/blob/b372394a4e7265d4041c479b4d1f515a9c21ec37/.github/workflows/release.yml#L21)
-
-#### `head-ref`
-
-The name of the head reference. Default `${{github.sha}}`.
-
-#### `base-ref`
-
-The name of the second branch. Defaults to the `tag_name` of the latest GitHub release. *This must be a GitHub release. Git tags or branches will not work.*
-
-#### `original-markdown`
-
-Default `true`, Output clean markdown content.
+- `head-ref` The name of the head reference. Default `${{github.sha}}`.
+- `base-ref` The name of the second branch. Defaults to the `tag_name` of the latest GitHub release. *This must be a GitHub release. Git tags or branches will not work.*
+- `original-markdown` Default `true`, Output clean markdown content.
+- `gh-pages` Default `gh-pages`, Specify the branch name to get the hash from
 
 ## Outputs
 
@@ -74,6 +59,7 @@ Default `true`, Output clean markdown content.
 - `tag` Tag name `v1.0.0`.
 - `version` The version number of the tag created. example: `1.0.0`
 - `branch` Branch name.
+- `gh-pages-hash` Output to the latest hash of the specified branch. example: `f5a04a0`
 
 ## Troubleshooting
 

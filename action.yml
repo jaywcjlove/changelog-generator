@@ -4,8 +4,8 @@ description: 'Returns the commit difference count between two git references.'
 inputs:
   token:
     description: 'Your GITHUB_TOKEN'
-    default: ''
-    required: true
+    default: ${{ github.token }}
+    required: false
   filter:
     description: 'Regular expression filtering'
     default: ''
@@ -17,6 +17,10 @@ inputs:
   head-ref:
     description: 'The name of the head reference'
     default: ''
+    required: false
+  gh-pages:
+    description: 'Specify the branch name to get the hash from'
+    default: 'gh-pages'
     required: false
   base-ref:
     description: 'The name of the base reference'
@@ -38,6 +42,8 @@ outputs:
     description: 'Tag name.'
   branch:
     description: 'Branch name.'
+  gh-pages-hash:
+    description: 'Specify the branch name to get the hash from.'
 runs:
   using: 'node12'
   main: 'dist/index.js'

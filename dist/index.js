@@ -11624,7 +11624,7 @@ function run() {
 
 function _run() {
   _run = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee() {
-    var headRef, baseRef, myToken, filterAuthor, regExp, originalMarkdown, _github$context$repo, owner, repo, octokit, latestRelease, tagRef, branch, branchData, commits, changelog, _iterator, _step, data, message, listTags;
+    var headRef, baseRef, myToken, filterAuthor, regExp, ghPagesBranch, originalMarkdown, _github$context$repo, owner, repo, octokit, latestRelease, tagRef, branch, branchData, commits, changelog, _iterator, _step, data, message, listTags;
 
     return _regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
@@ -11636,19 +11636,20 @@ function _run() {
             myToken = core.getInput('token');
             filterAuthor = core.getInput('filter-author');
             regExp = core.getInput('filter');
+            ghPagesBranch = core.getInput('gh-pages') || 'gh-pages';
             originalMarkdown = core.getInput('original-markdown');
             _github$context$repo = github.context.repo, owner = _github$context$repo.owner, repo = _github$context$repo.repo;
             octokit = github.getOctokit(myToken);
 
             if (baseRef) {
-              _context.next = 18;
+              _context.next = 19;
               break;
             }
 
-            _context.next = 12;
+            _context.next = 13;
             return octokit.rest.repos.getLatestRelease(_objectSpread({}, github.context.repo));
 
-          case 12:
+          case 13:
             latestRelease = _context.sent;
 
             if (latestRelease.status !== 200) {
@@ -11660,7 +11661,7 @@ function _run() {
             core.info("".concat(JSON.stringify(latestRelease, null, 2)));
             core.endGroup();
 
-          case 18:
+          case 19:
             if (!headRef) {
               headRef = github.context.sha;
             }
@@ -11682,17 +11683,28 @@ function _run() {
             }
 
             core.info("Ref: baseRef(\x1B[32m".concat(baseRef, "\x1B[0m), headRef(\x1B[32m").concat(headRef, "\x1B[0m), tagRef(\x1B[32m").concat(tagRef, "\x1B[0m)"));
-            _context.next = 29;
-            return octokit.rest.repos.getBranch(_objectSpread({}, github.context.repo));
+            _context.prev = 28;
+            _context.next = 31;
+            return octokit.rest.repos.getBranch(_objectSpread(_objectSpread({}, github.context.repo), {}, {
+              branch: ghPagesBranch
+            }));
 
-          case 29:
+          case 31:
             branchData = _context.sent;
             core.startGroup("\x1B[34mGet Branch \x1B[0m");
             core.info("".concat(JSON.stringify(branchData, null, 2)));
             core.endGroup();
+            _context.next = 40;
+            break;
 
+          case 37:
+            _context.prev = 37;
+            _context.t0 = _context["catch"](28);
+            core.info("Get Branch: \x1B[33m".concat(_context.t0.message, "\x1B[0m"));
+
+          case 40:
             if (!((baseRef || '').replace(/^[vV]/, '') === headRef)) {
-              _context.next = 38;
+              _context.next = 45;
               break;
             }
 
@@ -11701,19 +11713,19 @@ function _run() {
             core.info("Done: baseRef(\x1B[33m".concat(baseRef, "\x1B[0m) === headRef(\x1B[32m").concat(headRef, "\x1B[0m)"));
             return _context.abrupt("return");
 
-          case 38:
+          case 45:
             if (!(!!headRef && !!baseRef && regexp.test(headRef) && regexp.test(baseRef))) {
-              _context.next = 70;
+              _context.next = 77;
               break;
             }
 
-            _context.next = 41;
+            _context.next = 48;
             return octokit.rest.repos.compareCommits(_objectSpread(_objectSpread({}, github.context.repo), {}, {
               base: baseRef,
               head: headRef
             }));
 
-          case 41:
+          case 48:
             commits = _context.sent;
 
             if (commits && commits.status !== 200) {
@@ -11750,31 +11762,31 @@ function _run() {
             }
 
             if (tagRef) {
-              _context.next = 57;
+              _context.next = 64;
               break;
             }
 
-            _context.next = 52;
+            _context.next = 59;
             return octokit.rest.repos.listTags({
               owner: owner,
               repo: repo
             });
 
-          case 52:
+          case 59:
             listTags = _context.sent;
 
             if (!(listTags.status !== 200)) {
-              _context.next = 56;
+              _context.next = 63;
               break;
             }
 
             core.setFailed("Failed to get tag lists (status=".concat(listTags.status, ")"));
             return _context.abrupt("return");
 
-          case 56:
+          case 63:
             tagRef = listTags.data[0] && listTags.data[0].name ? listTags.data[0].name : '';
 
-          case 57:
+          case 64:
             core.info("Tag: \x1B[34m".concat(tagRef, "\x1B[0m"));
             core.setOutput('tag', tagRef);
             core.info("Tag: \x1B[34m".concat(tagRef || headRef || '-', "\x1B[0m"));
@@ -11786,31 +11798,31 @@ function _run() {
             core.setOutput('compareurl', "https://github.com/".concat(owner, "/").concat(repo, "/compare/").concat(baseRef, "...").concat(tagRef || headRef));
             core.setOutput('changelog', changelog);
             core.setOutput('version', getVersion(tagRef || headRef || '').replace(/^v/, ''));
-            _context.next = 71;
+            _context.next = 78;
             break;
 
-          case 70:
+          case 77:
             core.setFailed('Branch names must contain only numbers, strings, underscores, periods, and dashes.');
 
-          case 71:
-            _context.next = 80;
+          case 78:
+            _context.next = 87;
             break;
 
-          case 73:
-            _context.prev = 73;
-            _context.t0 = _context["catch"](0);
-            core.startGroup("Error: \x1B[34m".concat(_context.t0.message, "\x1B[0m"));
-            core.info("".concat(JSON.stringify(_context.t0, null, 2)));
+          case 80:
+            _context.prev = 80;
+            _context.t1 = _context["catch"](0);
+            core.startGroup("Error: \x1B[34m".concat(_context.t1.message, "\x1B[0m"));
+            core.info("".concat(JSON.stringify(_context.t1, null, 2)));
             core.endGroup();
-            core.setFailed("Could not generate changelog between references because: ".concat(_context.t0.message));
+            core.setFailed("Could not generate changelog between references because: ".concat(_context.t1.message));
             process.exit(1);
 
-          case 80:
+          case 87:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 73]]);
+    }, _callee, null, [[0, 80], [28, 37]]);
   }));
   return _run.apply(this, arguments);
 }

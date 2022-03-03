@@ -18,6 +18,7 @@ async function run() {
     const myToken = core.getInput('token');
     const filterAuthor = core.getInput('filter-author');
     const regExp = core.getInput('filter');
+    const ghPagesBranch = core.getInput('gh-pages') || 'gh-pages';
     const originalMarkdown = core.getInput('original-markdown');
     const { owner, repo } = github.context.repo;
     const octokit = github.getOctokit(myToken);
@@ -57,10 +58,14 @@ async function run() {
     }
     core.info(`Ref: baseRef(\x1b[32m${baseRef}\x1b[0m), headRef(\x1b[32m${headRef}\x1b[0m), tagRef(\x1b[32m${tagRef}\x1b[0m)`);
 
-    const branchData = await octokit.rest.repos.getBranch({ ...github.context.repo });
-    core.startGroup(`\x1b[34mGet Branch \x1b[0m`);
-    core.info(`${JSON.stringify(branchData, null, 2)}`);
-    core.endGroup();
+    try {
+      const branchData = await octokit.rest.repos.getBranch({ ...github.context.repo, branch: ghPagesBranch });
+      core.startGroup(`\x1b[34mGet Branch \x1b[0m`);
+      core.info(`${JSON.stringify(branchData, null, 2)}`);
+      core.endGroup();
+    } catch (error) {
+      core.info(`Get Branch: \x1b[33m${error.message}\x1b[0m`);
+    }
 
     if ((baseRef || '').replace(/^[vV]/, '') === headRef) {
       core.setOutput('tag', baseRef);
