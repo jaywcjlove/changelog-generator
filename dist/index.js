@@ -11681,7 +11681,7 @@ function _run() {
 
             core.info("Ref: baseRef(\x1B[32m".concat(baseRef, "\x1B[0m), headRef(\x1B[32m").concat(headRef, "\x1B[0m), tagRef(\x1B[32m").concat(tagRef, "\x1B[0m)"));
 
-            if (!((baseRef || '').replace(/^v/, '') === headRef)) {
+            if (!((baseRef || '').replace(/^[vV]/, '') === headRef)) {
               _context.next = 29;
               break;
             }
