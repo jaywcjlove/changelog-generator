@@ -11624,7 +11624,7 @@ function run() {
 
 function _run() {
   _run = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee() {
-    var headRef, baseRef, myToken, filterAuthor, regExp, ghPagesBranch, originalMarkdown, _github$context$repo, owner, repo, octokit, latestRelease, tagRef, branch, branchData, commits, changelog, _iterator, _step, data, message, listTags;
+    var headRef, baseRef, myToken, filterAuthor, regExp, ghPagesBranch, originalMarkdown, _github$context$repo, owner, repo, octokit, latestRelease, tagRef, branch, branchData, ghPagesData, commits, changelog, _iterator, _step, data, message, listTags;
 
     return _regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
@@ -11689,20 +11689,25 @@ function _run() {
 
           case 31:
             branchData = _context.sent;
+            ghPagesData = branchData.data.find(function (item) {
+              return item.name === ghPagesBranch;
+            });
             core.startGroup("\x1B[34mGet Branch \x1B[0m");
-            core.info("".concat(JSON.stringify(branchData, null, 2)));
+            core.info("".concat(JSON.stringify(branchData.data, null, 2)));
+            core.info("".concat(JSON.stringify(ghPagesData, null, 2)));
             core.endGroup();
-            _context.next = 40;
+            core.setOutput('gh-pages-hash', ghPagesData.hash);
+            _context.next = 43;
             break;
 
-          case 37:
-            _context.prev = 37;
+          case 40:
+            _context.prev = 40;
             _context.t0 = _context["catch"](28);
             core.info("Get Branch: \x1B[33m".concat(_context.t0.message, "\x1B[0m"));
 
-          case 40:
+          case 43:
             if (!((baseRef || '').replace(/^[vV]/, '') === headRef)) {
-              _context.next = 45;
+              _context.next = 48;
               break;
             }
 
@@ -11711,19 +11716,19 @@ function _run() {
             core.info("Done: baseRef(\x1B[33m".concat(baseRef, "\x1B[0m) === headRef(\x1B[32m").concat(headRef, "\x1B[0m)"));
             return _context.abrupt("return");
 
-          case 45:
+          case 48:
             if (!(!!headRef && !!baseRef && regexp.test(headRef) && regexp.test(baseRef))) {
-              _context.next = 77;
+              _context.next = 80;
               break;
             }
 
-            _context.next = 48;
+            _context.next = 51;
             return octokit.rest.repos.compareCommits(_objectSpread(_objectSpread({}, github.context.repo), {}, {
               base: baseRef,
               head: headRef
             }));
 
-          case 48:
+          case 51:
             commits = _context.sent;
 
             if (commits && commits.status !== 200) {
@@ -11760,31 +11765,31 @@ function _run() {
             }
 
             if (tagRef) {
-              _context.next = 64;
+              _context.next = 67;
               break;
             }
 
-            _context.next = 59;
+            _context.next = 62;
             return octokit.rest.repos.listTags({
               owner: owner,
               repo: repo
             });
 
-          case 59:
+          case 62:
             listTags = _context.sent;
 
             if (!(listTags.status !== 200)) {
-              _context.next = 63;
+              _context.next = 66;
               break;
             }
 
             core.setFailed("Failed to get tag lists (status=".concat(listTags.status, ")"));
             return _context.abrupt("return");
 
-          case 63:
+          case 66:
             tagRef = listTags.data[0] && listTags.data[0].name ? listTags.data[0].name : '';
 
-          case 64:
+          case 67:
             core.info("Tag: \x1B[34m".concat(tagRef, "\x1B[0m"));
             core.setOutput('tag', tagRef);
             core.info("Tag: \x1B[34m".concat(tagRef || headRef || '-', "\x1B[0m"));
@@ -11796,18 +11801,18 @@ function _run() {
             core.setOutput('compareurl', "https://github.com/".concat(owner, "/").concat(repo, "/compare/").concat(baseRef, "...").concat(tagRef || headRef));
             core.setOutput('changelog', changelog);
             core.setOutput('version', getVersion(tagRef || headRef || '').replace(/^v/, ''));
-            _context.next = 78;
-            break;
-
-          case 77:
-            core.setFailed('Branch names must contain only numbers, strings, underscores, periods, and dashes.');
-
-          case 78:
-            _context.next = 87;
+            _context.next = 81;
             break;
 
           case 80:
-            _context.prev = 80;
+            core.setFailed('Branch names must contain only numbers, strings, underscores, periods, and dashes.');
+
+          case 81:
+            _context.next = 90;
+            break;
+
+          case 83:
+            _context.prev = 83;
             _context.t1 = _context["catch"](0);
             core.startGroup("Error: \x1B[34m".concat(_context.t1.message, "\x1B[0m"));
             core.info("".concat(JSON.stringify(_context.t1, null, 2)));
@@ -11815,12 +11820,12 @@ function _run() {
             core.setFailed("Could not generate changelog between references because: ".concat(_context.t1.message));
             process.exit(1);
 
-          case 87:
+          case 90:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 80], [28, 37]]);
+    }, _callee, null, [[0, 83], [28, 40]]);
   }));
   return _run.apply(this, arguments);
 }

@@ -60,9 +60,12 @@ async function run() {
 
     try {
       const branchData = await octokit.request('GET /repos/{owner}/{repo}/branches', { ...github.context.repo });
+      const ghPagesData = branchData.data.find((item) => item.name === ghPagesBranch);
       core.startGroup(`\x1b[34mGet Branch \x1b[0m`);
-      core.info(`${JSON.stringify(branchData, null, 2)}`);
+      core.info(`${JSON.stringify(branchData.data, null, 2)}`);
+      core.info(`${JSON.stringify(ghPagesData, null, 2)}`);
       core.endGroup();
+      core.setOutput('gh-pages-hash', ghPagesData.hash);
     } catch (error) {
       core.info(`Get Branch: \x1b[33m${error.message}\x1b[0m`);
     }
