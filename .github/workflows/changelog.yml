@@ -25,10 +25,8 @@ jobs:
 
       - name: Create Tag
         id: create_tag
-        uses: jaywcjlove/create-tag-action@v1.2.1
+        uses: jaywcjlove/create-tag-action@v1.3.6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          # test: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
           package-path: ./package.json
 
       - name: Generate Changelog
@@ -49,6 +47,9 @@ jobs:
 
       - name: Get comparing changes url.
         run: echo "${{ steps.changelog.outputs.compareurl }}"
+
+      - name: The version number of the tag created.
+        run: echo "${{ steps.changelog.outputs.version }}"
 
       - name: The version number of the tag created.
         run: echo "${{ steps.changelog.outputs.version }}"

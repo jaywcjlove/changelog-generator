@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "prepare": "husky install",
-    "build": "ncc build ./index.js"
+    "build": "ncc build index.js -o dist",
+    "watch": "ncc watch index.js -o dist"
   },
   "repository": {
     "type": "git",
@@ -15,11 +16,11 @@
   "author": "jaywcjlove",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "1.6.0",
-    "@actions/github": "5.0.0"
+    "@actions/core": "~1.6.0",
+    "@actions/github": "~5.0.0"
   },
   "devDependencies": {
-    "@vercel/ncc": "0.31.1",
-    "husky": "7.0.2"
+    "@kkt/ncc": "~1.0.9",
+    "husky": "~7.0.2"
   }
 }
