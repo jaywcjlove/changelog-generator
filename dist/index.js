@@ -11694,9 +11694,9 @@ function _run() {
             });
             core.startGroup("\x1B[34mGet Branch \x1B[0m");
             core.info("Branch Data: ".concat(JSON.stringify(branchData.data, null, 2)));
-            core.info("ghPages Data: ".concat(ghPagesBranch, ", ").concat(ghPagesData.commit.hash, ", ").concat(JSON.stringify(ghPagesData, null, 2)));
+            core.info("ghPages Data: ".concat(ghPagesBranch, ", ").concat(ghPagesData.commit.sha, ", ").concat(JSON.stringify(ghPagesData, null, 2)));
             core.endGroup();
-            core.setOutput('gh-pages-hash', ghPagesData.commit.hash);
+            core.setOutput('gh-pages-hash', ghPagesData.commit.sha);
             _context.next = 43;
             break;
 
