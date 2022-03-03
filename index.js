@@ -43,13 +43,30 @@ async function run() {
     core.info(`Commit Content: \x1b[34m${owner}/${repo}\x1b[0m`)
     core.info(`Ref: \x1b[34m${github.context.ref}\x1b[0m`)
 
+    let tagRef = '';
+    if ((github.context.ref || '').startsWith('refs/tags/')) {
+      tagRef = getVersion(github.context.ref);
+    }
+
+    if ((github.context.ref || '').startsWith('refs/heads/')) {
+      const branch = github.context.ref.replace(/.*(?=\/)\//, '');
+      core.setOutput('branch', branch);
+      core.info(`Branch: \x1b[34m${branch}\x1b[0m`);
+    }
+    core.info(`Ref: baseRef(\x1b[32m${baseRef}\x1b[0m), headRef(\x1b[32m${headRef}\x1b[0m), tagRef(\x1b[32m${tagRef}\x1b[0m)`);
+
+    if (baseRef === headRef) {
+      core.setOutput('version', getVersion(tagRef || headRef || '').replace(/^v/, ''));
+      core.setOutput('tag', baseRef);
+      return;
+    }
+
     if (
       !!headRef &&
       !!baseRef &&
       regexp.test(headRef) &&
       regexp.test(baseRef)
     ) {
-      core.info(`Ref: baseRef(\x1b[32m${baseRef}\x1b[0m), headRef(\x1b[32m${headRef}\x1b[0m)`);
       const commits = await octokit.rest.repos.compareCommits({
         ...github.context.repo,
         base: baseRef,
@@ -81,10 +98,6 @@ async function run() {
         }) || '';
       }
 
-      let tagRef = '';
-      if ((github.context.ref || '').startsWith('refs/tags/')) {
-        tagRef = getVersion(github.context.ref);
-      }
 
       if (!tagRef) {
         const listTags = await octokit.rest.repos.listTags({ owner, repo });
@@ -98,11 +111,6 @@ async function run() {
       core.info(`Tag: \x1b[34m${tagRef}\x1b[0m`);
       core.setOutput('tag', tagRef);
 
-      if ((github.context.ref || '').startsWith('refs/heads/')) {
-        const branch = github.context.ref.replace(/.*(?=\/)\//, '');
-        core.setOutput('branch', branch);
-        core.info(`Branch: \x1b[34m${branch}\x1b[0m`);
-      }
       core.info(`Tag: \x1b[34m${tagRef || headRef || '-'}\x1b[0m`);
       core.info(`Input head-ref: \x1b[34m${headRef}\x1b[0m`);
       core.info(`Input base-ref: \x1b[34m${baseRef}\x1b[0m`);
