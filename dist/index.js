@@ -11669,17 +11669,18 @@ function _run() {
             core.info("Ref: \x1B[34m".concat(github.context.ref, "\x1B[0m"));
 
             if (!(!!headRef && !!baseRef && regexp.test(headRef) && regexp.test(baseRef))) {
-              _context.next = 56;
+              _context.next = 57;
               break;
             }
 
-            _context.next = 24;
+            core.info("Ref: baseRef(\x1B[32m".concat(baseRef, "\x1B[0m), headRef(\x1B[32m").concat(headRef, "\x1B[0m)"));
+            _context.next = 25;
             return octokit.rest.repos.compareCommits(_objectSpread(_objectSpread({}, github.context.repo), {}, {
               base: baseRef,
               head: headRef
             }));
 
-          case 24:
+          case 25:
             commits = _context.sent;
 
             if (commits && commits.status !== 200) {
@@ -11722,31 +11723,31 @@ function _run() {
             }
 
             if (tagRef) {
-              _context.next = 42;
+              _context.next = 43;
               break;
             }
 
-            _context.next = 37;
+            _context.next = 38;
             return octokit.rest.repos.listTags({
               owner: owner,
               repo: repo
             });
 
-          case 37:
+          case 38:
             listTags = _context.sent;
 
             if (!(listTags.status !== 200)) {
-              _context.next = 41;
+              _context.next = 42;
               break;
             }
 
             core.setFailed("Failed to get tag lists (status=".concat(listTags.status, ")"));
             return _context.abrupt("return");
 
-          case 41:
+          case 42:
             tagRef = listTags.data[0] && listTags.data[0].name ? listTags.data[0].name : '';
 
-          case 42:
+          case 43:
             core.info("Tag: \x1B[34m".concat(tagRef, "\x1B[0m"));
             core.setOutput('tag', tagRef);
 
@@ -11765,29 +11766,31 @@ function _run() {
             core.setOutput('compareurl', "https://github.com/".concat(owner, "/").concat(repo, "/compare/").concat(baseRef, "...").concat(tagRef || headRef));
             core.setOutput('changelog', changelog);
             core.setOutput('version', getVersion(tagRef || headRef || '').replace(/^v/, ''));
-            _context.next = 57;
+            _context.next = 58;
             break;
-
-          case 56:
-            core.setFailed('Branch names must contain only numbers, strings, underscores, periods, and dashes.');
 
           case 57:
-            _context.next = 64;
+            core.setFailed('Branch names must contain only numbers, strings, underscores, periods, and dashes.');
+
+          case 58:
+            _context.next = 67;
             break;
 
-          case 59:
-            _context.prev = 59;
+          case 60:
+            _context.prev = 60;
             _context.t0 = _context["catch"](0);
+            core.startGroup("Error: \x1B[34m".concat(_context.t0.message, "\x1B[0m"));
             core.info("".concat(JSON.stringify(_context.t0, null, 2)));
+            core.endGroup();
             core.setFailed("Could not generate changelog between references because: ".concat(_context.t0.message));
             process.exit(1);
 
-          case 64:
+          case 67:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 59]]);
+    }, _callee, null, [[0, 60]]);
   }));
   return _run.apply(this, arguments);
 }

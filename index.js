@@ -49,6 +49,7 @@ async function run() {
       regexp.test(headRef) &&
       regexp.test(baseRef)
     ) {
+      core.info(`Ref: baseRef(\x1b[32m${baseRef}\x1b[0m), headRef(\x1b[32m${headRef}\x1b[0m)`);
       const commits = await octokit.rest.repos.compareCommits({
         ...github.context.repo,
         base: baseRef,
@@ -86,7 +87,7 @@ async function run() {
       }
 
       if (!tagRef) {
-        const listTags = await octokit.rest.repos.listTags({owner, repo});
+        const listTags = await octokit.rest.repos.listTags({ owner, repo });
         if (listTags.status !== 200) {
           core.setFailed(`Failed to get tag lists (status=${listTags.status})`);
           return
@@ -116,9 +117,10 @@ async function run() {
         'Branch names must contain only numbers, strings, underscores, periods, and dashes.'
       );
     }
-
   } catch (error) {
+    core.startGroup(`Error: \x1b[34m${error.message}\x1b[0m`);
     core.info(`${JSON.stringify(error, null, 2)}`);
+    core.endGroup();
     core.setFailed(
       `Could not generate changelog between references because: ${error.message}`
     );
