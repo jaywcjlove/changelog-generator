@@ -20,7 +20,7 @@
     "@actions/github": "~5.0.0"
   },
   "devDependencies": {
-    "@kkt/ncc": "~1.0.9",
+    "@kkt/ncc": "1.0.13",
     "husky": "~7.0.2"
   }
 }
