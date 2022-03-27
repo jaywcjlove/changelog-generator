@@ -47,19 +47,19 @@ Then you can to use the resulting changelog.
 
 Only use the following Git Commit Messages. A simple and small footprint is critical here.
 
-① 🌟 `feat` Use when you add something entirely new. E.g: `feat(Button): add type props.`\
-② 🐞 `fix` Use when you fix a bug — need I say more? E.g. `fix: Case conversion.`\
-③ 📖 `doc` Use when you add documentation like README.md, or even inline docs. E.g. `doc(Color): API Interface.`\
-④ 💄 `chore` Changes to the build process or auxiliary tools. E.g. `chore(Color): API Interface.`\
-⑤ 🎨 `style` Format (changes that do not affect code execution). E.g. `style(Alert): API Interface.`\
-⑥ 🆎 `type` Typescript type bug fixes. E.g. `type(Alert): fix type error.`\
-⑦ ⛑ `test` Add and modify test cases. E.g. `test(Alert): Add test case.`\
-⑧ 🐝 `refactor` Refactoring (i.e. code changes that are not new additions or bug fixes). E.g. `refactor(Alert): API Interface.`\
-⑨ 🌍 `website` Documentation website changes. E.g. `website(Alert): Add example.`\
-⑩ 🔙 `revert` Revert last commit. E.g. `revert: Add test case.`\
-⑪ 💊 `clean` clean up. E.g. `clean: remove comment code.`\
-⑫ 📈 `perf` Change the code to improve performance. E.g. `revert: Add test case.`\
-⑬ 💢 `ci` Continuous integration related file modification. E.g. `ci: Update workflows config.`\
+1. 🌟 `feat` Use when you add something entirely new. E.g: `feat(Button): add type props.`\
+2. 🐞 `fix` Use when you fix a bug — need I say more? E.g. `fix: Case conversion.`\
+3. 📖 `doc` Use when you add documentation like README.md, or even inline docs. E.g. `doc(Color): API Interface.`\
+4. 💄 `chore` Changes to the build process or auxiliary tools. E.g. `chore(Color): API Interface.`\
+5. 🎨 `style` Format (changes that do not affect code execution). E.g. `style(Alert): API Interface.`\
+6. 🆎 `type` Typescript type bug fixes. E.g. `type(Alert): fix type error.`\
+7. ⛑ `test` Add and modify test cases. E.g. `test(Alert): Add test case.`\
+8. 🐝 `refactor` Refactoring (i.e. code changes that are not new additions or bug fixes). E.g. `refactor(Alert): API Interface.`\
+9. 🌍 `website` Documentation website changes. E.g. `website(Alert): Add example.`\
+10. 🔙 `revert` Revert last commit. E.g. `revert: Add test case.`\
+11. 💊 `clean` clean up. E.g. `clean: remove comment code.`\
+12. 📈 `perf` Change the code to improve performance. E.g. `revert: Add test case.`\
+13. 💢 `ci` Continuous integration related file modification. E.g. `ci: Update workflows config.`\
 
 ## Inputs
 
