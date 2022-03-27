@@ -135,10 +135,11 @@ async function run() {
         Object.keys(types).forEach((name) => {
           if (getRegExp(name, commit)) {
             commit = `- ${types[name]} ${commit}`;
-          } else if (commit) {
-            commit = `- 📄 ${commit}`;
           }
         });
+        if (!/^-\s/.test(commit)) {
+          commit = `- 📄 ${commit}`;
+        }
         return commit
       });
 

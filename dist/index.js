@@ -11785,10 +11785,13 @@ function _run() {
               Object.keys(types).forEach(function (name) {
                 if (getRegExp(name, commit)) {
                   commit = "- ".concat(types[name], " ").concat(commit);
-                } else if (commit) {
-                  commit = "- \uD83D\uDCC4 ".concat(commit);
                 }
               });
+
+              if (!/^-\s/.test(commit)) {
+                commit = "- \uD83D\uDCC4 ".concat(commit);
+              }
+
               return commit;
             });
 
