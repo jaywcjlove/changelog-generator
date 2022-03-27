@@ -86,27 +86,13 @@
       </ol>
       <h2 id="inputs"><a class="anchor" aria-hidden="true" tabindex="-1" href="#inputs"><span class="octicon octicon-link"></span></a>Inputs</h2>
       <ul>
-        <li>
-          <p><code>token</code> A GITHUB_TOKEN with the ability to pull from the repo in question. This is required. Why do we need <code>token</code>? Read more here: <a href="https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret">About the GITHUB_TOKEN secret</a>. Default: <code>${{ github.token }}</code></p>
-        </li>
-        <li>
-          <p><code>filter-author</code> Regular expression filtering author. Example: <a href="https://github.com/jaywcjlove/changelog-generator/blob/f48f63cdb5f3c5d8b6499c6d96e3450ee7bdb9f5/.github/workflows/changelog.yml#L17"><code>filter-author: (jaywcjlove|小弟调调™|dependabot\[bot\]|Renovate Bot)</code></a></p>
-        </li>
-        <li>
-          <p><code>filter</code> Regular expression filtering changelog. Example: <a href="https://github.com/jaywcjlove/changelog-generator/blob/b372394a4e7265d4041c479b4d1f515a9c21ec37/.github/workflows/release.yml#L21"><code>filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'</code></a></p>
-        </li>
-        <li>
-          <p><code>head-ref</code> The name of the head reference. Default <code>${{github.sha}}</code>.</p>
-        </li>
-        <li>
-          <p><code>base-ref</code> The name of the second branch. Defaults to the <code>tag_name</code> of the latest GitHub release. <em>This must be a GitHub release. Git tags or branches will not work.</em></p>
-        </li>
-        <li>
-          <p><code>original-markdown</code> Default <code>true</code>, Output clean markdown content.</p>
-        </li>
-        <li>
-          <p><code>gh-pages</code> Default <code>gh-pages</code>, Specify the branch name to get the hash from</p>
-        </li>
+        <li><code>token</code> A GITHUB_TOKEN with the ability to pull from the repo in question. This is required. Why do we need <code>token</code>? Read more here: <a href="https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret">About the GITHUB_TOKEN secret</a>. Default: <code>${{ github.token }}</code></li>
+        <li><code>filter-author</code> Regular expression filtering author. Example: <a href="https://github.com/jaywcjlove/changelog-generator/blob/f48f63cdb5f3c5d8b6499c6d96e3450ee7bdb9f5/.github/workflows/changelog.yml#L17"><code>filter-author: (jaywcjlove|小弟调调™|dependabot\[bot\]|Renovate Bot)</code></a></li>
+        <li><code>filter</code> Regular expression filtering changelog. Example: <a href="https://github.com/jaywcjlove/changelog-generator/blob/b372394a4e7265d4041c479b4d1f515a9c21ec37/.github/workflows/release.yml#L21"><code>filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'</code></a></li>
+        <li><code>head-ref</code> The name of the head reference. Default <code>${{github.sha}}</code>.</li>
+        <li><code>base-ref</code> The name of the second branch. Defaults to the <code>tag_name</code> of the latest GitHub release. <em>This must be a GitHub release. Git tags or branches will not work.</em></li>
+        <li><code>original-markdown</code> Default <code>true</code>, Output clean markdown content.</li>
+        <li><code>gh-pages</code> Default <code>gh-pages</code>, Specify the branch name to get the hash from</li>
       </ul>
       <h2 id="outputs"><a class="anchor" aria-hidden="true" tabindex="-1" href="#outputs"><span class="octicon octicon-link"></span></a>Outputs</h2>
       <ul>
