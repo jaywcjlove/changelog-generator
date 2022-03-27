@@ -20,7 +20,7 @@
     "@actions/github": "~5.0.0"
   },
   "lint-staged": {
-    "*.{js}": [
+    "*.js": [
       "npm run build"
     ]
   },
