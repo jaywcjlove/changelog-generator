@@ -11876,6 +11876,10 @@ function formatStringCommit() {
     commit = "\uD83D\uDD19 ".concat(commit);
   } else if (getRegExp('clean', commit)) {
     commit = "\uD83D\uDC8A ".concat(commit);
+  } else if (getRegExp('perf', commit)) {
+    commit = "\uD83D\uDE80 ".concat(commit);
+  } else if (getRegExp('ci', commit)) {
+    commit = "\uD83D\uDCA2 ".concat(commit);
   } else {
     commit = "\uD83D\uDCC4 ".concat(commit);
   }

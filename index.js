@@ -185,6 +185,8 @@ function formatStringCommit(commit = '', repoName = '', { regExp, shortHash, ori
     commit = `💊 ${commit}`;
   } else if (getRegExp('perf', commit)) {
     commit = `📈 ${commit}`;
+  } else if (getRegExp('ci', commit)) {
+    commit = `💢 ${commit}`;
   } else {
     commit = `📄 ${commit}`;
   }
