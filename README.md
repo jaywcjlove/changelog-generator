@@ -58,7 +58,7 @@ Only use the following Git Commit Messages. A simple and small footprint is crit
 ⑨ 🌍 `website` Documentation website changes. E.g. `website(Alert): Add example.`\
 ⑩ 🔙 `revert` Revert last commit. E.g. `revert: Add test case.`\
 ⑪ 💊 `clean` clean up. E.g. `clean: remove comment code.`\
-⑫ 🚀 `perf` Change the code to improve performance. E.g. `revert: Add test case.`\
+⑫ 📈 `perf` Change the code to improve performance. E.g. `revert: Add test case.`\
 ⑬ 💢 `ci` Continuous integration related file modification. E.g. `ci: Update workflows config.`\
 
 ## Inputs

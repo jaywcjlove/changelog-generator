@@ -11618,13 +11618,29 @@ var getVersion = function getVersion(ver) {
   return currentVersion;
 };
 
+var types = {
+  type: '🆎',
+  feat: '🌟',
+  style: '🎨',
+  chore: '💄',
+  doc: '📖',
+  fix: '🐞',
+  test: '⛑',
+  refactor: '🐝',
+  website: '🌍',
+  revert: '🔙',
+  clean: '💊',
+  perf: '📈',
+  ci: '💢'
+};
+
 function run() {
   return _run.apply(this, arguments);
 }
 
 function _run() {
   _run = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee() {
-    var headRef, baseRef, myToken, filterAuthor, regExp, ghPagesBranch, originalMarkdown, _github$context$repo, owner, repo, octokit, latestRelease, tagRef, branch, branchData, ghPagesData, commits, changelog, _iterator, _step, data, message, listTags;
+    var headRef, baseRef, myToken, filterAuthor, regExp, ghPagesBranch, originalMarkdown, _github$context$repo, owner, repo, octokit, latestRelease, tagRef, branch, branchData, ghPagesData, commits, commitLog, _iterator, _step, data, message, listTags;
 
     return _regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
@@ -11719,7 +11735,7 @@ function _run() {
 
           case 49:
             if (!(!!headRef && !!baseRef && regexp.test(headRef) && regexp.test(baseRef))) {
-              _context.next = 81;
+              _context.next = 82;
               break;
             }
 
@@ -11739,7 +11755,7 @@ function _run() {
             core.startGroup("Compare Commits Result Data: \x1B[32m".concat(commits.status || '-', "\x1B[0m \x1B[32m").concat(baseRef, "\x1B[0m...\x1B[32m").concat(headRef, "\x1B[0m"));
             core.info("".concat(JSON.stringify(commits, null, 2)));
             core.endGroup();
-            changelog = '';
+            commitLog = [];
             _iterator = _createForOfIteratorHelper(commits.data.commits);
 
             try {
@@ -11749,7 +11765,7 @@ function _run() {
                 core.startGroup("Commit: \x1B[34m".concat(message, "\x1B[0m \x1B[34m").concat(data.commit.author.name, "(").concat(data.author.login, ")\x1B[0m ").concat(data.sha));
                 core.info("".concat(JSON.stringify(data, null, 2)));
                 core.endGroup();
-                changelog += formatStringCommit(message, "".concat(owner, "/").concat(repo), {
+                commitLog.push(formatStringCommit(message, "".concat(owner, "/").concat(repo), {
                   originalMarkdown: originalMarkdown,
                   regExp: regExp,
                   shortHash: data.sha.slice(0, 7),
@@ -11757,7 +11773,7 @@ function _run() {
                   hash: data.sha,
                   author: data.commit.author.name,
                   login: data.author.login
-                }) || '';
+                }));
               }
             } catch (err) {
               _iterator.e(err);
@@ -11765,55 +11781,66 @@ function _run() {
               _iterator.f();
             }
 
+            commitLog = commitLog.map(function (commit) {
+              Object.keys(types).forEach(function (name) {
+                if (getRegExp(name, commit)) {
+                  commit = "- ".concat(types[name], " ").concat(commit);
+                } else if (commit) {
+                  commit = "- \uD83D\uDCC4 ".concat(commit);
+                }
+              });
+              return commit;
+            });
+
             if (tagRef) {
-              _context.next = 68;
+              _context.next = 69;
               break;
             }
 
-            _context.next = 63;
+            _context.next = 64;
             return octokit.rest.repos.listTags({
               owner: owner,
               repo: repo
             });
 
-          case 63:
+          case 64:
             listTags = _context.sent;
 
             if (!(listTags.status !== 200)) {
-              _context.next = 67;
+              _context.next = 68;
               break;
             }
 
             core.setFailed("Failed to get tag lists (status=".concat(listTags.status, ")"));
             return _context.abrupt("return");
 
-          case 67:
+          case 68:
             tagRef = listTags.data[0] && listTags.data[0].name ? listTags.data[0].name : '';
 
-          case 68:
+          case 69:
             core.info("Tag: \x1B[34m".concat(tagRef, "\x1B[0m"));
             core.setOutput('tag', tagRef);
             core.info("Tag: \x1B[34m".concat(tagRef || headRef || '-', "\x1B[0m"));
             core.info("Input head-ref: \x1B[34m".concat(headRef, "\x1B[0m"));
             core.info("Input base-ref: \x1B[34m".concat(baseRef, "\x1B[0m"));
             core.startGroup('Result Changelog');
-            core.info("".concat(changelog));
+            core.info("".concat(commitLog.join('\n')));
             core.endGroup();
             core.setOutput('compareurl', "https://github.com/".concat(owner, "/").concat(repo, "/compare/").concat(baseRef, "...").concat(tagRef || headRef));
-            core.setOutput('changelog', changelog);
+            core.setOutput('changelog', commitLog.join('\n'));
             core.setOutput('version', getVersion(tagRef || headRef || '').replace(/^v/, ''));
-            _context.next = 82;
+            _context.next = 83;
             break;
-
-          case 81:
-            core.setFailed('Branch names must contain only numbers, strings, underscores, periods, and dashes.');
 
           case 82:
-            _context.next = 91;
+            core.setFailed('Branch names must contain only numbers, strings, underscores, periods, and dashes.');
+
+          case 83:
+            _context.next = 92;
             break;
 
-          case 84:
-            _context.prev = 84;
+          case 85:
+            _context.prev = 85;
             _context.t1 = _context["catch"](0);
             core.startGroup("Error: \x1B[34m".concat(_context.t1.message, "\x1B[0m"));
             core.info("".concat(JSON.stringify(_context.t1, null, 2)));
@@ -11821,12 +11848,12 @@ function _run() {
             core.setFailed("Could not generate changelog between references because: ".concat(_context.t1.message));
             process.exit(1);
 
-          case 91:
+          case 92:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 84], [28, 41]]);
+    }, _callee, null, [[0, 85], [28, 41]]);
   }));
   return _run.apply(this, arguments);
 }
@@ -11854,41 +11881,11 @@ function formatStringCommit() {
 
   login = login.replace(/\[bot\]/, '-bot');
 
-  if (getRegExp('type', commit)) {
-    commit = "\uD83C\uDD8E ".concat(commit);
-  } else if (getRegExp('feat', commit)) {
-    commit = "\uD83C\uDF1F ".concat(commit);
-  } else if (getRegExp('style', commit)) {
-    commit = "\uD83C\uDFA8 ".concat(commit);
-  } else if (getRegExp('chore', commit)) {
-    commit = "\uD83D\uDC84 ".concat(commit);
-  } else if (getRegExp('doc', commit) || getRegExp('docs', commit)) {
-    commit = "\uD83D\uDCD6 ".concat(commit);
-  } else if (getRegExp('fix', commit) || getRegExp('fixed', commit)) {
-    commit = "\uD83D\uDC1E ".concat(commit);
-  } else if (getRegExp('test', commit)) {
-    commit = "\u26D1 ".concat(commit);
-  } else if (getRegExp('refactor', commit)) {
-    commit = "\uD83D\uDC1D ".concat(commit);
-  } else if (getRegExp('website', commit)) {
-    commit = "\uD83C\uDF0D ".concat(commit);
-  } else if (getRegExp('revert', commit)) {
-    commit = "\uD83D\uDD19 ".concat(commit);
-  } else if (getRegExp('clean', commit)) {
-    commit = "\uD83D\uDC8A ".concat(commit);
-  } else if (getRegExp('perf', commit)) {
-    commit = "\uD83D\uDE80 ".concat(commit);
-  } else if (getRegExp('ci', commit)) {
-    commit = "\uD83D\uDCA2 ".concat(commit);
-  } else {
-    commit = "\uD83D\uDCC4 ".concat(commit);
-  }
-
   if (originalMarkdown) {
-    return "- ".concat(commit, " ").concat(shortHash, " ").concat(login ? "@".concat(login) : '', "\n");
+    return "".concat(commit, " ").concat(shortHash, " ").concat(login ? "@".concat(login) : '');
   }
 
-  return "- ".concat(commit, " [`").concat(shortHash, "`](http://github.com/").concat(repoName, "/commit/").concat(hash, ")").concat(login ? " @".concat(login) : '', "\n");
+  return "".concat(commit, " [`").concat(shortHash, "`](http://github.com/").concat(repoName, "/commit/").concat(hash, ")").concat(login ? " @".concat(login) : '');
 }
 
 function getRegExp() {

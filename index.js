@@ -11,6 +11,22 @@ const getVersion = (ver) => {
   return currentVersion
 }
 
+const types = {
+  type: '🆎',
+  feat: '🌟',
+  style: '🎨',
+  chore: '💄',
+  doc: '📖',
+  fix: '🐞',
+  test: '⛑',
+  refactor: '🐝',
+  website: '🌍',
+  revert: '🔙',
+  clean: '💊',
+  perf: '📈',
+  ci: '💢',
+}
+
 async function run() {
   try {
     var headRef = core.getInput('head-ref');
@@ -101,20 +117,30 @@ async function run() {
       core.info(`${JSON.stringify(commits, null, 2)}`)
       core.endGroup()
 
-      let changelog = '';
+      let commitLog = [];
       for (const data of commits.data.commits) {
         const message = data.commit.message.split('\n\n')[0];
         core.startGroup(`Commit: \x1b[34m${message}\x1b[0m \x1b[34m${data.commit.author.name}(${data.author.login})\x1b[0m ${data.sha}`);
         core.info(`${JSON.stringify(data, null, 2)}`);
         core.endGroup();
-        changelog += formatStringCommit(message, `${owner}/${repo}`, {
+        commitLog.push(formatStringCommit(message, `${owner}/${repo}`, {
           originalMarkdown,
           regExp, shortHash: data.sha.slice(0, 7), filterAuthor, hash: data.sha,
           author: data.commit.author.name,
           login: data.author.login,
-        }) || '';
+        }));
       }
 
+      commitLog = commitLog.map((commit) => {
+        Object.keys(types).forEach((name) => {
+          if (getRegExp(name, commit)) {
+            commit = `- ${types[name]} ${commit}`;
+          } else if (commit) {
+            commit = `- 📄 ${commit}`;
+          }
+        });
+        return commit
+      });
 
       if (!tagRef) {
         const listTags = await octokit.rest.repos.listTags({ owner, repo });
@@ -132,10 +158,10 @@ async function run() {
       core.info(`Input head-ref: \x1b[34m${headRef}\x1b[0m`);
       core.info(`Input base-ref: \x1b[34m${baseRef}\x1b[0m`);
       core.startGroup('Result Changelog');
-      core.info(`${changelog}`);
+      core.info(`${commitLog.join('\n')}`);
       core.endGroup();
       core.setOutput('compareurl', `https://github.com/${owner}/${repo}/compare/${baseRef}...${tagRef || headRef}`);
-      core.setOutput('changelog', changelog);
+      core.setOutput('changelog', commitLog.join('\n'));
       core.setOutput('version', getVersion(tagRef || headRef || '').replace(/^v/, ''));
     } else {
       core.setFailed(
@@ -161,39 +187,10 @@ function formatStringCommit(commit = '', repoName = '', { regExp, shortHash, ori
     return '';
   }
   login = login.replace(/\[bot\]/, '-bot');
-  if (getRegExp('type', commit)) {
-    commit = `🆎 ${commit}`;
-  } else if (getRegExp('feat', commit)) {
-    commit = `🌟 ${commit}`;
-  } else if (getRegExp('style', commit)) {
-    commit = `🎨 ${commit}`;
-  } else if (getRegExp('chore', commit)) {
-    commit = `💄 ${commit}`;
-  } else if (getRegExp('doc', commit) || getRegExp('docs', commit)) {
-    commit = `📖 ${commit}`;
-  } else if (getRegExp('fix', commit) || getRegExp('fixed', commit)) {
-    commit = `🐞 ${commit}`;
-  } else if (getRegExp('test', commit)) {
-    commit = `⛑ ${commit}`;
-  } else if (getRegExp('refactor', commit)) {
-    commit = `🐝 ${commit}`;
-  } else if (getRegExp('website', commit)) {
-    commit = `🌍 ${commit}`;
-  } else if (getRegExp('revert', commit)) {
-    commit = `🔙 ${commit}`;
-  } else if (getRegExp('clean', commit)) {
-    commit = `💊 ${commit}`;
-  } else if (getRegExp('perf', commit)) {
-    commit = `📈 ${commit}`;
-  } else if (getRegExp('ci', commit)) {
-    commit = `💢 ${commit}`;
-  } else {
-    commit = `📄 ${commit}`;
-  }
   if (originalMarkdown) {
-    return `- ${commit} ${shortHash} ${login ? `@${login}`: ''}\n`;
+    return `${commit} ${shortHash} ${login ? `@${login}`: ''}`;
   }
-  return `- ${commit} [\`${shortHash}\`](http://github.com/${repoName}/commit/${hash})${login ? ` @${login}`: ''}\n`;
+  return `${commit} [\`${shortHash}\`](http://github.com/${repoName}/commit/${hash})${login ? ` @${login}`: ''}`;
 }
 
 function getRegExp(str = '', commit = '') {
