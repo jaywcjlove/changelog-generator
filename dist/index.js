@@ -11788,12 +11788,12 @@ function _run() {
                 }
               });
 
-              if (!/^-\s/.test(commit)) {
+              if (!/^-\s/.test(commit) && commit) {
                 commit = "- \uD83D\uDCC4 ".concat(commit);
               }
 
               return commit;
-            });
+            }).filter(Boolean);
 
             if (tagRef) {
               _context.next = 69;

@@ -137,11 +137,11 @@ async function run() {
             commit = `- ${types[name]} ${commit}`;
           }
         });
-        if (!/^-\s/.test(commit)) {
+        if (!/^-\s/.test(commit) && commit) {
           commit = `- 📄 ${commit}`;
         }
         return commit
-      });
+      }).filter(Boolean);
 
       if (!tagRef) {
         const listTags = await octokit.rest.repos.listTags({ owner, repo });
