@@ -114,6 +114,16 @@ repository uses this action and GitHub releases for an [example](https://github.
 - [uiwjs/react-heat-map](https://github.com/uiwjs/react-heat-map/blob/f828826111dc6d79249fdd106648d835ae8e47ba/.github/workflows/ci.yml#L29-L36)
 - [More Examples...](https://github.com/jaywcjlove/changelog-generator/network/dependents)
 
+## Contributors
+
+As always, thanks to our amazing contributors!
+
+<a href="https://github.com/jaywcjlove/changelog-generator/graphs/contributors">
+  <img src="https://jaywcjlove.github.io/changelog-generator/CONTRIBUTORS.svg" />
+</a>
+
+Made with [action-contributors](https://github.com/jaywcjlove/github-action-contributors).
+
 ## License
 
 The scripts and documentation in this project are released under the [MIT License](./LICENSE)
