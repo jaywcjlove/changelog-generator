@@ -11640,7 +11640,7 @@ function run() {
 
 function _run() {
   _run = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee() {
-    var headRef, baseRef, myToken, filterAuthor, regExp, ghPagesBranch, originalMarkdown, _github$context$repo, owner, repo, octokit, latestRelease, tagRef, branch, branchData, ghPagesData, commits, commitLog, _iterator, _step, data, message, listTags;
+    var headRef, baseRef, myToken, filterAuthor, regExp, ghPagesBranch, originalMarkdown, _github$context$repo, owner, repo, octokit, latestRelease, tagRef, branch, branchData, ghPagesData, commits, commitLog, _iterator, _step, data, message, author, listTags;
 
     return _regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
@@ -11762,7 +11762,8 @@ function _run() {
               for (_iterator.s(); !(_step = _iterator.n()).done;) {
                 data = _step.value;
                 message = data.commit.message.split('\n\n')[0];
-                core.startGroup("Commit: \x1B[34m".concat(message, "\x1B[0m \x1B[34m").concat(data.commit.author.name, "(").concat(data.author.login, ")\x1B[0m ").concat(data.sha));
+                author = data.author || data.committer;
+                core.startGroup("Commit: \x1B[34m".concat(message, "\x1B[0m \x1B[34m").concat(data.commit.author.name, "(").concat(author.login, ")\x1B[0m ").concat(data.sha));
                 core.info("".concat(JSON.stringify(data, null, 2)));
                 core.endGroup();
                 commitLog.push(formatStringCommit(message, "".concat(owner, "/").concat(repo), {
@@ -11772,7 +11773,7 @@ function _run() {
                   filterAuthor: filterAuthor,
                   hash: data.sha,
                   author: data.commit.author.name,
-                  login: data.author.login
+                  login: author.login
                 }));
               }
             } catch (err) {
