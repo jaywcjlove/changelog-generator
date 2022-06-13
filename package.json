@@ -27,6 +27,6 @@
   "devDependencies": {
     "@kkt/ncc": "~1.0.13",
     "lint-staged": "~13.0.0",
-    "husky": "~7.0.2"
+    "husky": "~8.0.0"
   }
 }
