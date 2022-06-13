@@ -28,7 +28,7 @@ inputs:
     required: false
   original-markdown:
     description: 'Output clean markdown content.'
-    default: true
+    default: 'true'
     required: false
 
 outputs:

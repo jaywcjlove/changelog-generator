@@ -3,11 +3,11 @@
   "version": "1.5.4",
   "private": true,
   "description": "A GitHub Action that compares the commit differences between two branches",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "prepare": "husky install",
-    "build": "ncc build index.js -o dist",
-    "watch": "ncc watch index.js -o dist"
+    "build": "ncc build src/index.ts -o dist",
+    "watch": "ncc watch src/index.ts -o dist"
   },
   "repository": {
     "type": "git",

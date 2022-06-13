@@ -1,8 +1,9 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
+import core from '@actions/core';
+import github from '@actions/github';
+
 const regexp = /^[.A-Za-z0-9_-]*$/;
 
-const getVersion = (ver) => {
+const getVersion = (ver: string = '') => {
   let currentVersion = ''
   ver.replace(/([v|V]\d(\.\d+){0,2})/i, (str) => {
     currentVersion = str
@@ -43,7 +44,7 @@ async function run() {
       const latestRelease = await octokit.rest.repos.getLatestRelease({ ...github.context.repo });
       if (latestRelease.status !== 200) {
         core.setFailed(
-          `There are no releases on ${owner}/${repo}. Tags are not releases. (status=${latestRelease.status}) ${latestRelease.data.message || ''}`
+          `There are no releases on ${owner}/${repo}. Tags are not releases. (status=${latestRelease.status}) ${(latestRelease.data as any).message || ''}`
         );
       }
       baseRef = latestRelease.data.tag_name;
@@ -79,12 +80,18 @@ async function run() {
       const ghPagesData = branchData.data.find((item) => item.name === ghPagesBranch);
       core.startGroup(`\x1b[34mGet Branch \x1b[0m`);
       core.info(`Branch Data: ${JSON.stringify(branchData.data, null, 2)}`);
-      core.info(`ghPages Data: ${ghPagesBranch}, ${ghPagesData.commit.sha}, ${JSON.stringify(ghPagesData, null, 2)}`);
+      if (ghPagesData) {
+        core.info(`ghPages Data: ${ghPagesBranch}, ${ghPagesData.commit.sha}, ${JSON.stringify(ghPagesData, null, 2)}`);
+      }
       core.endGroup();
-      core.setOutput('gh-pages-hash', ghPagesData.commit.sha);
-      core.setOutput('gh-pages-short-hash', ghPagesData.commit.sha.substring(0,7));
+      if (ghPagesData) {
+        core.setOutput('gh-pages-hash', ghPagesData.commit.sha);
+        core.setOutput('gh-pages-short-hash', ghPagesData.commit.sha.substring(0,7));
+      }
     } catch (error) {
-      core.info(`Get Branch: \x1b[33m${error.message}\x1b[0m`);
+      if (error instanceof Error) {
+        core.info(`Get Branch: \x1b[33m${error.message}\x1b[0m`);
+      }
     }
 
     if ((baseRef || '').replace(/^[vV]/, '') === headRef) {
@@ -108,7 +115,7 @@ async function run() {
 
       if (commits && commits.status !== 200) {
         core.setFailed(
-          `There are no releases on ${owner}/${repo}. Tags are not releases. (status=${commits.status}) ${commits.data.message || ''}`
+          `There are no releases on ${owner}/${repo}. Tags are not releases. (status=${commits.status}) ${(commits.data as any).message || ''}`
         );
       }
       core.startGroup(
@@ -120,20 +127,21 @@ async function run() {
       let commitLog = [];
       for (const data of commits.data.commits) {
         const message = data.commit.message.split('\n\n')[0];
-        const author = data.author || data.committer;
-        core.startGroup(`Commit: \x1b[34m${message}\x1b[0m \x1b[34m${data.commit.author.name}(${author.login})\x1b[0m ${data.sha}`);
+        const author = data.author || data.committer || { login: '-' };
+        core.startGroup(`Commit: \x1b[34m${message}\x1b[0m \x1b[34m${(data.commit.author || {}).name}(${author.login})\x1b[0m ${data.sha}`);
         core.info(`${JSON.stringify(data, null, 2)}`);
         core.endGroup();
         commitLog.push(formatStringCommit(message, `${owner}/${repo}`, {
           originalMarkdown,
           regExp, shortHash: data.sha.slice(0, 7), filterAuthor, hash: data.sha,
-          author: data.commit.author.name,
+          // author: '',
+          // author: data.commit.author ? data.commit.author.name : '',
           login: author.login,
         }));
       }
 
       commitLog = commitLog.map((commit) => {
-        Object.keys(types).forEach((name) => {
+        (Object.keys(types) as Array<keyof typeof types>).forEach((name) => {
           if (getRegExp(name, commit)) {
             commit = `- ${types[name]} ${commit}`;
           }
@@ -171,17 +179,28 @@ async function run() {
       );
     }
   } catch (error) {
-    core.startGroup(`Error: \x1b[34m${error.message}\x1b[0m`);
-    core.info(`${JSON.stringify(error, null, 2)}`);
-    core.endGroup();
-    core.setFailed(
-      `Could not generate changelog between references because: ${error.message}`
-    );
+    if (error instanceof Error) {
+      core.startGroup(`Error: \x1b[34m${error.message}\x1b[0m`);
+      core.info(`${JSON.stringify(error, null, 2)}`);
+      core.endGroup();
+      core.setFailed(
+        `Could not generate changelog between references because: ${error.message}`
+      );
+    }
     process.exit(1);
   }
 }
 
-function formatStringCommit(commit = '', repoName = '', { regExp, shortHash, originalMarkdown, filterAuthor, hash, login = '' }) {
+type FormatStringCommit = {
+  regExp?: string;
+  shortHash?: string;
+  originalMarkdown?: string;
+  filterAuthor?: string;
+  hash?: string;
+  login?: string;
+}
+
+function formatStringCommit(commit = '', repoName = '', { regExp, shortHash, originalMarkdown, filterAuthor, hash, login = '' }: FormatStringCommit) {
   if (filterAuthor && (new RegExp(filterAuthor)).test(login)) {
     login = '';
   }
@@ -202,5 +221,7 @@ function getRegExp(str = '', commit = '') {
 try {
   run();
 } catch (error) {
-  core.setFailed(error.message);
+  if (error instanceof Error) {
+    core.setFailed(error.message);
+  }
 }
