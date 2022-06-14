@@ -1,5 +1,5 @@
-import * as core from '@actions/core';
-import * as github from '@actions/github';
+import { getInput, setFailed, startGroup, info, endGroup, setOutput } from '@actions/core';
+import { context, getOctokit } from '@actions/github';
 
 const regexp = /^[.A-Za-z0-9_-]*$/;
 
@@ -30,74 +30,74 @@ const types = {
 
 async function run() {
   try {
-    var headRef = core.getInput('head-ref');
-    var baseRef = core.getInput('base-ref');
-    const myToken = core.getInput('token');
-    const filterAuthor = core.getInput('filter-author');
-    const regExp = core.getInput('filter');
-    const ghPagesBranch = core.getInput('gh-pages') || 'gh-pages';
-    const originalMarkdown = core.getInput('original-markdown');
-    const { owner, repo } = github.context.repo;
-    const octokit = github.getOctokit(myToken);
+    var headRef = getInput('head-ref');
+    var baseRef = getInput('base-ref');
+    const myToken = getInput('token');
+    const filterAuthor = getInput('filter-author');
+    const regExp = getInput('filter');
+    const ghPagesBranch = getInput('gh-pages') || 'gh-pages';
+    const originalMarkdown = getInput('original-markdown');
+    const { owner, repo } = context.repo;
+    const octokit = getOctokit(myToken);
 
     if (!baseRef) {
-      const latestRelease = await octokit.rest.repos.getLatestRelease({ ...github.context.repo });
+      const latestRelease = await octokit.rest.repos.getLatestRelease({ ...context.repo });
       if (latestRelease.status !== 200) {
-        core.setFailed(
+        setFailed(
           `There are no releases on ${owner}/${repo}. Tags are not releases. (status=${latestRelease.status}) ${(latestRelease.data as any).message || ''}`
         );
       }
       baseRef = latestRelease.data.tag_name;
-      core.startGroup(
+      startGroup(
         `Latest Release Result Data: \x1b[32m${latestRelease.status || '-'}\x1b[0m \x1b[32m${latestRelease.data.tag_name}\x1b[0m`
       )
-      core.info(`${JSON.stringify(latestRelease, null, 2)}`)
-      core.endGroup()
+      info(`${JSON.stringify(latestRelease, null, 2)}`)
+      endGroup()
     }
     if (!headRef) {
-      headRef = github.context.sha;
+      headRef = context.sha;
     }
 
-    core.info(`Commit Content: \x1b[34m${owner}/${repo}\x1b[0m`)
-    core.startGroup(`Ref: \x1b[34m${github.context.ref}\x1b[0m`);
-    core.info(`${JSON.stringify(github.context, null, 2)}`);
-    core.endGroup();
+    info(`Commit Content: \x1b[34m${owner}/${repo}\x1b[0m`)
+    startGroup(`Ref: \x1b[34m${context.ref}\x1b[0m`);
+    info(`${JSON.stringify(context, null, 2)}`);
+    endGroup();
 
     let tagRef = '';
-    if ((github.context.ref || '').startsWith('refs/tags/')) {
-      tagRef = getVersion(github.context.ref);
+    if ((context.ref || '').startsWith('refs/tags/')) {
+      tagRef = getVersion(context.ref);
     }
 
-    if ((github.context.ref || '').startsWith('refs/heads/')) {
-      const branch = github.context.ref.replace(/.*(?=\/)\//, '');
-      core.setOutput('branch', branch);
-      core.info(`Branch: \x1b[34m${branch}\x1b[0m`);
+    if ((context.ref || '').startsWith('refs/heads/')) {
+      const branch = context.ref.replace(/.*(?=\/)\//, '');
+      setOutput('branch', branch);
+      info(`Branch: \x1b[34m${branch}\x1b[0m`);
     }
-    core.info(`Ref: baseRef(\x1b[32m${baseRef}\x1b[0m), headRef(\x1b[32m${headRef}\x1b[0m), tagRef(\x1b[32m${tagRef}\x1b[0m)`);
+    info(`Ref: baseRef(\x1b[32m${baseRef}\x1b[0m), headRef(\x1b[32m${headRef}\x1b[0m), tagRef(\x1b[32m${tagRef}\x1b[0m)`);
 
     try {
-      const branchData = await octokit.request('GET /repos/{owner}/{repo}/branches', { ...github.context.repo });
+      const branchData = await octokit.request('GET /repos/{owner}/{repo}/branches', { ...context.repo });
       const ghPagesData = branchData.data.find((item) => item.name === ghPagesBranch);
-      core.startGroup(`\x1b[34mGet Branch \x1b[0m`);
-      core.info(`Branch Data: ${JSON.stringify(branchData.data, null, 2)}`);
+      startGroup(`\x1b[34mGet Branch \x1b[0m`);
+      info(`Branch Data: ${JSON.stringify(branchData.data, null, 2)}`);
       if (ghPagesData) {
-        core.info(`ghPages Data: ${ghPagesBranch}, ${ghPagesData.commit.sha}, ${JSON.stringify(ghPagesData, null, 2)}`);
+        info(`ghPages Data: ${ghPagesBranch}, ${ghPagesData.commit.sha}, ${JSON.stringify(ghPagesData, null, 2)}`);
       }
-      core.endGroup();
+      endGroup();
       if (ghPagesData) {
-        core.setOutput('gh-pages-hash', ghPagesData.commit.sha);
-        core.setOutput('gh-pages-short-hash', ghPagesData.commit.sha.substring(0,7));
+        setOutput('gh-pages-hash', ghPagesData.commit.sha);
+        setOutput('gh-pages-short-hash', ghPagesData.commit.sha.substring(0,7));
       }
     } catch (error) {
       if (error instanceof Error) {
-        core.info(`Get Branch: \x1b[33m${error.message}\x1b[0m`);
+        info(`Get Branch: \x1b[33m${error.message}\x1b[0m`);
       }
     }
 
     if ((baseRef || '').replace(/^[vV]/, '') === headRef) {
-      core.setOutput('tag', baseRef);
-      core.setOutput('version', baseRef.replace(/^[vV]/, ''));
-      core.info(`Done: baseRef(\x1b[33m${baseRef}\x1b[0m) === headRef(\x1b[32m${headRef}\x1b[0m)`);
+      setOutput('tag', baseRef);
+      setOutput('version', baseRef.replace(/^[vV]/, ''));
+      info(`Done: baseRef(\x1b[33m${baseRef}\x1b[0m) === headRef(\x1b[32m${headRef}\x1b[0m)`);
       return;
     }
 
@@ -108,29 +108,29 @@ async function run() {
       regexp.test(baseRef)
     ) {
       const commits = await octokit.rest.repos.compareCommits({
-        ...github.context.repo,
+        ...context.repo,
         base: baseRef,
         head: headRef,
       });
 
       if (commits && commits.status !== 200) {
-        core.setFailed(
+        setFailed(
           `There are no releases on ${owner}/${repo}. Tags are not releases. (status=${commits.status}) ${(commits.data as any).message || ''}`
         );
       }
-      core.startGroup(
+      startGroup(
         `Compare Commits Result Data: \x1b[32m${commits.status || '-'}\x1b[0m \x1b[32m${baseRef}\x1b[0m...\x1b[32m${headRef}\x1b[0m`
       )
-      core.info(`${JSON.stringify(commits, null, 2)}`)
-      core.endGroup()
+      info(`${JSON.stringify(commits, null, 2)}`)
+      endGroup()
 
       let commitLog = [];
       for (const data of commits.data.commits) {
         const message = data.commit.message.split('\n\n')[0];
         const author = data.author || data.committer || { login: '-' };
-        core.startGroup(`Commit: \x1b[34m${message}\x1b[0m \x1b[34m${(data.commit.author || {}).name}(${author.login})\x1b[0m ${data.sha}`);
-        core.info(`${JSON.stringify(data, null, 2)}`);
-        core.endGroup();
+        startGroup(`Commit: \x1b[34m${message}\x1b[0m \x1b[34m${(data.commit.author || {}).name}(${author.login})\x1b[0m ${data.sha}`);
+        info(`${JSON.stringify(data, null, 2)}`);
+        endGroup();
         commitLog.push(formatStringCommit(message, `${owner}/${repo}`, {
           originalMarkdown,
           regExp, shortHash: data.sha.slice(0, 7), filterAuthor, hash: data.sha,
@@ -155,35 +155,35 @@ async function run() {
       if (!tagRef) {
         const listTags = await octokit.rest.repos.listTags({ owner, repo });
         if (listTags.status !== 200) {
-          core.setFailed(`Failed to get tag lists (status=${listTags.status})`);
+          setFailed(`Failed to get tag lists (status=${listTags.status})`);
           return
         }
         tagRef = listTags.data[0] && listTags.data[0].name ? listTags.data[0].name : '';
       }
   
-      core.info(`Tag: \x1b[34m${tagRef}\x1b[0m`);
-      core.setOutput('tag', tagRef);
+      info(`Tag: \x1b[34m${tagRef}\x1b[0m`);
+      setOutput('tag', tagRef);
 
-      core.info(`Tag: \x1b[34m${tagRef || headRef || '-'}\x1b[0m`);
-      core.info(`Input head-ref: \x1b[34m${headRef}\x1b[0m`);
-      core.info(`Input base-ref: \x1b[34m${baseRef}\x1b[0m`);
-      core.startGroup('Result Changelog');
-      core.info(`${commitLog.join('\n')}`);
-      core.endGroup();
-      core.setOutput('compareurl', `https://github.com/${owner}/${repo}/compare/${baseRef}...${tagRef || headRef}`);
-      core.setOutput('changelog', commitLog.join('\n'));
-      core.setOutput('version', getVersion(tagRef || headRef || '').replace(/^v/, ''));
+      info(`Tag: \x1b[34m${tagRef || headRef || '-'}\x1b[0m`);
+      info(`Input head-ref: \x1b[34m${headRef}\x1b[0m`);
+      info(`Input base-ref: \x1b[34m${baseRef}\x1b[0m`);
+      startGroup('Result Changelog');
+      info(`${commitLog.join('\n')}`);
+      endGroup();
+      setOutput('compareurl', `https://github.com/${owner}/${repo}/compare/${baseRef}...${tagRef || headRef}`);
+      setOutput('changelog', commitLog.join('\n'));
+      setOutput('version', getVersion(tagRef || headRef || '').replace(/^v/, ''));
     } else {
-      core.setFailed(
+      setFailed(
         'Branch names must contain only numbers, strings, underscores, periods, and dashes.'
       );
     }
   } catch (error) {
     if (error instanceof Error) {
-      core.startGroup(`Error: \x1b[34m${error.message}\x1b[0m`);
-      core.info(`${JSON.stringify(error, null, 2)}`);
-      core.endGroup();
-      core.setFailed(
+      startGroup(`Error: \x1b[34m${error.message}\x1b[0m`);
+      info(`${JSON.stringify(error, null, 2)}`);
+      endGroup();
+      setFailed(
         `Could not generate changelog between references because: ${error.message}`
       );
     }
@@ -222,6 +222,6 @@ try {
   run();
 } catch (error) {
   if (error instanceof Error) {
-    core.setFailed(error.message);
+    setFailed(error.message);
   }
 }
