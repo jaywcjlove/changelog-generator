@@ -115,7 +115,13 @@ async function run() {
           ...context.repo,
           path: myPath,
         })
-        info(`${JSON.stringify(commitsPath, null, 2)}`)
+
+        if (commitsPath && commitsPath.status !== 200) {
+          setFailed(
+            `There are no releases on ${owner}/${repo}. Tags are not releases. (status=${commitsPath.status}) ${(commitsPath.data as any).message || ''}`
+          );
+        }
+        info(`${JSON.stringify(commitsPath.data, null, 2)}`)
       }
 
       const commits = await octokit.rest.repos.compareCommits({
