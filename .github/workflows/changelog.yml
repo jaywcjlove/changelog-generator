@@ -1,14 +1,17 @@
 name: test
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   test:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 16
 
       - run: npm install
       - run: npm run build
@@ -59,7 +62,7 @@ jobs:
         # uses: jaywcjlove/changelog-generator@main
         uses: ./
         with:
-          path: .github/workflows/changelog.yml
+          path: ./.github/workflows/changelog.yml
           token: ${{ secrets.GITHUB_TOKEN }}
           head-ref: ${{steps.create_tag.outputs.version}}
           original-markdown: true
