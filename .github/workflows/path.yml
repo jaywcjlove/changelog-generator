@@ -36,7 +36,6 @@ jobs:
       - run: echo "outputs.gh-pages-short-hash - ${{ steps.changelog.outputs.gh-pages-short-hash }}"
 
       - name: Generate Changelog (folder path test)
-        id: changelog
         # uses: jaywcjlove/changelog-generator@main
         uses: ./
         with:
