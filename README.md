@@ -71,6 +71,7 @@ Only use the following Git Commit Messages. A simple and small footprint is crit
 - `base-ref` The name of the second branch. Defaults to the `tag_name` of the latest GitHub release. *This must be a GitHub release. Git tags or branches will not work.*
 - `original-markdown` Default `true`, Output clean markdown content.
 - `gh-pages` Default `gh-pages`, Specify the branch name to get the hash from
+- `path` Only commits containing this file path will be returned.
 
 ## Outputs
 

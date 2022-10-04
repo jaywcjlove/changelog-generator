@@ -1,5 +1,6 @@
 import { getInput, setFailed, startGroup, info, endGroup, setOutput } from '@actions/core';
-import { context, getOctokit } from '@actions/github';
+import { context, getOctokit,  } from '@actions/github';
+import { OctokitResponse } from '@octokit/types';
 
 const regexp = /^[.A-Za-z0-9_-]*$/;
 
@@ -109,44 +110,45 @@ async function run() {
       regexp.test(baseRef)
     ) {
 
+      let commitsData = null as unknown as OctokitResponse<CommitsData>
       if (myPath) {
         info(`path: ${myPath}`)
-        const commitsPath = await octokit.request('GET /repos/{owner}/{repo}/commits', {
+        const commitsData = await octokit.request('GET /repos/{owner}/{repo}/commits', {
           ...context.repo,
           path: myPath,
         })
 
-        if (commitsPath && commitsPath.status !== 200) {
+        if (commitsData && commitsData.status !== 200) {
           setFailed(
-            `There are no releases on ${owner}/${repo}. Tags are not releases. (status=${commitsPath.status}) ${(commitsPath.data as any).message || ''}`
+            `There are no releases on ${owner}/${repo}. Tags are not releases. (status=${commitsData.status}) ${(commitsData.data as any).message || ''}`
           );
         }
         startGroup(
-          `Compare Path Commits Result Data: \x1b[32m${commitsPath.status || '-'}\x1b[0m \x1b[32m${baseRef}\x1b[0m...\x1b[32m${headRef}\x1b[0m`
+          `Compare Path Commits Result Data: \x1b[32m${commitsData.status || '-'}\x1b[0m \x1b[32m${baseRef}\x1b[0m...\x1b[32m${headRef}\x1b[0m`
         )
-        info(`${JSON.stringify(commitsPath.data, null, 2)}`)
+        info(`${JSON.stringify(commitsData.data, null, 2)}`)
+        endGroup()
+      } else {
+        const commitsData = await octokit.rest.repos.compareCommits({
+          ...context.repo,
+          base: baseRef,
+          head: headRef,
+        });
+  
+        if (commitsData && commitsData.status !== 200) {
+          setFailed(
+            `There are no releases on ${owner}/${repo}. Tags are not releases. (status=${commitsData.status}) ${(commitsData.data as any).message || ''}`
+          );
+        }
+        startGroup(
+          `Compare Commits Result Data: \x1b[32m${commitsData.status || '-'}\x1b[0m \x1b[32m${baseRef}\x1b[0m...\x1b[32m${headRef}\x1b[0m`
+        )
+        info(`${JSON.stringify(commitsData, null, 2)}`)
         endGroup()
       }
 
-      const commits = await octokit.rest.repos.compareCommits({
-        ...context.repo,
-        base: baseRef,
-        head: headRef,
-      });
-
-      if (commits && commits.status !== 200) {
-        setFailed(
-          `There are no releases on ${owner}/${repo}. Tags are not releases. (status=${commits.status}) ${(commits.data as any).message || ''}`
-        );
-      }
-      startGroup(
-        `Compare Commits Result Data: \x1b[32m${commits.status || '-'}\x1b[0m \x1b[32m${baseRef}\x1b[0m...\x1b[32m${headRef}\x1b[0m`
-      )
-      info(`${JSON.stringify(commits, null, 2)}`)
-      endGroup()
-
       let commitLog = [];
-      for (const data of commits.data.commits) {
+      for (const data of commitsData.data.commits) {
         const message = data.commit.message.split('\n\n')[0];
         const author = data.author || data.committer || { login: '-' };
         startGroup(`Commit: \x1b[34m${message}\x1b[0m \x1b[34m${(data.commit.author || {}).name}(${author.login})\x1b[0m ${data.sha}`);
