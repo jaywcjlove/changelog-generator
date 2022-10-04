@@ -59,7 +59,7 @@ jobs:
         # uses: jaywcjlove/changelog-generator@main
         uses: ./
         with:
-          path: .github/workflows/changelog.yml
+          path: ./.github/workflows/changelog.yml
           token: ${{ secrets.GITHUB_TOKEN }}
           head-ref: ${{steps.create_tag.outputs.version}}
           original-markdown: true

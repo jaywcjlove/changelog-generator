@@ -121,7 +121,7 @@ async function run() {
             `There are no releases on ${owner}/${repo}. Tags are not releases. (status=${commitsPath.status}) ${(commitsPath.data as any).message || ''}`
           );
         }
-        info(`${JSON.stringify(commitsPath.data, null, 2)}`)
+        info(`Path Commits: ${JSON.stringify(commitsPath.data, null, 2)}`)
       }
 
       const commits = await octokit.rest.repos.compareCommits({

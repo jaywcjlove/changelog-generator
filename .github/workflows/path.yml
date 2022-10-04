@@ -1,0 +1,36 @@
+name: test
+on:
+  push:
+    branches:
+      - feature-path
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - run: npm install
+      - run: npm run build
+
+      - name: Generate Changelog (path test)
+        id: changelog_path
+        # uses: jaywcjlove/changelog-generator@main
+        uses: ./
+        with:
+          path: ./.github/workflows/changelog.yml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          head-ref: ${{steps.create_tag.outputs.version}}
+          original-markdown: true
+          filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
+
+      - run: echo "outputs.tag - ${{ steps.changelog.outputs.tag }}"
+      - run: echo "outputs.branch - ${{ steps.changelog.outputs.branch }}"
+      - run: echo "outputs.compareurl - ${{ steps.changelog.outputs.compareurl }}"
+      - run: echo "outputs.version - ${{ steps.changelog.outputs.version }}"
+      - run: echo "outputs.gh-pages-hash - ${{ steps.changelog.outputs.gh-pages-hash }}"
+      - run: echo "outputs.gh-pages-hash - ${{ steps.changelog.outputs['gh-pages-hash'] }}"
+      - run: echo "outputs.gh-pages-short-hash - ${{ steps.changelog.outputs.gh-pages-short-hash }}"
