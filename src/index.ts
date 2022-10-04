@@ -109,8 +109,7 @@ async function run() {
       regexp.test(headRef) &&
       regexp.test(baseRef)
     ) {
-
-      let commitsData = null as unknown as OctokitResponse<CommitsData>
+      let resultData = [] as Commits[]
       if (myPath) {
         info(`path: ${myPath}`)
         const commitsData = await octokit.request('GET /repos/{owner}/{repo}/commits', {
@@ -122,6 +121,8 @@ async function run() {
           setFailed(
             `There are no releases on ${owner}/${repo}. Tags are not releases. (status=${commitsData.status}) ${(commitsData.data as any).message || ''}`
           );
+        } else {
+          resultData = commitsData.data as unknown  as Commits[];
         }
         startGroup(
           `Compare Path Commits Result Data: \x1b[32m${commitsData.status || '-'}\x1b[0m \x1b[32m${baseRef}\x1b[0m...\x1b[32m${headRef}\x1b[0m`
@@ -139,6 +140,8 @@ async function run() {
           setFailed(
             `There are no releases on ${owner}/${repo}. Tags are not releases. (status=${commitsData.status}) ${(commitsData.data as any).message || ''}`
           );
+        } else {
+          resultData = commitsData.data.commits as unknown  as Commits[]
         }
         startGroup(
           `Compare Commits Result Data: \x1b[32m${commitsData.status || '-'}\x1b[0m \x1b[32m${baseRef}\x1b[0m...\x1b[32m${headRef}\x1b[0m`
@@ -148,7 +151,7 @@ async function run() {
       }
 
       let commitLog = [];
-      for (const data of commitsData.data.commits) {
+      for (const data of resultData) {
         const message = data.commit.message.split('\n\n')[0];
         const author = data.author || data.committer || { login: '-' };
         startGroup(`Commit: \x1b[34m${message}\x1b[0m \x1b[34m${(data.commit.author || {}).name}(${author.login})\x1b[0m ${data.sha}`);
