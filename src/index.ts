@@ -33,6 +33,7 @@ async function run() {
     var headRef = getInput('head-ref');
     var baseRef = getInput('base-ref');
     const myToken = getInput('token');
+    const myPath = getInput('path');
     const filterAuthor = getInput('filter-author');
     const regExp = getInput('filter');
     const ghPagesBranch = getInput('gh-pages') || 'gh-pages';
@@ -107,6 +108,16 @@ async function run() {
       regexp.test(headRef) &&
       regexp.test(baseRef)
     ) {
+
+      if (myPath) {
+        info(`path: ${myPath}`)
+        const commitsPath = await octokit.request('GET /repos/{owner}/{repo}/commits', {
+          ...context.repo,
+          path: myPath,
+        })
+        info(`${JSON.stringify(commitsPath, null, 2)}`)
+      }
+
       const commits = await octokit.rest.repos.compareCommits({
         ...context.repo,
         base: baseRef,

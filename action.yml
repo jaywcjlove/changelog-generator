@@ -30,6 +30,10 @@ inputs:
     description: 'Output clean markdown content.'
     default: 'true'
     required: false
+  path:
+    description: 'Only commits containing this file path will be returned..'
+    default: ''
+    required: false
 
 outputs:
   version:
