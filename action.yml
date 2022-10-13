@@ -51,7 +51,7 @@ outputs:
   gh-pages-short-hash:
     description: 'Specify the branch name to get the short-hash from.'
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
 branding:
   icon: 'list'
