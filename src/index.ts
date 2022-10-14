@@ -1,6 +1,5 @@
 import { getInput, setFailed, startGroup, info, endGroup, setOutput } from '@actions/core';
 import { context, getOctokit,  } from '@actions/github';
-import { OctokitResponse } from '@octokit/types';
 
 const regexp = /^[.A-Za-z0-9_-]*$/;
 
@@ -19,6 +18,8 @@ const types = {
   style: '🎨',
   chore: '💄',
   doc: '📖',
+  docs: '📖',
+  build: '🧯',
   fix: '🐞',
   test: '⛑',
   refactor: '🐝',

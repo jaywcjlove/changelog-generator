@@ -50,7 +50,7 @@ Only use the following Git Commit Messages. A simple and small footprint is crit
 
 1. 🌟 `feat` Use when you add something entirely new. E.g: `feat(Button): add type props.`
 2. 🐞 `fix` Use when you fix a bug — need I say more? E.g. `fix: Case conversion.`
-3. 📖 `doc` Use when you add documentation like README.md, or even inline docs. E.g. `doc(Color): API Interface.`
+3. 📖 `doc`/`docs` Use when you add documentation like README.md, or even inline docs. E.g. `doc(Color): API Interface.`
 4. 💄 `chore` Changes to the build process or auxiliary tools. E.g. `chore(Color): API Interface.`
 5. 🎨 `style` Format (changes that do not affect code execution). E.g. `style(Alert): API Interface.`
 6. 🆎 `type` Typescript type bug fixes. E.g. `type(Alert): fix type error.`
@@ -61,6 +61,23 @@ Only use the following Git Commit Messages. A simple and small footprint is crit
 11. 💊 `clean` clean up. E.g. `clean: remove comment code.`
 12. 📈 `perf` Change the code to improve performance. E.g. `revert: Add test case.`
 13. 💢 `ci` Continuous integration related file modification. E.g. `ci: Update workflows config.`
+14. 🧯 `build` Changes that affect the build system or external dependencies (example scopes: gulp, webpack, vite, npm)
+
+```shell
+<type>(<scope>): <short summary>
+  │       │             │
+  │       │             └─⫸ Summary in present tense. Not capitalized. No period at the end.
+  │       │
+  │       └─⫸ Commit Scope: animations|bazel|benchpress|common|compiler|compiler-cli|core|
+  │                          elements|forms|http|language-service|localize|platform-browser|
+  │                          platform-browser-dynamic|platform-server|router|service-worker|
+  │                          upgrade|zone.js|packaging|changelog|docs-infra|migrations|ngcc|ve|
+  │                          devtools....
+  │
+  └─⫸ Commit Type: build|ci|doc|docs|feat|fix|perf|refactor|test
+                    website|chore|style|type|revert
+```
+
 
 ## Inputs
 
@@ -104,9 +121,10 @@ repository uses this action and GitHub releases for an [example](https://github.
 
 ## Acknowledgements
 
+- [@conventional-changelog/conventional-changelog](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular#angular-convention).
+- [@homeday-de/github-action-changelog-generator](https://github.com/homeday-de/github-action-changelog-generator).
 - [@jessicalostinspace/commit](https://github.com/jessicalostinspace/commit-difference-action).
 - [@metcalfc/changelog-generator](https://github.com/metcalfc/changelog-generator).
-- [@homeday-de/github-action-changelog-generator](https://github.com/homeday-de/github-action-changelog-generator).
 
 ## Example
 
