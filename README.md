@@ -14,6 +14,7 @@ I just wanted a simple way to populate the body of a GitHub Release.
 
 
 ```yml
+- run: echo "previous_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo '')" >> $GITHUB_ENV
 - name: Generate changelog
   id: changelog
   uses: jaywcjlove/changelog-generator@main
@@ -113,11 +114,14 @@ If you are seeing this error its likely that you do not yet have a GitHub releas
 API this Action uses only works with GitHub Releases. Convert one of your tags to a release and you'll be on your way. You can check out how this
 repository uses this action and GitHub releases for an [example](https://github.com/jaywcjlove/changelog-generator/blob/600f36ff605c63a74a264ab324247f0c392bf7a2/.github/workflows/changelog.yml#L12-L18).
 
+You can also set `env.previous_tag` to `""` or the previous tag if it exists, and run the step conditionally. If there is no previous tag, the step will not run:
+
 ```diff
++- run: echo "previous_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo '')" >> $GITHUB_ENV
  - name: Generate changelog
    id: changelog
    uses: jaywcjlove/changelog-generator@main
-+   if: env.previous_tag
++  if: env.previous_tag
    with:
     token: ${{ secrets.GITHUB_TOKEN }}
 ```
