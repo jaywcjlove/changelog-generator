@@ -30,6 +30,10 @@ inputs:
     description: 'Output clean markdown content.'
     default: 'true'
     required: false
+  show-emoji:
+    description: 'Show emoji icons.'
+    default: 'true'
+    required: false
   path:
     description: 'Only commits containing this file path will be returned..'
     default: ''

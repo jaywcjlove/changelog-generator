@@ -36,6 +36,7 @@ async function run() {
     var baseRef = getInput('base-ref');
     const myToken = getInput('token');
     const myPath = getInput('path');
+    const showEmoji = getInput('show-emoji') === 'false' ? false : true;
     const filterAuthor = getInput('filter-author');
     const regExp = getInput('filter');
     const ghPagesBranch = getInput('gh-pages') || 'gh-pages';
@@ -170,11 +171,11 @@ async function run() {
       commitLog = commitLog.map((commit) => {
         (Object.keys(types) as Array<keyof typeof types>).forEach((name) => {
           if (getRegExp(name, commit)) {
-            commit = `- ${types[name]} ${commit}`;
+            commit = showEmoji ? `- ${types[name]} ${commit}` : `- ${commit}`;
           }
         });
         if (!/^-\s/.test(commit) && commit) {
-          commit = `- 📄 ${commit}`;
+          commit = showEmoji ? `- 📄 ${commit}` : `- ${commit}`;
         }
         return commit
       }).filter(Boolean);

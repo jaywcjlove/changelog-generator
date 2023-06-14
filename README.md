@@ -91,6 +91,7 @@ Only use the following Git Commit Messages. A simple and small footprint is crit
 - `original-markdown` Default `true`, Output clean markdown content.
 - `gh-pages` Default `gh-pages`, Specify the branch name to get the hash from
 - `path` Only commits containing this file path will be returned.
+- `show-emoji` Show emoji icons. Default `true`.
 
 ## Outputs
 
