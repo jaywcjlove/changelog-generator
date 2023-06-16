@@ -34,6 +34,9 @@ inputs:
     description: 'Show emoji icons.'
     default: 'true'
     required: false
+  template:
+    description: 'Define the log display template'
+    required: false
   path:
     description: 'Only commits containing this file path will be returned..'
     default: ''

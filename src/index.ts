@@ -36,6 +36,7 @@ async function run() {
     var baseRef = getInput('base-ref');
     const myToken = getInput('token');
     const myPath = getInput('path');
+    const template = getInput('template');
     const showEmoji = getInput('show-emoji') === 'false' ? false : true;
     const filterAuthor = getInput('filter-author');
     const regExp = getInput('filter');
@@ -168,14 +169,19 @@ async function run() {
         }));
       }
 
+      const commitCategory: Partial<Record<keyof typeof types, string[]>> = {};
+
       commitLog = commitLog.map((commit) => {
         (Object.keys(types) as Array<keyof typeof types>).forEach((name) => {
+          if (!commitCategory[name]) commitCategory[name] = [];
           if (getRegExp(name, commit)) {
             commit = showEmoji ? `- ${types[name]} ${commit}` : `- ${commit}`;
           }
+          commitCategory[name]!.push(commit);
         });
         if (!/^-\s/.test(commit) && commit) {
           commit = showEmoji ? `- 📄 ${commit}` : `- ${commit}`;
+          commitCategory['__unknown__' as keyof typeof types]!.push(commit);
         }
         return commit
       }).filter(Boolean);
@@ -188,6 +194,23 @@ async function run() {
         }
         tagRef = listTags.data[0] && listTags.data[0].name ? listTags.data[0].name : '';
       }
+      
+      let changelogContent = '';
+      /**
+       * https://github.com/jaywcjlove/changelog-generator/issues/111#issuecomment-1594085749
+       */
+      if (template && typeof template === 'string') {
+        changelogContent = template;
+        (Object.keys(commitCategory) as Array<keyof typeof types>).forEach((keyname) => {
+          changelogContent = changelogContent.replace(`{{${keyname}}}`, (commitCategory[keyname] || []).join('\n'));
+        });
+        changelogContent = changelogContent.replace(/##+\s[\D]+\{\{\w+\}\}/g, '');
+        startGroup('Template Changelog:');
+        info(changelogContent);
+        endGroup();
+      } else {
+        changelogContent = commitLog.join('\n');
+      }
   
       info(`Tag: \x1b[34m${tagRef}\x1b[0m`);
       setOutput('tag', tagRef);
@@ -199,7 +222,7 @@ async function run() {
       info(`${commitLog.join('\n')}`);
       endGroup();
       setOutput('compareurl', `https://github.com/${owner}/${repo}/compare/${baseRef}...${tagRef || headRef}`);
-      setOutput('changelog', commitLog.join('\n'));
+      setOutput('changelog', changelogContent);
       setOutput('version', getVersion(tagRef || headRef || '').replace(/^v/, ''));
     } else {
       setFailed(

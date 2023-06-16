@@ -46,6 +46,29 @@ Then you can to use the resulting changelog.
       Document Website: https://raw.githack.com/jaywcjlove/changelog-generator/${{ steps.changelog.outputs.gh-pages-short-hash }}/index.html
 ```
 
+Define the log display template ([#111](https://github.com/jaywcjlove/changelog-generator/issues/111#issuecomment-1594085749)).
+
+```yml
+- name: Generate changelog
+  uses: jaywcjlove/changelog-generator@main
+  with:
+    token: ${{ secrets.GITHUB_TOKEN }}
+    filter-author: (jaywcjlove|小弟调调™|dependabot|renovate\\[bot\\]|dependabot\\[bot\\]|Renovate Bot)
+    filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
+    template: |
+        ## Bugs
+
+        {{fix}}
+
+        ## Feature
+
+        {{feat}}{{type}}
+
+        ## Document 
+
+        {{doc}}
+```
+
 ## GETTING STARTED
 
 Only use the following Git Commit Messages. A simple and small footprint is critical here.
@@ -91,6 +114,7 @@ Only use the following Git Commit Messages. A simple and small footprint is crit
 - `original-markdown` Default `true`, Output clean markdown content.
 - `gh-pages` Default `gh-pages`, Specify the branch name to get the hash from
 - `path` Only commits containing this file path will be returned.
+- `template` Define the log display template ([#111](https://github.com/jaywcjlove/changelog-generator/issues/111#issuecomment-1594085749)).
 - `show-emoji` Show emoji icons. Default `true`.
 
 ## Outputs
