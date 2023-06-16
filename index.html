@@ -225,17 +225,16 @@ customElements.define('markdown-style', MarkdownStyle);</script><markdown-style 
 </span><span class="code-line line-number" line="5">    <span class="token key atrule">filter-author</span><span class="token punctuation">:</span> (jaywcjlove<span class="token punctuation">|</span>小弟调调™<span class="token punctuation">|</span>dependabot<span class="token punctuation">|</span>renovate\\<span class="token punctuation">[</span>bot\\<span class="token punctuation">]</span><span class="token punctuation">|</span>dependabot\\<span class="token punctuation">[</span>bot\\<span class="token punctuation">]</span><span class="token punctuation">|</span>Renovate Bot)
 </span><span class="code-line line-number" line="6">    <span class="token key atrule">filter</span><span class="token punctuation">:</span> <span class="token string">'[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'</span>
 </span><span class="code-line line-number" line="7">    <span class="token key atrule">template</span><span class="token punctuation">:</span> <span class="token punctuation">|</span><span class="token scalar string">
-</span></span><span class="code-line line-number" line="8"><span class="token scalar string">        ## Bugs</span>
-</span><span class="code-line line-number" line="9">
-</span><span class="code-line line-number" line="10">        <span class="token punctuation">{</span><span class="token punctuation">{</span>fix<span class="token punctuation">}</span><span class="token punctuation">}</span>
-</span><span class="code-line line-number" line="11">
-</span><span class="code-line line-number" line="12">        <span class="token comment">## Feature</span>
-</span><span class="code-line line-number" line="13">
-</span><span class="code-line line-number" line="14">        <span class="token punctuation">{</span><span class="token punctuation">{</span>feat<span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">{</span><span class="token punctuation">{</span>type<span class="token punctuation">}</span><span class="token punctuation">}</span>
-</span><span class="code-line line-number" line="15">
-</span><span class="code-line line-number" line="16">        <span class="token comment">## Document </span>
-</span><span class="code-line line-number" line="17">
-</span><span class="code-line line-number" line="18">        <span class="token punctuation">{</span><span class="token punctuation">{</span>doc<span class="token punctuation">}</span><span class="token punctuation">}</span>
+</span></span><span class="code-line line-number" line="8"><span class="token scalar string">      ## Bugs
+</span></span><span class="code-line line-number" line="9"><span class="token scalar string">      {{fix}}
+</span></span><span class="code-line line-number" line="10"><span class="token scalar string">      ## Feature
+</span></span><span class="code-line line-number" line="11"><span class="token scalar string">      {{feat}}
+</span></span><span class="code-line line-number" line="12"><span class="token scalar string">      ## Improve
+</span></span><span class="code-line line-number" line="13"><span class="token scalar string">      {{refactor,perf,clean}}
+</span></span><span class="code-line line-number" line="14"><span class="token scalar string">      ## Misc 
+</span></span><span class="code-line line-number" line="15"><span class="token scalar string">      {{chore,style,ci||🔶 Nothing change}}
+</span></span><span class="code-line line-number" line="16"><span class="token scalar string">      ## Unknown
+</span></span><span class="code-line line-number" line="17"><span class="token scalar string">      {{__unknown__}}</span>
 </span></code><div onclick="copied(this)" data-code="- name: Generate changelog
   uses: jaywcjlove/changelog-generator@main
   with:
@@ -243,17 +242,16 @@ customElements.define('markdown-style', MarkdownStyle);</script><markdown-style 
     filter-author: (jaywcjlove|小弟调调™|dependabot|renovate\\[bot\\]|dependabot\\[bot\\]|Renovate Bot)
     filter: &#x27;[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}&#x27;
     template: |
-        ## Bugs
-
-        {{fix}}
-
-        ## Feature
-
-        {{feat}}{{type}}
-
-        ## Document 
-
-        {{doc}}
+      ## Bugs
+      {{fix}}
+      ## Feature
+      {{feat}}
+      ## Improve
+      {{refactor,perf,clean}}
+      ## Misc 
+      {{chore,style,ci||🔶 Nothing change}}
+      ## Unknown
+      {{__unknown__}}
 " class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
     <p>Customize <code>type</code> and <code>emoji</code> icons</p>
     <pre class="language-yml"><code class="language-yml code-highlight"><span class="code-line line-number" line="1"><span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Generate Changelog(custom<span class="token punctuation">-</span>emoji test)
