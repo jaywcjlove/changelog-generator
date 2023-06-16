@@ -154,6 +154,7 @@ async function run() {
       }
 
       let commitLog = [];
+      info(`ResultData Lenght:${resultData.length}`)
       for (const data of resultData) {
         const message = data.commit.message.split('\n\n')[0];
         const author = data.author || data.committer || { login: '-' };
@@ -169,19 +170,22 @@ async function run() {
         }));
       }
 
-      const commitCategory: Partial<Record<keyof typeof types, string[]>> = {};
+      const commitCategory: Partial<Record<keyof typeof types | '__unknown__', string[]>> = {
+        '__unknown__': []
+      };
 
+      info(`ResultData Lenght: ${resultData.length}`)
       commitLog = commitLog.map((commit) => {
         (Object.keys(types) as Array<keyof typeof types>).forEach((name) => {
           if (!commitCategory[name]) commitCategory[name] = [];
           if (getRegExp(name, commit)) {
             commit = showEmoji ? `- ${types[name]} ${commit}` : `- ${commit}`;
+            commitCategory[name]!.push(commit);
           }
-          commitCategory[name]!.push(commit);
         });
         if (!/^-\s/.test(commit) && commit) {
           commit = showEmoji ? `- 📄 ${commit}` : `- ${commit}`;
-          commitCategory['__unknown__' as keyof typeof types]!.push(commit);
+          commitCategory['__unknown__']!.push(commit);
         }
         return commit
       }).filter(Boolean);
