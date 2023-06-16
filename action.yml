@@ -34,6 +34,9 @@ inputs:
     description: 'Show emoji icons.'
     default: 'true'
     required: false
+  custom-emoji:
+    description: 'Customize type and emoji icons'
+    required: false
   template:
     description: 'Define the log display template'
     required: false

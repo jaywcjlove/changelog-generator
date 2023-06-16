@@ -76,6 +76,15 @@ jobs:
           filter-author: (小弟调调™|Renovate Bot)
           filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
 
+      - name: Generate Changelog(custom-emoji test)
+        uses: ./
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          head-ref: ${{steps.create_tag.outputs.version}}
+          filter-author: (小弟调调™|Renovate Bot)
+          filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
+          custom-emoji: 'type🐝,feat💄,fix🆎'
+
       - name: Create Release
         uses: ncipollo/release-action@v1
         if: steps.create_tag.outputs.successful

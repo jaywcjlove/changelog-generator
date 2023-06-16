@@ -69,6 +69,18 @@ Define the log display template ([#111](https://github.com/jaywcjlove/changelog-
         {{doc}}
 ```
 
+Customize `type` and `emoji` icons
+
+```yml
+- name: Generate Changelog(custom-emoji test)
+  uses: jaywcjlove/changelog-generator@main
+  with:
+    token: ${{ secrets.GITHUB_TOKEN }}
+    filter-author: (小弟调调™|Renovate Bot)
+    filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
+    custom-emoji: 'type🐝,feat💄,fix🆎'
+```
+
 ## GETTING STARTED
 
 Only use the following Git Commit Messages. A simple and small footprint is critical here.
@@ -116,6 +128,7 @@ Only use the following Git Commit Messages. A simple and small footprint is crit
 - `path` Only commits containing this file path will be returned.
 - `template` Define the log display template ([#111](https://github.com/jaywcjlove/changelog-generator/issues/111#issuecomment-1594085749)).
 - `show-emoji` Show emoji icons. Default `true`.
+- `custom-emoji` Customize type and emoji icons. Example `type🆎,chore💄,fix🐞`.
 
 ## Outputs
 

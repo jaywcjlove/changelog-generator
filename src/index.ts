@@ -12,7 +12,7 @@ const getVersion = (ver: string = '') => {
   return currentVersion
 }
 
-const types = {
+const defaultTypes = {
   type: '🆎',
   feat: '🌟',
   style: '🎨',
@@ -37,6 +37,8 @@ async function run() {
     const myToken = getInput('token');
     const myPath = getInput('path');
     const template = getInput('template');
+    /** @example `type🆎,chore💄,fix🐞` Use commas to separate */
+    const customEmoji = getInput('custom-emoji') || '';
     const showEmoji = getInput('show-emoji') === 'false' ? false : true;
     const filterAuthor = getInput('filter-author');
     const regExp = getInput('filter');
@@ -44,6 +46,18 @@ async function run() {
     const originalMarkdown = getInput('original-markdown');
     const { owner, repo } = context.repo;
     const octokit = getOctokit(myToken);
+    const types = defaultTypes;
+    
+    const customEmojiData = customEmoji.split(',')
+    if (customEmoji && customEmojiData.length) {
+      customEmojiData.forEach((item) => {
+        const emojiIcon = item.match(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g);
+        const typeName = item.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '');
+        if (typeName && emojiIcon) {
+          types[typeName as keyof typeof types] = emojiIcon[0];
+        }
+      });
+    }
 
     if (!baseRef) {
       const latestRelease = await octokit.rest.repos.getLatestRelease({ ...context.repo });
@@ -211,6 +225,7 @@ async function run() {
         changelogContent = changelogContent.replace(/##+\s[\D]+\{\{\w+\}\}/g, '');
         startGroup('Template Changelog:');
         info(changelogContent);
+        info(JSON.stringify(commitCategory, null, 2));
         endGroup();
       } else {
         changelogContent = commitLog.join('\n');
