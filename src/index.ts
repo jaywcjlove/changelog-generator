@@ -230,10 +230,10 @@ async function run() {
       );
     }
   } catch (error) {
+    startGroup(`Error: \x1b[34m${(error as any).message}\x1b[0m`);
+    info(`${JSON.stringify(error, null, 2)}`);
+    endGroup();
     if (error instanceof Error) {
-      startGroup(`Error: \x1b[34m${error.message}\x1b[0m`);
-      info(`${JSON.stringify(error, null, 2)}`);
-      endGroup();
       setFailed(
         `Could not generate changelog between references because: ${error.message}`
       );
