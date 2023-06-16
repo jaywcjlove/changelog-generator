@@ -11,7 +11,7 @@ inputs:
     default: ''
     required: false
   filter-author:
-    description: 'Regular expression filtering'
+    description: 'Regular expression to filter user name not to display.'
     default: ''
     required: false
   head-ref:
