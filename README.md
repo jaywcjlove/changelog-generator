@@ -56,17 +56,16 @@ Define the log display template ([#111](https://github.com/jaywcjlove/changelog-
     filter-author: (jaywcjlove|小弟调调™|dependabot|renovate\\[bot\\]|dependabot\\[bot\\]|Renovate Bot)
     filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
     template: |
-        ## Bugs
-
-        {{fix}}
-
-        ## Feature
-
-        {{feat}}{{type}}
-
-        ## Document 
-
-        {{doc}}
+      ## Bugs
+      {{fix}}
+      ## Feature
+      {{feat}}
+      ## Improve
+      {{refactor,perf,clean}}
+      ## Misc 
+      {{chore,style,ci||🔶 Nothing change}}
+      ## Unknown
+      {{__unknown__}}
 ```
 
 Customize `type` and `emoji` icons

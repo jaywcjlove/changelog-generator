@@ -1,34 +1,8 @@
 import { getInput, setFailed, startGroup, info, endGroup, setOutput } from '@actions/core';
 import { context, getOctokit,  } from '@actions/github';
+import { getVersion, getCommitLog, defaultTypes, formatStringCommit, getRegExp } from './utils';
 
 const regexp = /^[.A-Za-z0-9_-]*$/;
-
-const getVersion = (ver: string = '') => {
-  let currentVersion = ''
-  ver.replace(/([v|V]\d(\.\d+){0,2})/i, (str) => {
-    currentVersion = str
-    return str
-  })
-  return currentVersion
-}
-
-const defaultTypes = {
-  type: '🆎',
-  feat: '🌟',
-  style: '🎨',
-  chore: '💄',
-  doc: '📖',
-  docs: '📖',
-  build: '🧯',
-  fix: '🐞',
-  test: '⛑',
-  refactor: '🐝',
-  website: '🌍',
-  revert: '🔙',
-  clean: '💊',
-  perf: '📈',
-  ci: '💢',
-}
 
 async function run() {
   try {
@@ -184,26 +158,6 @@ async function run() {
         }));
       }
 
-      const commitCategory: Partial<Record<keyof typeof types | '__unknown__', string[]>> = {
-        '__unknown__': []
-      };
-
-      info(`ResultData Lenght: ${resultData.length}`)
-      commitLog = commitLog.map((commit) => {
-        (Object.keys(types) as Array<keyof typeof types>).forEach((name) => {
-          if (!commitCategory[name]) commitCategory[name] = [];
-          if (getRegExp(name, commit)) {
-            commit = showEmoji ? `- ${types[name]} ${commit}` : `- ${commit}`;
-            commitCategory[name]!.push(commit);
-          }
-        });
-        if (!/^-\s/.test(commit) && commit) {
-          commit = showEmoji ? `- 📄 ${commit}` : `- ${commit}`;
-          commitCategory['__unknown__']!.push(commit);
-        }
-        return commit
-      }).filter(Boolean);
-
       if (!tagRef) {
         const listTags = await octokit.rest.repos.listTags({ owner, repo });
         if (listTags.status !== 200) {
@@ -212,36 +166,20 @@ async function run() {
         }
         tagRef = listTags.data[0] && listTags.data[0].name ? listTags.data[0].name : '';
       }
-      
-      let changelogContent = '';
-      /**
-       * https://github.com/jaywcjlove/changelog-generator/issues/111#issuecomment-1594085749
-       */
-      if (template && typeof template === 'string') {
-        changelogContent = template;
-        (Object.keys(commitCategory) as Array<keyof typeof types>).forEach((keyname) => {
-          changelogContent = changelogContent.replace(`{{${keyname}}}`, (commitCategory[keyname] || []).join('\n'));
-        });
-        changelogContent = changelogContent.replace(/##+\s[\D]+\{\{\w+\}\}/g, '');
-        startGroup('Template Changelog:');
-        info(changelogContent);
-        info(JSON.stringify(commitCategory, null, 2));
-        endGroup();
-      } else {
-        changelogContent = commitLog.join('\n');
-      }
-  
+
+      const { changelog, changelogContent } = getCommitLog(commitLog, { types, showEmoji, template });
+      startGroup('Result Changelog');
+      info(`${changelog.join('\n')}`);
+      endGroup();
+      setOutput('changelog', changelogContent);
+
       info(`Tag: \x1b[34m${tagRef}\x1b[0m`);
       setOutput('tag', tagRef);
 
       info(`Tag: \x1b[34m${tagRef || headRef || '-'}\x1b[0m`);
       info(`Input head-ref: \x1b[34m${headRef}\x1b[0m`);
       info(`Input base-ref: \x1b[34m${baseRef}\x1b[0m`);
-      startGroup('Result Changelog');
-      info(`${commitLog.join('\n')}`);
-      endGroup();
       setOutput('compareurl', `https://github.com/${owner}/${repo}/compare/${baseRef}...${tagRef || headRef}`);
-      setOutput('changelog', changelogContent);
       setOutput('version', getVersion(tagRef || headRef || '').replace(/^v/, ''));
     } else {
       setFailed(
@@ -260,33 +198,6 @@ async function run() {
     }
     process.exit(1);
   }
-}
-
-type FormatStringCommit = {
-  regExp?: string;
-  shortHash?: string;
-  originalMarkdown?: string;
-  filterAuthor?: string;
-  hash?: string;
-  login?: string;
-}
-
-function formatStringCommit(commit = '', repoName = '', { regExp, shortHash, originalMarkdown, filterAuthor, hash, login = '' }: FormatStringCommit) {
-  if (filterAuthor && (new RegExp(filterAuthor)).test(login)) {
-    login = '';
-  }
-  if (regExp && (new RegExp(regExp).test(commit))) {
-    return '';
-  }
-  login = login.replace(/\[bot\]/, '-bot');
-  if (originalMarkdown) {
-    return `${commit} ${shortHash} ${login ? `@${login}`: ''}`;
-  }
-  return `${commit} [\`${shortHash}\`](http://github.com/${repoName}/commit/${hash})${login ? ` @${login}`: ''}`;
-}
-
-function getRegExp(str = '', commit = '') {
-  return (new RegExp(`^(${str}\s+[\s|(|:])|(${str}[(|:])`)).test(commit.trim().toLocaleLowerCase());
 }
 
 try {
