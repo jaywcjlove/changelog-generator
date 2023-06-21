@@ -25,8 +25,8 @@ async function run() {
     const customEmojiData = customEmoji.split(',')
     if (customEmoji && customEmojiData.length) {
       customEmojiData.forEach((item) => {
-        const emojiIcon = item.match(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g);
-        const typeName = item.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '');
+        const emojiIcon = item.match(/[\u{1F300}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1F1E0}-\u{1F1FF}]/gu);
+        const typeName = item.replace(/[\u{1F300}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1F1E0}-\u{1F1FF}]/gu, '');
         if (typeName && emojiIcon) {
           types[typeName as keyof typeof types] = emojiIcon[0];
         }
