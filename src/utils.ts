@@ -57,11 +57,12 @@ type Options = {
   types: typeof defaultTypes;
   category?: Partial<Record<keyof typeof defaultTypes, string[]>>;
   showEmoji: boolean;
+  removeType: boolean;
   template: string;
 }
 
 export function getCommitLog(log: string[], options = {} as Options) {
-  const { types, category = {}, showEmoji, template } = options;
+  const { types, category = {}, showEmoji, template, removeType = false } = options;
   if (!Array.isArray(category['__unknown__'])) category['__unknown__'] = [];
   log = log.map((commit) => {
     (Object.keys(types || {}) as Array<keyof typeof defaultTypes>).forEach((name) => {
@@ -74,6 +75,9 @@ export function getCommitLog(log: string[], options = {} as Options) {
     if (!/^-\s/.test(commit) && commit) {
       commit = showEmoji ? `- ${types['__unknown__']} ${commit}` : `- ${commit}`;
       category['__unknown__']!.push(commit);
+    }
+    if (removeType) {
+      commit = commit.replace(/(^-\s+?\w+(\s+)?\((.*?)\):\s+)|(^-\s+?\w+(\s+)?:\s+)/, '- ');
     }
     return commit
   }).filter(Boolean);

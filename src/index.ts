@@ -4,23 +4,47 @@ import { getVersion, getCommitLog, defaultTypes, formatStringCommit, getRegExp }
 
 const regexp = /^[.A-Za-z0-9_-]*$/;
 
+const getOptions = () => {
+  const myToken = getInput('token');
+  return {
+    ...context.repo,
+    headRef: getInput('head-ref'),
+    baseRef: getInput('base-ref'),
+    myToken,
+    myPath: getInput('path'),
+    template: getInput('template'),
+    /** @example `type🆎,chore💄,fix🐞` Use commas to separate */
+    customEmoji: getInput('custom-emoji') || '',
+    showEmoji: getInput('show-emoji') === 'false' ? false : true,
+    removeType: getInput('remove-type') === 'false' ? false : true,
+    filterAuthor: getInput('filter-author'),
+    regExp: getInput('filter'),
+    ghPagesBranch: getInput('gh-pages') || 'gh-pages',
+    originalMarkdown: getInput('original-markdown'),
+    octokit: getOctokit(myToken),
+    types: defaultTypes,
+  }
+}
+
+
 async function run() {
   try {
-    var headRef = getInput('head-ref');
-    var baseRef = getInput('base-ref');
-    const myToken = getInput('token');
-    const myPath = getInput('path');
-    const template = getInput('template');
-    /** @example `type🆎,chore💄,fix🐞` Use commas to separate */
-    const customEmoji = getInput('custom-emoji') || '';
-    const showEmoji = getInput('show-emoji') === 'false' ? false : true;
-    const filterAuthor = getInput('filter-author');
-    const regExp = getInput('filter');
-    const ghPagesBranch = getInput('gh-pages') || 'gh-pages';
-    const originalMarkdown = getInput('original-markdown');
-    const { owner, repo } = context.repo;
-    const octokit = getOctokit(myToken);
-    const types = defaultTypes;
+    const options = getOptions();
+    const {
+      myPath,
+      template,
+      customEmoji,
+      removeType,
+      showEmoji,
+      filterAuthor,
+      regExp,
+      ghPagesBranch,
+      originalMarkdown,
+      owner,
+      repo,
+      octokit,
+      types,
+    } = options || {};
     
     const customEmojiData = customEmoji.split(',')
     if (customEmoji && customEmojiData.length) {
@@ -33,22 +57,22 @@ async function run() {
       });
     }
 
-    if (!baseRef) {
+    if (!options.baseRef) {
       const latestRelease = await octokit.rest.repos.getLatestRelease({ ...context.repo });
       if (latestRelease.status !== 200) {
         setFailed(
           `There are no releases on ${owner}/${repo}. Tags are not releases. (status=${latestRelease.status}) ${(latestRelease.data as any).message || ''}`
         );
       }
-      baseRef = latestRelease.data.tag_name;
+      options.baseRef = latestRelease.data.tag_name;
       startGroup(
         `Latest Release Result Data: \x1b[32m${latestRelease.status || '-'}\x1b[0m \x1b[32m${latestRelease.data.tag_name}\x1b[0m`
       )
       info(`${JSON.stringify(latestRelease, null, 2)}`)
       endGroup()
     }
-    if (!headRef) {
-      headRef = context.sha;
+    if (!options.headRef) {
+      options.headRef = context.sha;
     }
 
     info(`Commit Content: \x1b[34m${owner}/${repo}\x1b[0m`)
@@ -66,7 +90,7 @@ async function run() {
       setOutput('branch', branch);
       info(`Branch: \x1b[34m${branch}\x1b[0m`);
     }
-    info(`Ref: baseRef(\x1b[32m${baseRef}\x1b[0m), headRef(\x1b[32m${headRef}\x1b[0m), tagRef(\x1b[32m${tagRef}\x1b[0m)`);
+    info(`Ref: baseRef(\x1b[32m${options.baseRef}\x1b[0m), options.headRef(\x1b[32m${options.headRef}\x1b[0m), tagRef(\x1b[32m${tagRef}\x1b[0m)`);
 
     try {
       const branchData = await octokit.request('GET /repos/{owner}/{repo}/branches', { ...context.repo });
@@ -87,18 +111,18 @@ async function run() {
       }
     }
 
-    if ((baseRef || '').replace(/^[vV]/, '') === headRef) {
-      setOutput('tag', baseRef);
-      setOutput('version', baseRef.replace(/^[vV]/, ''));
-      info(`Done: baseRef(\x1b[33m${baseRef}\x1b[0m) === headRef(\x1b[32m${headRef}\x1b[0m)`);
+    if ((options.baseRef || '').replace(/^[vV]/, '') === options.headRef) {
+      setOutput('tag', options.baseRef);
+      setOutput('version', options.baseRef.replace(/^[vV]/, ''));
+      info(`Done: baseRef(\x1b[33m${options.baseRef}\x1b[0m) === headRef(\x1b[32m${options.headRef}\x1b[0m)`);
       return;
     }
 
     if (
-      !!headRef &&
-      !!baseRef &&
-      regexp.test(headRef) &&
-      regexp.test(baseRef)
+      !!options.headRef &&
+      !!options.baseRef &&
+      regexp.test(options.headRef) &&
+      regexp.test(options.baseRef)
     ) {
       let resultData = [] as Commits[]
       if (myPath) {
@@ -116,15 +140,15 @@ async function run() {
           resultData = commitsData.data as unknown  as Commits[];
         }
         startGroup(
-          `Compare Path Commits Result Data: \x1b[32m${commitsData.status || '-'}\x1b[0m \x1b[32m${baseRef}\x1b[0m...\x1b[32m${headRef}\x1b[0m`
+          `Compare Path Commits Result Data: \x1b[32m${commitsData.status || '-'}\x1b[0m \x1b[32m${options.baseRef}\x1b[0m...\x1b[32m${options.headRef}\x1b[0m`
         )
         info(`${JSON.stringify(commitsData.data, null, 2)}`)
         endGroup()
       } else {
         const commitsData = await octokit.rest.repos.compareCommits({
           ...context.repo,
-          base: baseRef,
-          head: headRef,
+          base: options.baseRef,
+          head: options.headRef,
         });
   
         if (commitsData && commitsData.status !== 200) {
@@ -135,7 +159,7 @@ async function run() {
           resultData = commitsData.data.commits as unknown  as Commits[]
         }
         startGroup(
-          `Compare Commits Result Data: \x1b[32m${commitsData.status || '-'}\x1b[0m \x1b[32m${baseRef}\x1b[0m...\x1b[32m${headRef}\x1b[0m`
+          `Compare Commits Result Data: \x1b[32m${commitsData.status || '-'}\x1b[0m \x1b[32m${options.baseRef}\x1b[0m...\x1b[32m${options.headRef}\x1b[0m`
         )
         info(`${JSON.stringify(commitsData, null, 2)}`)
         endGroup()
@@ -167,7 +191,7 @@ async function run() {
         tagRef = listTags.data[0] && listTags.data[0].name ? listTags.data[0].name : '';
       }
 
-      const { changelog, changelogContent } = getCommitLog(commitLog, { types, showEmoji, template });
+      const { changelog, changelogContent } = getCommitLog(commitLog, { types, showEmoji, removeType, template });
       startGroup('Result Changelog');
       info(`${changelog.join('\n')}`);
       endGroup();
@@ -176,11 +200,11 @@ async function run() {
       info(`Tag: \x1b[34m${tagRef}\x1b[0m`);
       setOutput('tag', tagRef);
 
-      info(`Tag: \x1b[34m${tagRef || headRef || '-'}\x1b[0m`);
-      info(`Input head-ref: \x1b[34m${headRef}\x1b[0m`);
-      info(`Input base-ref: \x1b[34m${baseRef}\x1b[0m`);
-      setOutput('compareurl', `https://github.com/${owner}/${repo}/compare/${baseRef}...${tagRef || headRef}`);
-      setOutput('version', getVersion(tagRef || headRef || '').replace(/^v/, ''));
+      info(`Tag: \x1b[34m${tagRef || options.headRef || '-'}\x1b[0m`);
+      info(`Input head-ref: \x1b[34m${options.headRef}\x1b[0m`);
+      info(`Input base-ref: \x1b[34m${options.baseRef}\x1b[0m`);
+      setOutput('compareurl', `https://github.com/${owner}/${repo}/compare/${options.baseRef}...${tagRef || options.headRef}`);
+      setOutput('version', getVersion(tagRef || options.headRef || '').replace(/^v/, ''));
     } else {
       setFailed(
         'Branch names must contain only numbers, strings, underscores, periods, and dashes.'

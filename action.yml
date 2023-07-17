@@ -40,6 +40,9 @@ inputs:
   template:
     description: 'Define the log display template'
     required: false
+  remove-type:
+    description: 'Remove type in commit'
+    required: false
   path:
     description: 'Only commits containing this file path will be returned..'
     default: ''
