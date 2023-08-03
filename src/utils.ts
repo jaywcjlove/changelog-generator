@@ -94,7 +94,7 @@ export function getCommitLog(log: string[], options = {} as Options) {
       if (arr.length > 0) return arr.join('\n');
       return string;
     });
-    changelogContent = changelogContent.replace(/##+\s[\D]+\{\{\w+\}\}/g, '');
+    changelogContent = changelogContent.replace(/##(.*?)\n+\{\{(.*?)\}\}(\s+)?(\n+)?/g, '');
   } else {
     changelogContent = log.join('\n');
   }
