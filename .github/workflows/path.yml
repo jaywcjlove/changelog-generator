@@ -16,6 +16,12 @@ jobs:
       - run: npm install
       - run: npm run build
 
+      - name: Create Tag
+        id: create_tag
+        uses: jaywcjlove/create-tag-action@main
+        with:
+          package-path: ./package.json
+
       - name: Generate Changelog (path test)
         id: changelog
         # uses: jaywcjlove/changelog-generator@main
