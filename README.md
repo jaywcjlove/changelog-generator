@@ -1,6 +1,7 @@
 Changelog Generator
 ===
 
+[![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-048754?logo=buymeacoffee)](https://jaywcjlove.github.io/#/sponsor)
 [![Build & Test](https://github.com/jaywcjlove/changelog-generator/actions/workflows/changelog.yml/badge.svg)](https://github.com/jaywcjlove/changelog-generator/actions/workflows/changelog.yml)
 [![Repo Dependents](https://badgen.net/github/dependents-repo/jaywcjlove/changelog-generator)](https://github.com/jaywcjlove/changelog-generator/network/dependents)
 
