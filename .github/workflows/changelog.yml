@@ -26,6 +26,7 @@ jobs:
           site: "Create Tag {{version}}"
           menus:
             Home: index.html
+            Sponsor: https://jaywcjlove.github.io/#/sponsor
           footer: |
             <a href="https://jaywcjlove.github.io/#/sponsor" target="_blank">Sponsor</a> • 
             <a href="https://jaywcjlove.github.io/create-tag-action" target="_blank">Create Tag</a> • 
