@@ -167,9 +167,8 @@ async function run() {
       }
 
       let commitLog = [];
-      info(`ResultData Lenght:${resultData.length}`)
-      const resData = options.order == 'asc' ? resultData : resultData.reverse();
-      for (const data of resData) {
+      info(`ResultData Lenght:${resultData.length} - ${options.order}`)
+      for (const data of resultData) {
         const message = data.commit.message.split('\n\n')[0];
         const author = data.author || data.committer || { login: '-' };
         startGroup(`Commit: \x1b[34m${message}\x1b[0m \x1b[34m${(data.commit.author || {}).name}(${author.login})\x1b[0m ${data.sha}`);
@@ -183,6 +182,8 @@ async function run() {
           login: author.login,
         }));
       }
+
+      commitLog = options.order === 'asc' ? commitLog : commitLog.reverse();
 
       if (!tagRef) {
         const listTags = await octokit.rest.repos.listTags({ owner, repo });
