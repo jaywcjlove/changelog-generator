@@ -22,6 +22,10 @@ inputs:
     description: 'Specify the branch name to get the hash from'
     default: 'gh-pages'
     required: false
+  order:
+    description: 'Should the log results be displayed in descending (desc) or ascending (asc) order'
+    default: 'asc'
+    required: false
   base-ref:
     description: 'The name of the base reference'
     default: ''

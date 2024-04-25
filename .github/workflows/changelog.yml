@@ -99,6 +99,20 @@ jobs:
           filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
           show-emoji: false
           remove-type: true
+
+      - name: Order Changelog (ASC)
+        uses: ./
+        with:
+          filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
+          show-emoji: false
+          remove-type: true
+
+      - name: Order Changelog (DESC)
+        uses: ./
+        with:
+          filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
+          show-emoji: false
+          remove-type: true
       
       - name: Generate Changelog (outputs.changelog)
         run: echo "${{ steps.changelogEmoji.outputs.changelog }}"

@@ -12,6 +12,7 @@ const getOptions = () => {
     baseRef: getInput('base-ref'),
     myToken,
     myPath: getInput('path'),
+    order: getInput('asc') as 'asc' | 'desc',
     template: getInput('template'),
     /** @example `type🆎,chore💄,fix🐞` Use commas to separate */
     customEmoji: getInput('custom-emoji') || '',
@@ -167,7 +168,8 @@ async function run() {
 
       let commitLog = [];
       info(`ResultData Lenght:${resultData.length}`)
-      for (const data of resultData) {
+      const resData = options.order == 'asc' ? resultData : resultData.reverse();
+      for (const data of resData) {
         const message = data.commit.message.split('\n\n')[0];
         const author = data.author || data.committer || { login: '-' };
         startGroup(`Commit: \x1b[34m${message}\x1b[0m \x1b[34m${(data.commit.author || {}).name}(${author.login})\x1b[0m ${data.sha}`);
