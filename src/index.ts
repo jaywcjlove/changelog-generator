@@ -12,7 +12,7 @@ const getOptions = () => {
     baseRef: getInput('base-ref'),
     myToken,
     myPath: getInput('path'),
-    order: getInput('asc') as 'asc' | 'desc',
+    order: getInput('order') as 'asc' | 'desc',
     template: getInput('template'),
     /** @example `type🆎,chore💄,fix🐞` Use commas to separate */
     customEmoji: getInput('custom-emoji') || '',
