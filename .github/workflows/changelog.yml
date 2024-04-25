@@ -106,6 +106,7 @@ jobs:
           filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
           show-emoji: false
           remove-type: true
+          order: 'asc'
 
       - name: Order Changelog (DESC)
         uses: ./
@@ -113,6 +114,7 @@ jobs:
           filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
           show-emoji: false
           remove-type: true
+          order: 'desc'
       
       - name: Generate Changelog (outputs.changelog)
         run: echo "${{ steps.changelogEmoji.outputs.changelog }}"
