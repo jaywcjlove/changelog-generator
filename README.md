@@ -34,7 +34,7 @@ Then you can to use the resulting changelog.
 
 - name: Create Release
   uses: ncipollo/release-action@v1
-  if: steps.create_tag.outputs.successful
+  if: steps.create_tag.outputs.successful == 'true'
   with:
     token: ${{ secrets.GITHUB_TOKEN }}
     name: ${{ steps.create_tag.outputs.version }}
