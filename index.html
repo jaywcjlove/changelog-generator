@@ -67,7 +67,7 @@
 </span><span class="code-line line-number" line="3">
 </span><span class="code-line line-number" line="4"><span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Create Release
 </span><span class="code-line line-number" line="5">  <span class="token key atrule">uses</span><span class="token punctuation">:</span> ncipollo/release<span class="token punctuation">-</span>action@v1
-</span><span class="code-line line-number" line="6">  <span class="token key atrule">if</span><span class="token punctuation">:</span> steps.create_tag.outputs.successful
+</span><span class="code-line line-number" line="6">  <span class="token key atrule">if</span><span class="token punctuation">:</span> steps.create_tag.outputs.successful == 'true'
 </span><span class="code-line line-number" line="7">  <span class="token key atrule">with</span><span class="token punctuation">:</span>
 </span><span class="code-line line-number" line="8">    <span class="token key atrule">token</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span><span class="token punctuation">{</span> secrets.GITHUB_TOKEN <span class="token punctuation">}</span><span class="token punctuation">}</span>
 </span><span class="code-line line-number" line="9">    <span class="token key atrule">name</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span><span class="token punctuation">{</span> steps.create_tag.outputs.version <span class="token punctuation">}</span><span class="token punctuation">}</span>
@@ -83,7 +83,7 @@
 
 - name: Create Release
   uses: ncipollo/release-action@v1
-  if: steps.create_tag.outputs.successful
+  if: steps.create_tag.outputs.successful == &#x27;true&#x27;
   with:
     token: ${{ secrets.GITHUB_TOKEN }}
     name: ${{ steps.create_tag.outputs.version }}
