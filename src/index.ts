@@ -33,18 +33,18 @@ async function run() {
       info(`Branch: \x1b[34m${branch}\x1b[0m`);
     }
 
-    info(`Ref: baseRef(\x1b[32m${baseRef}\x1b[0m), options.headRef(\x1b[32m${headRef}\x1b[0m), tagRef(\x1b[32m${options.tagRef}\x1b[0m)`);
+    info(`Ref: baseRef(\x1b[32m${options.baseRef}\x1b[0m), options.headRef(\x1b[32m${headRef}\x1b[0m), tagRef(\x1b[32m${options.tagRef}\x1b[0m)`);
 
     await handleBranchData(options);
 
-    if ((baseRef || '').replace(/^[vV]/, '') === headRef) {
-      setOutput('tag', baseRef);
-      setOutput('version', baseRef.replace(/^[vV]/, ''));
-      info(`Done: baseRef(\x1b[33m${baseRef}\x1b[0m) === headRef(\x1b[32m${headRef}\x1b[0m)`);
+    if ((options.baseRef || '').replace(/^[vV]/, '') === headRef) {
+      setOutput('tag', options.baseRef);
+      setOutput('version', options.baseRef.replace(/^[vV]/, ''));
+      info(`Done: options.baseRef(\x1b[33m${options.baseRef}\x1b[0m) === headRef(\x1b[32m${headRef}\x1b[0m)`);
       return;
     }
 
-    if (regexp.test(headRef) && regexp.test(baseRef)) {
+    if (regexp.test(headRef) && regexp.test(options.baseRef)) {
       const resultData = await fetchCommits(options);
       const commitLog = processCommits(resultData, options);
 
@@ -58,8 +58,8 @@ async function run() {
 
       info(`Tag: \x1b[34m${tagRef || headRef || '-'}\x1b[0m`);
       info(`Input head-ref: \x1b[34m${headRef}\x1b[0m`);
-      info(`Input base-ref: \x1b[34m${baseRef}\x1b[0m`);
-      setOutput('compareurl', `https://github.com/${owner}/${repo}/compare/${baseRef}...${tagRef || headRef}`);
+      info(`Input base-ref: \x1b[34m${options.baseRef}\x1b[0m`);
+      setOutput('compareurl', `https://github.com/${owner}/${repo}/compare/${options.baseRef}...${tagRef || headRef}`);
       setOutput('version', getVersion(tagRef || headRef || '').replace(/^v/, ''));
     } else {
       setFailed('Branch names must contain only numbers, strings, underscores, periods, and dashes.');

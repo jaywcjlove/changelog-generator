@@ -74,14 +74,17 @@ export const parseCustomEmojis = (customEmoji: string, defaultTypes: Record<stri
 
 export const handleNoBaseRef = async (options: ActionOptions) => {
   const { octokit, owner, repo } = options;
+  // Get the latest release
   const latestRelease = await octokit.rest.repos.getLatestRelease({ ...context.repo });
   if (latestRelease.status !== 200) {
     setFailed(`There are no releases on ${owner}/${repo}. Tags are not releases. (status=${latestRelease.status}) ${(latestRelease.data as any).message || ''}`);
+  } else {
+    options.baseRef = latestRelease.data.tag_name;
+    startGroup(`Latest Release Result Data: \x1b[32m${latestRelease.status || '-'}\x1b[0m \x1b[32m${latestRelease.data.tag_name}\x1b[0m`);
+    info(`${JSON.stringify(latestRelease, null, 2)}`);
+    endGroup();
+    return latestRelease.data.tag_name;
   }
-  options.baseRef = latestRelease.data.tag_name;
-  startGroup(`Latest Release Result Data: \x1b[32m${latestRelease.status || '-'}\x1b[0m \x1b[32m${latestRelease.data.tag_name}\x1b[0m`);
-  info(`${JSON.stringify(latestRelease, null, 2)}`);
-  endGroup();
 };
 
 export const handleBranchData = async (options: ActionOptions) => {
