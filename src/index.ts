@@ -1,31 +1,8 @@
-import { getInput, setFailed, startGroup, info, endGroup, setOutput } from '@actions/core';
-import { context, getOctokit,  } from '@actions/github';
-import { getVersion, getCommitLog, defaultTypes, handleBranchData, processCommits, parseCustomEmojis, getTagRef, fetchCommits, handleNoBaseRef } from './utils';
+import { setFailed, startGroup, info, endGroup, setOutput } from '@actions/core';
+import { context } from '@actions/github';
+import { getVersion, getOptions, getCommitLog, handleBranchData, processCommits, getTagRef, fetchCommits, handleNoBaseRef } from './utils';
 
 const regexp = /^[.A-Za-z0-9_-]*$/;
-
-const getOptions = () => {
-  const myToken = getInput('token');
-  return {
-    ...context.repo,
-    headRef: getInput('head-ref'),
-    baseRef: getInput('base-ref'),
-    myToken,
-    myPath: getInput('path'),
-    order: getInput('order') as 'asc' | 'desc',
-    template: getInput('template'),
-    /** @example `type🆎,chore💄,fix🐞` Use commas to separate */
-    customEmoji: getInput('custom-emoji') || '',
-    showEmoji: getInput('show-emoji') !== 'false',
-    removeType: getInput('remove-type') !== 'false',
-    filterAuthor: getInput('filter-author'),
-    regExp: getInput('filter'),
-    ghPagesBranch: getInput('gh-pages') || 'gh-pages',
-    originalMarkdown: getInput('original-markdown'),
-    octokit: getOctokit(myToken),
-    types: parseCustomEmojis(getInput('custom-emoji'), defaultTypes),
-  };
-};
 
 async function run() {
   try {
@@ -46,9 +23,8 @@ async function run() {
     info(`${JSON.stringify(context, null, 2)}`);
     endGroup();
 
-    let tagRef = '';
     if ((context.ref || '').startsWith('refs/tags/')) {
-      tagRef = getVersion(context.ref);
+      options.tagRef = getVersion(context.ref);
     }
 
     if ((context.ref || '').startsWith('refs/heads/')) {
@@ -57,7 +33,7 @@ async function run() {
       info(`Branch: \x1b[34m${branch}\x1b[0m`);
     }
 
-    info(`Ref: baseRef(\x1b[32m${baseRef}\x1b[0m), options.headRef(\x1b[32m${headRef}\x1b[0m), tagRef(\x1b[32m${tagRef}\x1b[0m)`);
+    info(`Ref: baseRef(\x1b[32m${baseRef}\x1b[0m), options.headRef(\x1b[32m${headRef}\x1b[0m), tagRef(\x1b[32m${options.tagRef}\x1b[0m)`);
 
     await handleBranchData(options);
 
@@ -71,7 +47,8 @@ async function run() {
     if (regexp.test(headRef) && regexp.test(baseRef)) {
       const resultData = await fetchCommits(options);
       const commitLog = processCommits(resultData, options);
-      tagRef = await getTagRef(options);
+
+      const tagRef = await getTagRef(options);
       const { changelog, changelogContent } = getCommitLog(commitLog, { types, showEmoji, removeType, template });
       startGroup('Result Changelog');
       info(`${changelog.join('\n')}`);

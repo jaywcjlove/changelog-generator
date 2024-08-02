@@ -1,6 +1,33 @@
 import { getInput, setFailed, startGroup, info, endGroup, setOutput } from '@actions/core';
 import { context, getOctokit } from '@actions/github';
 
+
+export const getOptions = () => {
+  const myToken = getInput('token');
+  return {
+    ...context.repo,
+    headRef: getInput('head-ref'),
+    baseRef: getInput('base-ref'),
+    myToken,
+    myPath: getInput('path'),
+    order: getInput('order') as 'asc' | 'desc',
+    template: getInput('template'),
+    /** @example `type🆎,chore💄,fix🐞` Use commas to separate */
+    customEmoji: getInput('custom-emoji') || '',
+    showEmoji: getInput('show-emoji') !== 'false',
+    removeType: getInput('remove-type') !== 'false',
+    filterAuthor: getInput('filter-author'),
+    regExp: getInput('filter'),
+    ghPagesBranch: getInput('gh-pages') || 'gh-pages',
+    originalMarkdown: getInput('original-markdown'),
+    octokit: getOctokit(myToken),
+    types: parseCustomEmojis(getInput('custom-emoji'), defaultTypes),
+    tagRef: '',
+  };
+};
+
+export type ActionOptions = ReturnType<typeof getOptions>;
+
 export const getVersion = (ver: string = '') => {
   let currentVersion = ''
   ver.replace(/([v|V]\d(\.\d+){0,2})/i, (str) => {
@@ -45,7 +72,7 @@ export const parseCustomEmojis = (customEmoji: string, defaultTypes: Record<stri
 };
 
 
-export const handleNoBaseRef = async (options: any) => {
+export const handleNoBaseRef = async (options: ActionOptions) => {
   const { octokit, owner, repo } = options;
   const latestRelease = await octokit.rest.repos.getLatestRelease({ ...context.repo });
   if (latestRelease.status !== 200) {
@@ -57,7 +84,7 @@ export const handleNoBaseRef = async (options: any) => {
   endGroup();
 };
 
-export const handleBranchData = async (options: any) => {
+export const handleBranchData = async (options: ActionOptions) => {
   const { octokit, ghPagesBranch } = options;
   try {
     const branchData = await octokit.request('GET /repos/{owner}/{repo}/branches', { ...context.repo });
@@ -77,7 +104,7 @@ export const handleBranchData = async (options: any) => {
   }
 };
 
-export const fetchCommits = async (options: any) => {
+export const fetchCommits = async (options: ActionOptions) => {
   const { octokit, myPath, baseRef, headRef } = options;
   let resultData = [] as any[];
 
@@ -115,7 +142,7 @@ export const fetchCommits = async (options: any) => {
   return resultData;
 };
 
-export const processCommits = (resultData: any[], options: any) => {
+export const processCommits = (resultData: any[], options: ActionOptions) => {
   const { order, owner, repo, originalMarkdown, regExp, filterAuthor, types } = options;
   let commitLog = [] as string[];
 
@@ -139,7 +166,7 @@ export const processCommits = (resultData: any[], options: any) => {
   return order === 'asc' ? commitLog : commitLog.reverse();
 };
 
-export const getTagRef = async (options: any) => {
+export const getTagRef = async (options: ActionOptions) => {
   const { octokit, owner, repo, headRef } = options;
   let tagRef = '';
 
