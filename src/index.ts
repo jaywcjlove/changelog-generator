@@ -2,7 +2,7 @@ import { setFailed, startGroup, info, endGroup, setOutput } from '@actions/core'
 import { context } from '@actions/github';
 import { getVersion, getOptions, getCommitLog, handleBranchData, processCommits, getTagRef, fetchCommits, handleNoBaseRef } from './utils';
 
-const regexp = /^[.A-Za-z0-9_-]*$/;
+const regexp = /^[.A-Za-z0-9_/-]*$/;
 
 async function run() {
   try {
@@ -17,7 +17,7 @@ async function run() {
     if (!headRef) {
       options.headRef = context.sha;
     }
-    
+
     info(`Commit Content: \x1b[34m${owner}/${repo}\x1b[0m`);
     startGroup(`Ref: \x1b[34m${context.ref}\x1b[0m`);
     info(`${JSON.stringify(context, null, 2)}`);
@@ -62,7 +62,7 @@ async function run() {
       setOutput('compareurl', `https://github.com/${owner}/${repo}/compare/${options.baseRef}...${tagRef || headRef}`);
       setOutput('version', getVersion(tagRef || headRef || '').replace(/^v/, ''));
     } else {
-      setFailed('Branch names must contain only numbers, strings, underscores, periods, and dashes.');
+      setFailed('Branch names must contain only numbers, strings, underscores, periods, forward slashes and dashes. (A-z 0-9 _ - / .)');
     }
   } catch (error) {
     info(`path: ${error}`);
