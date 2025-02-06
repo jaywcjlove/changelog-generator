@@ -54,7 +54,7 @@ Define the log display template ([#111](https://github.com/jaywcjlove/changelog-
   uses: jaywcjlove/changelog-generator@main
   with:
     token: ${{ secrets.GITHUB_TOKEN }}
-    filter-author: (jaywcjlove|小弟调调™|dependabot|renovate\\[bot\\]|dependabot\\[bot\\]|Renovate Bot)
+    filter-author: (jaywcjlove|小弟调调™|dependabot|renovate\\[bot\\]|dependabot\\[bot\\])
     filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
     template: |
       ## Bugs
