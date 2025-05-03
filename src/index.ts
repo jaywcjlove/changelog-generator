@@ -1,6 +1,7 @@
 import { setFailed, startGroup, info, endGroup, setOutput } from '@actions/core';
 import { context } from '@actions/github';
-import { getVersion, getOptions, getCommitLog, handleBranchData, processCommits, getTagRef, fetchCommits, handleNoBaseRef } from './utils';
+import { getVersion, getCommitLog } from './utils';
+import { getOptions, getTagRef, processCommits, handleBranchData, fetchCommits, handleNoBaseRef } from './utils-base';
 
 const regexp = /^[.A-Za-z0-9_/-]*$/;
 

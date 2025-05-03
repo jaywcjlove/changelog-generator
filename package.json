@@ -7,7 +7,9 @@
   "scripts": {
     "prepare": "husky && npm run build",
     "build": "ncc build src/index.ts -o dist",
-    "watch": "ncc watch src/index.ts -o dist"
+    "watch": "ncc watch src/index.ts -o dist",
+    "test": "tsbb test",
+    "coverage": "tsbb test --coverage --bail"
   },
   "repository": {
     "type": "git",
@@ -28,9 +30,22 @@
     "@actions/core": "~1.10.0",
     "@actions/github": "^6.0.0"
   },
+  "jest": {
+    "collectCoverageFrom": [
+      "<rootDir>/src/*.{js,ts}"
+    ],
+    "testMatch": [
+      "<rootDir>/test/**/*.{js,ts}"
+    ],
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/?!(.*)"
+    ]
+  },
   "devDependencies": {
     "@kkt/ncc": "1.1.1",
     "lint-staged": "^15.2.2",
-    "husky": "^9.0.11"
+    "husky": "^9.0.11",
+    "tsbb": "^4.5.1",
+    "jest": "^29.7.0"
   }
 }

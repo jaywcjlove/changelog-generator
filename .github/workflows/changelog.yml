@@ -15,6 +15,7 @@ jobs:
 
       - run: npm install
       - run: npm run build
+      - run: npm run coverage
 
       # - run: mkdir -p build
       # - run: npm i markdown-to-html-cli -g
