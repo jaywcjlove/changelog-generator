@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">81.96% </span>
+                <span class="strong">95.08% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>50/61</span>
+                <span class='fraction'>58/61</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">73.43% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>32/64</span>
+                <span class='fraction'>47/64</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">90.9% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>10/11</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">82.14% </span>
+                <span class="strong">96.42% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>46/56</span>
+                <span class='fraction'>54/56</span>
             </div>
         
             
@@ -200,12 +200,12 @@
 <a name='L135'></a><a href='#L135'>135</a>
 <a name='L136'></a><a href='#L136'>136</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -261,17 +261,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -334,7 +334,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&nbsp;
-export const getVersion = (ver: string = <span class="branch-0 cbranch-no" title="branch not covered" >'')</span> =&gt; {
+export const getVersion = (ver: string = '') =&gt; {
   let currentVersion = ''
   ver.replace(/([v|V]\d(\.\d+){0,2})/i, (str) =&gt; {
     currentVersion = str
@@ -389,24 +389,24 @@ export const parseCustomEmojis = (customEmoji: string, defaultTypes: Record&lt;s
 export type FormatStringCommit = {
   regExp?: string;
   shortHash?: string;
-  originalMarkdown?: string;
+  originalMarkdown?: boolean;
   filterAuthor?: string;
   hash?: string;
   login?: string;
 }
 &nbsp;
-export function <span class="fstat-no" title="function not covered" >formatStringCommit(</span>commit = <span class="branch-0 cbranch-no" title="branch not covered" >'',</span> repoName = <span class="branch-0 cbranch-no" title="branch not covered" >'',</span> { regExp, shortHash, originalMarkdown, filterAuthor, hash, login = <span class="branch-0 cbranch-no" title="branch not covered" >'' </span>}: FormatStringCommit) {
-<span class="cstat-no" title="statement not covered" >  if (filterAuthor &amp;&amp; (new RegExp(filterAuthor)).test(login)) {</span>
-<span class="cstat-no" title="statement not covered" >    login = '';</span>
+export function formatStringCommit(commit = <span class="branch-0 cbranch-no" title="branch not covered" >'',</span> repoName = <span class="branch-0 cbranch-no" title="branch not covered" >'',</span> { regExp, shortHash, originalMarkdown, filterAuthor, hash, login = <span class="branch-0 cbranch-no" title="branch not covered" >'' </span>}: FormatStringCommit) {
+  if (filterAuthor &amp;&amp; (new RegExp(filterAuthor)).test(login)) {
+    login = '';
   }
-<span class="cstat-no" title="statement not covered" >  if (regExp &amp;&amp; (new RegExp(regExp).test(commit))) {</span>
-<span class="cstat-no" title="statement not covered" >    return '';</span>
+  if (regExp &amp;&amp; (new RegExp(regExp).test(commit))) {
+    return '';
   }
-<span class="cstat-no" title="statement not covered" >  login = login.replace(/\[bot\]/, '-bot');</span>
-<span class="cstat-no" title="statement not covered" >  if (originalMarkdown) {</span>
-<span class="cstat-no" title="statement not covered" >    return `${commit} ${shortHash} ${login ? `@${login}`: ''}`;</span>
+  login = login.replace(/\[bot\]/, '-bot');
+  if (originalMarkdown) {
+    return `${commit} ${shortHash} ${login ? `@${login}`: ''}`;
   }
-<span class="cstat-no" title="statement not covered" >  return `${commit} [\`${shortHash}\`](http://github.com/${repoName}/commit/${hash})${login ? ` @${login}`: ''}`;</span>
+  return `${commit} [\`${shortHash}\`](http://github.com/${repoName}/commit/${hash})${login ? ` @${login}`: ''}`;
 }
 &nbsp;
 export function getRegExp(type = <span class="branch-0 cbranch-no" title="branch not covered" >'',</span> commit = '') {
@@ -475,7 +475,7 @@ export function getCommitLog(log: string[], options = <span class="branch-0 cbra
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-04T05:09:04.960Z
+                at 2025-05-04T05:38:59.932Z
             </div>
         <script src="prettify.js"></script>
         <script>
