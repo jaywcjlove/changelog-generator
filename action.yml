@@ -45,6 +45,7 @@ inputs:
     description: 'Define the log display template'
     required: false
   remove-type:
+    default: false
     description: 'Remove type in commit'
     required: false
   path:
