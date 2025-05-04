@@ -1,4 +1,4 @@
-import { getCommitLog, defaultTypes, getRegExp } from '../src/utils';
+import { getCommitLog, defaultTypes, getRegExp, getVersion, parseCustomEmojis } from '../src/utils';
 
 const log = [
     'feat: Add new feature',
@@ -117,5 +117,69 @@ describe('getRegExp', () => {
         expect(getRegExp('feat', '')).toBe(false);
         expect(getRegExp('feat', undefined)).toBe(false);
         expect(getRegExp('', 'feat: Add new feature')).toBe(false);
+    });
+});
+
+describe('getVersion', () => {
+  test.each([
+    ['v1.2.3', 'v1.2.3'],
+    ['V4.5', 'V4.5'],
+    ['hello world', ''],
+    ['', ''],
+    ['some text v2.0-beta another text', 'v2.0'],
+    ['v1.0 and V2.1.0 are present', 'v1.0'],
+    ['version V5', 'V5'],
+    ['app version v3.1', 'v3.1'],
+  ])('should return %s when the input is %s', (input, expectedOutput) => {
+    expect(getVersion(input)).toBe(expectedOutput);
+  });
+});
+
+describe('parseCustomEmojis', () => {
+    const defaultTypes = {
+        text: '📝',
+        image: '🖼️',
+        video: '🎬',
+    };
+
+    test.each([
+        [
+            'single custom emoji',
+            'note📌',
+            { text: '📝', image: '🖼️', video: '🎬', note: '📌' },
+        ],
+        [
+            'multiple custom emojis',
+            'flag🚩,star⭐',
+            { text: '📝', image: '🖼️', video: '🎬', flag: '🚩', star: '⭐' },
+        ],
+        [
+            'overwrite default emoji',
+            'text✏️',
+            { text: '✏️', image: '🖼️', video: '🎬' },
+        ],
+        [
+            'ignore item without valid emoji',
+            'text,icon:',
+            { text: '📝', image: '🖼️', video: '🎬' },
+        ],
+        [
+            'ignore item without type name',
+            ':✨,image🖼️',
+            { ":": "✨", text: '📝', image: '🖼️', video: '🎬' },
+        ],
+        ['empty custom emoji string', '', { text: '📝', image: '🖼️', video: '🎬' }],
+        [
+            'handle extra commas',
+            'note📌,,star⭐,',
+            { text: '📝', image: '🖼️', video: '🎬', note: '📌', star: '⭐' },
+        ],
+        [
+            'use first emoji if multiple present',
+            'alert⚠️🚨',
+            { text: '📝', image: '🖼️', video: '🎬', alert: '⚠️🚨' },
+        ],
+    ])('should handle %s: input "%s" and return %j', (testName, customEmoji, expectedOutput) => {
+        expect(parseCustomEmojis(customEmoji, { ...defaultTypes })).toEqual(expectedOutput);
     });
 });

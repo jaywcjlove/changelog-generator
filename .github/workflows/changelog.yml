@@ -50,6 +50,13 @@ jobs:
           output: dist/CONTRIBUTORS.svg
           avatarSize: 42
           
+      - run: cp -rp coverage/lcov-report dist
+      - name: Create Coverage Badges
+        uses: jaywcjlove/coverage-badges-cli@main
+        with:
+          source: coverage/coverage-summary.json
+          output: dist/badges.svg
+
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:

@@ -32,14 +32,23 @@ export const defaultTypes = {
  */
 export const parseCustomEmojis = (customEmoji: string, defaultTypes: Record<string, string>) => {
   const customEmojiData = customEmoji.split(',');
+  const parsedEmojis: Record<string, string> = { ...defaultTypes };
+
+  // A more inclusive emoji regex that matches compound characters (including variation selectors and zero-width joiners)
+  const emojiRegex = /([\p{Emoji_Presentation}\p{Emoji}\uFE0F\u200D]+)/gu;
+
   customEmojiData.forEach((item) => {
-    const emojiIcon = item.match(/[\u{1F300}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1F1E0}-\u{1F1FF}]/gu);
-    const typeName = item.replace(/[\u{1F300}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1F1E0}-\u{1F1FF}]/gu, '');
-    if (typeName && emojiIcon) {
-      defaultTypes[typeName as keyof typeof defaultTypes] = emojiIcon[0];
+    const emojiIconMatch = item.match(emojiRegex);
+    if (emojiIconMatch && emojiIconMatch[0]) {
+      const emoji = emojiIconMatch[0];
+      const typeName = item.replace(emoji, '').trim();
+      if (typeName) {
+        parsedEmojis[typeName] = emoji;
+      }
     }
   });
-  return defaultTypes as Options['types'];
+
+  return { ...parsedEmojis };
 };
 
 export type FormatStringCommit = {
@@ -72,15 +81,6 @@ export function getRegExp(type = '', commit = '') {
   const typeLowerCase = type.trim().toLocaleLowerCase();
   return (new RegExp(`^(${typeLowerCase}\\s+[\\s(|:])|(${typeLowerCase}[(|:])`)).test(commit.trim().toLocaleLowerCase());
 }
-// export function getRegExp(str = '', commit = '') {
-//   return (new RegExp(`^(${str}\s+[\s|(|:])|(${str}[(|:])`)).test(commit.trim().toLocaleLowerCase());
-// }
-
-// export function getRegExp(types: typeof defaultTypes, type: keyof typeof defaultTypes, commit = '') {
-//   const str = types[type];
-//   const commitLower = commit.trim().toLocaleLowerCase();
-//   return commitLower.startsWith(`${type}:`) || commitLower.startsWith(`${str}:`);
-// }
 
 type Options = {
   types: typeof defaultTypes;
