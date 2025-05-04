@@ -1,4 +1,4 @@
-import { getInput, setFailed, startGroup, info, endGroup, setOutput } from '@actions/core';
+import { getInput, getBooleanInput, setFailed, startGroup, info, endGroup, setOutput } from '@actions/core';
 import { context, getOctokit } from '@actions/github';
 
 import { parseCustomEmojis } from './utils';
@@ -18,14 +18,14 @@ export const getOptions = () => {
       template: getInput('template'),
       /** @example `type🆎,chore💄,fix🐞` Use commas to separate */
       customEmoji: getInput('custom-emoji') || '',
-      showEmoji: getInput('show-emoji') !== 'false',
-      removeType: getInput('remove-type') !== 'false',
+      showEmoji: getBooleanInput('show-emoji') !== false,
+      removeType: getBooleanInput('remove-type') !== false,
       filterAuthor: getInput('filter-author'),
       regExp: getInput('filter'),
       ghPagesBranch: getInput('gh-pages') || 'gh-pages',
-      originalMarkdown: getInput('original-markdown'),
+      originalMarkdown: getBooleanInput('original-markdown'),
       octokit: getOctokit(myToken),
-      types: parseCustomEmojis(getInput('custom-emoji'), defaultTypes),
+      types: parseCustomEmojis(getInput('custom-emoji'), defaultTypes) as typeof defaultTypes,
       tagRef: '',
     };
 };

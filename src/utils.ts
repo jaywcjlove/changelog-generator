@@ -54,7 +54,7 @@ export const parseCustomEmojis = (customEmoji: string, defaultTypes: Record<stri
 export type FormatStringCommit = {
   regExp?: string;
   shortHash?: string;
-  originalMarkdown?: string;
+  originalMarkdown?: boolean;
   filterAuthor?: string;
   hash?: string;
   login?: string;

@@ -1,4 +1,5 @@
 import { getCommitLog, defaultTypes, getRegExp, getVersion, parseCustomEmojis } from '../src/utils';
+import { formatStringCommit, FormatStringCommit } from '../src/utils';
 
 const log = [
     'feat: Add new feature',
@@ -133,6 +134,8 @@ describe('getVersion', () => {
   ])('should return %s when the input is %s', (input, expectedOutput) => {
     expect(getVersion(input)).toBe(expectedOutput);
   });
+
+  expect(getVersion()).toBe('');
 });
 
 describe('parseCustomEmojis', () => {
@@ -181,5 +184,63 @@ describe('parseCustomEmojis', () => {
         ],
     ])('should handle %s: input "%s" and return %j', (testName, customEmoji, expectedOutput) => {
         expect(parseCustomEmojis(customEmoji, { ...defaultTypes })).toEqual(expectedOutput);
+    });
+});
+
+describe('formatStringCommit', () => {
+    const defaultOptions: FormatStringCommit = {
+        regExp: undefined,
+        shortHash: 'dd3f682',
+        originalMarkdown: false,
+        filterAuthor: undefined,
+        hash: 'fullcommitsha',
+        login: 'testuser',
+    };
+
+    it('should format commit string with markdown link and author', () => {
+        expect(formatStringCommit('feat: add new feature', 'my-repo', defaultOptions)).toBe('feat: add new feature [`dd3f682`](http://github.com/my-repo/commit/fullcommitsha) @testuser');
+    });
+
+    it('should format commit string with original markdown and author', () => {
+        const options = { ...defaultOptions, originalMarkdown: true }; // 使用布尔值 true
+        expect(formatStringCommit('fix: resolve issue #123', 'any-repo', options)).toBe('fix: resolve issue #123 dd3f682 @testuser');
+    });
+
+    it('should format commit string without author if login is empty', () => {
+        const options = { ...defaultOptions, login: '' };
+        expect(formatStringCommit('docs: update README', 'my-repo', options)).toBe('docs: update README [`dd3f682`](http://github.com/my-repo/commit/fullcommitsha)');
+    });
+
+    it('should format commit string with original markdown and no author if login is empty', () => {
+        const options = { ...defaultOptions, originalMarkdown: true, login: '' }; // 使用布尔值 true
+        expect(formatStringCommit('style: apply code formatting', 'any-repo', options)).toBe('style: apply code formatting dd3f682 ');
+    });
+
+    it('should return an empty string if commit matches the provided regexp', () => {
+        const options = { ...defaultOptions, regExp: '^WIP' };
+        expect(formatStringCommit('WIP: implement draft feature', 'my-repo', options)).toBe('');
+    });
+
+    it('should format commit string if regexp is not provided', () => {
+        expect(formatStringCommit('refactor: improve code structure', 'my-repo', { ...defaultOptions, regExp: undefined })).toBe('refactor: improve code structure [`dd3f682`](http://github.com/my-repo/commit/fullcommitsha) @testuser');
+    });
+
+    it('should remove "[bot]" suffix from login', () => {
+        const options = { ...defaultOptions, login: 'testbot[bot]' };
+        expect(formatStringCommit('chore: update dependencies', 'my-repo', options)).toBe('chore: update dependencies [`dd3f682`](http://github.com/my-repo/commit/fullcommitsha) @testbot-bot');
+    });
+
+    it('should filter out author if login matches filterAuthor regexp', () => {
+        const options = { ...defaultOptions, filterAuthor: 'testuser' };
+        expect(formatStringCommit('test: add unit tests', 'my-repo', options)).toBe('test: add unit tests [`dd3f682`](http://github.com/my-repo/commit/fullcommitsha)');
+    });
+
+    it('should not filter out author if login does not match filterAuthor regexp', () => {
+        const options = { ...defaultOptions, filterAuthor: 'anotheruser' };
+        expect(formatStringCommit('build: update webpack config', 'my-repo', options)).toBe('build: update webpack config [`dd3f682`](http://github.com/my-repo/commit/fullcommitsha) @testuser');
+    });
+
+    it('should handle empty commit message', () => {
+        expect(formatStringCommit('', 'my-repo', defaultOptions)).toBe(' [`dd3f682`](http://github.com/my-repo/commit/fullcommitsha) @testuser');
     });
 });
