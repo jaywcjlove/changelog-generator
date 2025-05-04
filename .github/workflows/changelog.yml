@@ -25,6 +25,7 @@ jobs:
         run: |
           cat > idoc.yml << EOF
           site: "Create Tag {{version}}"
+          output: wwww
           menus:
             Home: index.html
             Sponsor: https://jaywcjlove.github.io/#/sponsor
@@ -47,21 +48,21 @@ jobs:
         uses: jaywcjlove/github-action-contributors@main
         with:
           filter-author: (renovate\[bot\]|renovate-bot|dependabot\[bot\])
-          output: dist/CONTRIBUTORS.svg
+          output: wwww/CONTRIBUTORS.svg
           avatarSize: 42
           
-      - run: cp -rp coverage/lcov-report dist
+      - run: cp -rp coverage/lcov-report wwww
       - name: Create Coverage Badges
         uses: jaywcjlove/coverage-badges-cli@main
         with:
           source: coverage/coverage-summary.json
-          output: dist/badges.svg
+          output: wwww/badges.svg
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          publish_dir: ./wwww
 
       - name: Create Tag
         id: create_tag
