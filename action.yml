@@ -69,7 +69,7 @@ outputs:
   gh-pages-short-hash:
     description: 'Specify the branch name to get the short-hash from.'
 runs:
-  using: 'node20'
+  using: 'node24'
   main: 'dist/index.js'
 branding:
   icon: 'list'
